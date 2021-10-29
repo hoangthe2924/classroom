@@ -141,7 +141,7 @@ function DashboardContent() {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          {/*<List>{secondaryListItems}</List>*/}
         </Drawer>
         <Box
           component="main"

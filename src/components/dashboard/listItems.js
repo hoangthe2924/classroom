@@ -24,18 +24,18 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Classes" />
     </ListItem>
-    <ListItem component='a' href={'/student-list'} button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Students" />
-    </ListItem>
+    {/*<ListItem component='a' href={'/student-list'} button>*/}
+    {/*  <ListItemIcon>*/}
+    {/*    <PeopleIcon />*/}
+    {/*  </ListItemIcon>*/}
+    {/*  <ListItemText primary="Students" />*/}
+    {/*</ListItem>*/}
   </div>
 );
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
+    <ListSubheader inset>Account</ListSubheader>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
