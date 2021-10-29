@@ -22,7 +22,7 @@ export default () => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch("http://127.0.0.1:3000/classes")
+        fetch("https://advanced-web-classroom-api.herokuapp.com/classes/")
             .then(res => res.json())
             .then(
                 (result) => {

@@ -36,7 +36,7 @@ export default () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ className: textInput.current.value })
         };
-        fetch('http://127.0.0.1:3000/classes', requestOptions)
+        fetch('https://advanced-web-classroom-api.herokuapp.com/classes/', requestOptions)
             .then(res => res.json())
             .then(
                 (result) => {
