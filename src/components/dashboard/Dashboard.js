@@ -16,9 +16,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
-import {useRoutes} from 'hookrouter';
-import Routes from '../../router/routes'
-import DashboardText from './DashboardText'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ClassList from "../Class/ClassList";
+import DashboardText from "./DashboardText";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -86,7 +86,6 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const routeResult = useRoutes(Routes);
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -157,7 +156,12 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container >
-            {routeResult || <DashboardText/>}
+          <BrowserRouter>
+              <Routes>
+                <Route path="class-list" element={<ClassList />} />
+                <Route path={"dashboard"} element={<DashboardText />} />
+              </Routes>
+          </BrowserRouter>
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
