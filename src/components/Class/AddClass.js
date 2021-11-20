@@ -18,8 +18,6 @@ export default () => {
     const [items, setItems] = useState([]);
     let textInput = useRef();  // React use ref to get input value
 
-
-
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {

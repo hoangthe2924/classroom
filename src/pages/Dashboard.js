@@ -9,22 +9,23 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import { Button } from '@mui/material';
+import { mainListItems} from 'components/Dashboard/ListItems';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ClassList from "../Class/ClassList";
-import DashboardText from "./DashboardText";
+import ClassList from "components/Class/ClassList";
+import Login from "components/Authen/Login/Login"
+import Register from 'components/Authen/Register/Register';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Class-rum
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -115,13 +116,10 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Button variant="outlined" color="inherit" href="/login">
+              Login
+            </Button>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -159,7 +157,8 @@ function DashboardContent() {
           <BrowserRouter>
               <Routes>
                 <Route path="class-list" element={<ClassList />} />
-                <Route path={"dashboard"} element={<DashboardText />} />
+                <Route path={"login"} element={<Login />} />
+                <Route path={"register"} element={<Register />} />
               </Routes>
           </BrowserRouter>
             <Copyright sx={{ pt: 4 }} />
