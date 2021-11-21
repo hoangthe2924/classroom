@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
-import {Card, CardActionArea, CardContent, Grid, Typography} from "@mui/material";
+import {Card, CardActionArea, CardContent, Grid, Typography, Button} from "@mui/material";
 import * as PropTypes from "prop-types";
-import AddClass from "./AddClass";
+import AddClassForm from "./AddClassForm";
+import http from "axios-config";
 
 function LoadingButton(props) {
     return null;
@@ -16,34 +17,49 @@ LoadingButton.propTypes = {
     children: PropTypes.node
 };
 
-export default () => {
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
+export default function ClassList() {
+    const [open, setOpen] = useState(false);
     const [items, setItems] = useState([]);
 
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = (formik) => () => {
+        console.log("close");
+        formik.resetForm();
+        setOpen(false);
+      };    
+
     useEffect(() => {
-        fetch("https://advanced-web-classroom-api.herokuapp.com/classes/")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setIsLoaded(true);
-                    setItems(result);
-                },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-    }, [])
+        async function fetchClass() {
+            console.log("update");
+            await http.get("/classes").then(
+              (result) => {
+                setItems(result.data);
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          }
+          fetchClass();
+    }, [open])
 
     return <Grid container spacing={3} direction="row"
                  justify="flex-start"
                  padding={10}
                  alignItems="flex-start">
-        <AddClass/>
+        <Grid item xs={12} sm={12} md={12} textAlign='center'>
+        <Button
+        variant="outlined"
+        sx={{ float: "center" }}
+        onClick={handleClickOpen}
+      >
+        Add Class
+      </Button>
+      <AddClassForm open={open} handleClose={handleClose} />
+      </Grid>
     {items.map(cls =>
             <Grid item xs={12} sm={6} md={4} >
             <Card >
