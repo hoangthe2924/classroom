@@ -33,7 +33,6 @@ export default function ClassList() {
 
     useEffect(() => {
         async function fetchClass() {
-            console.log("update");
             await http.get("/classes").then(
               (result) => {
                 setItems(result.data);
