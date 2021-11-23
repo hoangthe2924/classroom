@@ -26,11 +26,11 @@ const UserEmailList = ({ emailList, setEmailList }) => {
         }
       >
         <ListItemAvatar>
-          <Avatar>
+          <Avatar sx={{ width: 30, height: 30 }}>
             <Person />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={email} />
+        <ListItemText primary={email}/>
       </ListItem>
     </Box>
   ));
