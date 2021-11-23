@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import http from "axios-config";
+import { register } from 'services/auth.service';
 
 
 export default function LoginForm(){
@@ -22,19 +22,7 @@ export default function LoginForm(){
     initialValues: {
     },
     onSubmit: async (values) => {
-      await http
-        .post("/users/register/", values)
-        .then((res) => {
-          console.log("res", res);
-          if (res.status === 200 || res.status === 201) {
-            alert("Your question has been submited!");
-          } else {
-            alert("Please try again later");
-          }
-        })
-        .catch((error) => {
-          console.log("err: ", error);
-        });
+      await register(values);
     },
   });
   return(
@@ -65,6 +53,8 @@ export default function LoginForm(){
                   required
                   fullWidth
                   id="fullname"
+                  value={formik.values.subject}
+                  onChange={formik.handleChange}
                   label="Full Name"
                   autoFocus
                 />
@@ -76,6 +66,8 @@ export default function LoginForm(){
                   id="username"
                   label="Username"
                   name="username"
+                  value={formik.values.subject}
+                  onChange={formik.handleChange}
                   autoComplete="user-name"
                 />
               </Grid>
@@ -86,6 +78,8 @@ export default function LoginForm(){
                   id="email"
                   label="Email Address"
                   name="email"
+                  value={formik.values.subject}
+                  onChange={formik.handleChange}
                   autoComplete="email"
                 />
               </Grid>
@@ -96,6 +90,8 @@ export default function LoginForm(){
                   name="password"
                   label="Password"
                   type="password"
+                  value={formik.values.subject}
+                  onChange={formik.handleChange}
                   id="password"
                   autoComplete="new-password"
                 />
