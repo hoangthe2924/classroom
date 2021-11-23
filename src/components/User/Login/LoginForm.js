@@ -13,8 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import http from "axios-config";
-
+import { login } from 'services/auth.service';
+import GoogleLoginButton from './GoogleLogin';
 
 export default function LoginForm(){
   const theme = createTheme();
@@ -24,17 +24,7 @@ export default function LoginForm(){
       password: "",
     },
     onSubmit: async (values) => {
-      await http
-        .post("/users/login/", values)
-        .then((res) => {
-          console.log("res", res);
-          document.cookie = "token=" + res.cookie
-          console.log(res, document.cookie);
-        })
-        .catch((error) => {
-          console.log(values);
-          console.log("err: ", error);
-        });
+      await login(values);
     },
   });
   return(
@@ -93,6 +83,7 @@ export default function LoginForm(){
           >
             Sign In
           </Button>
+          <GoogleLoginButton/>
           <Grid container>
             <Grid item xs={12}>
               <Link href="/register" variant="body2" >
