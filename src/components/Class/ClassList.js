@@ -31,6 +31,19 @@ export default function ClassList() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+        async function fetchClass() {
+            await http.get("/classes").then(
+              (result) => {
+                setItems(result.data);
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          }
+          fetchClass();
+    }, [open])
   const handleClickOpen = () => {
     setOpen(true);
   };
