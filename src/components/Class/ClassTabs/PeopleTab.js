@@ -10,9 +10,11 @@ import {
   ListItemText,
   Avatar,
   Typography,
+  Box,
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InvitationDialog from "components/InvitationUser/InvitationDialog";
 
 export default function PeopleTab({ items }) {
   const [item, setItem] = useState([]);
@@ -43,9 +45,21 @@ export default function PeopleTab({ items }) {
     : [];
   return (
     <div>
-      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-        Teachers
-      </Typography>
+      <Box
+        sx={{
+          mt: 4,
+          mb: 2,
+          width: "60%",
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "1px solid",
+        }}
+      >
+        <Typography variant="h6" component="div">
+          Teachers
+        </Typography>
+        <InvitationDialog role="teacher"/>
+      </Box>
       <List dense>
         {teachers &&
           teachers.map((user) => (
@@ -69,9 +83,21 @@ export default function PeopleTab({ items }) {
             </ListItem>
           ))}
       </List>
-      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+      <Box
+        sx={{
+          mt: 4,
+          mb: 2,
+          width: "60%",
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "1px solid",
+        }}
+      >
+        <Typography variant="h6" component="div">
         Students
-      </Typography>
+        </Typography>
+        <InvitationDialog role="student" />
+      </Box>
       <List dense>
         {students &&
           students.map((user) => (
