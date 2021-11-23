@@ -128,18 +128,6 @@ function DashboardContent() {
               </Button>
             </Toolbar>
           </AppBar>
-          <Drawer variant="permanent" open={open}>
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                px: [1],
-              }}
-            >
-            
-          </Toolbar>
-          </Drawer>
         <Drawer variant="permanent" open={open}>
           <Toolbar>
               <IconButton onClick={toggleDrawer}>
