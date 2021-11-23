@@ -34,7 +34,3 @@ export function register(values) {
       console.log("err: ", error);
     });
   }
-
-  export function getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
-}
