@@ -12,8 +12,8 @@ import Divider from "@mui/material/Divider";
 import UserEmailList from "./UserEmailList";
 import { Snackbar } from "@mui/material";
 import MuiAlert from '@mui/material/Alert';
-import { IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 function validateEmail(email) {
   const re =
@@ -51,9 +51,6 @@ const InvitationDialog = (props) => {
     setOpenInvitationDialog(true);
   };
 
-  const openSuccessBarHandler = () => {
-    setOpenSuccessSBar(true);
-  }
 
   const closeSuccessBarHandler = () => {
     setOpenSuccessSBar(false);
@@ -61,7 +58,16 @@ const InvitationDialog = (props) => {
 
   return (
     <Fragment>
-      <Button onClick={openDialogHandler}>Open Dialog</Button>
+      <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={openDialogHandler}
+        >
+          <PersonAddIcon />
+        </IconButton>
       <Dialog
         maxWidth="xs"
         fullWidth="true"
