@@ -1,7 +1,7 @@
 import { Box, Grid, TextField, IconButton, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Fragment, useState , forwardRef } from "react";
+import { Fragment, useState, forwardRef } from "react";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -19,7 +19,7 @@ const LinkInvitation = ({ cjc }) => {
 
   const closeCopyBarHandler = () => {
     setOpenCopyBar(false);
-  }
+  };
 
   const copyToClipBoardHandler = () => {
     navigator.clipboard.writeText(LINK_INVITE);
