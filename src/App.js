@@ -38,11 +38,11 @@ function App() {
       <ThemeProvider theme={mdTheme}>
         <MyAppBar>
           <Routes>
-            <Route path={"class-list"} element={<ClassList />} />
+            <Route path={"classes"} element={<ClassList />} />
             <Route path={"login"} element={<LoginForm />} />
             <Route path={"register"} element={<RegisterForm />} />
             <Route path={"profile"} element={<Profile />} />
-            <Route path="/class/:id" element={<ClassDetail />} />
+            <Route path="/classes/:id" element={<ClassDetail />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
           <Copyright sx={{ pt: 4 }} />

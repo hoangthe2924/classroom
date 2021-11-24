@@ -10,10 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Button } from "@mui/material";
-import {
-  mainListItems,
-  secondaryListItems,
-} from "components/Dashboard/ListItems";
+import { mainListItems } from "components/Dashboard/ListItems";
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 import * as actions from "../actions/index.js";
