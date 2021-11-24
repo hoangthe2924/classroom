@@ -16,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import LinkInvitation from "./LinkInvitation";
 
 const LINK = "http://localhost:7000/classes/people/invite";
 
@@ -29,7 +30,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const InvitationDialog = ({ role }) => {
+const InvitationDialog = ({ role, cjc }) => {
   const [openInvitationDialog, setOpenInvitationDialog] = useState(false);
   const [openSuccessSBar, setOpenSuccessSBar] = useState(false);
   const [openErrorSBar, setOpenErrorSBar] = useState(false);
@@ -70,7 +71,7 @@ const InvitationDialog = ({ role }) => {
   };
 
   const inviteHandler = () => {
-    //const JWTtoken = localStorage.get("access_token");
+    const token = JSON.parse(localStorage.getItem("user")).accessToken;
 
     axios
       .post(
@@ -82,8 +83,8 @@ const InvitationDialog = ({ role }) => {
         },
         {
           headers: {
-            Authorization: `Bearer`,
             "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -101,7 +102,7 @@ const InvitationDialog = ({ role }) => {
             break;
           default:
             setOpenErrorSBar(true);
-        };
+        }
       });
 
     //call api
@@ -121,15 +122,26 @@ const InvitationDialog = ({ role }) => {
       </IconButton>
       <Dialog
         maxWidth="xs"
-        fullWidth="true"
+        fullWidth={true}
         open={openInvitationDialog}
         onClose={closeDialogHandler}
       >
         <DialogTitle>Invite {role}</DialogTitle>
         <DialogContent dividers>
-          <DialogContentText fontSize="12px">
-            Enter emails you want to invite
-          </DialogContentText>
+          {role === "teacher" && (
+            <DialogContentText fontSize="12px">
+              Enter emails to invite teachers
+            </DialogContentText>
+          )}
+          {role === "student" && (
+            <Fragment>
+              <DialogContentText fontSize="12px">
+                Enter emails to invite students or copy this link
+              </DialogContentText>
+              <LinkInvitation cjc={cjc} />
+            </Fragment>
+          )}
+
           <TextField
             autoFocus
             margin="dense"
@@ -170,8 +182,16 @@ const InvitationDialog = ({ role }) => {
         </Alert>
       </Snackbar>
 
-      <Snackbar open={openErrorSBar} autoHideDuration={4000} onClose={closeErrorBarHandler}>
-        <Alert onClose={closeErrorBarHandler} severity="error" sx={{ width: "100%" }}>
+      <Snackbar
+        open={openErrorSBar}
+        autoHideDuration={4000}
+        onClose={closeErrorBarHandler}
+      >
+        <Alert
+          onClose={closeErrorBarHandler}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           Send invitation fail!
         </Alert>
       </Snackbar>
