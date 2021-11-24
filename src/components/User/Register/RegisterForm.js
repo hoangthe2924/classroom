@@ -1,49 +1,47 @@
-import React from 'react'
-import { useFormik } from 'formik'
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { Alert } from '@mui/material/index';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { register } from 'services/auth.service';
-import * as Yup from 'yup';
-
+import React from "react";
+import { useFormik } from "formik";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { Alert } from "@mui/material/index";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { register } from "services/auth.service";
+import * as Yup from "yup";
+import { useNavigate, Navigate } from "react-router-dom";
 
 export default function LoginForm() {
   const theme = createTheme();
+  let navigate = useNavigate();
   const validationSchema = Yup.object().shape({
     fullname: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('First Name is required'),
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
+      .required("First Name is required"),
     username: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('First Name is required'),
-    email: Yup.string()
-      .email('Email is invalid')
-      .required('Email is required'),
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
+      .required("First Name is required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
     password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
   });
   const formik = useFormik({
-    initialValues: {
-    },
+    initialValues: {},
     onSubmit: async (values) => {
       await register(values);
-
+      navigate("/login");
     },
-    validationSchema: validationSchema
+    validationSchema: validationSchema,
   });
   return (
     <React.Fragment>
@@ -53,20 +51,25 @@ export default function LoginForm() {
           <Box
             sx={{
               marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={formik.handleSubmit}
+              sx={{ mt: 3 }}
+            >
               <Grid container spacing={2}>
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                   <TextField
                     autoComplete="given-name"
                     name="fullname"
@@ -82,7 +85,7 @@ export default function LoginForm() {
                     <Alert severity="error">{formik.errors.fullname}</Alert>
                   )}
                 </Grid>
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                   <TextField
                     required
                     fullWidth
@@ -130,7 +133,9 @@ export default function LoginForm() {
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" color="primary" />}
+                    control={
+                      <Checkbox value="allowExtraEmails" color="primary" />
+                    }
                     label="I agree to the terms of service."
                   />
                 </Grid>
@@ -155,5 +160,5 @@ export default function LoginForm() {
         </Container>
       </ThemeProvider>
     </React.Fragment>
-  )
+  );
 }

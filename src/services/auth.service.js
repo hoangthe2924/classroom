@@ -1,16 +1,19 @@
 import http from "axios-config";
 
-export function login(values) {
+export async function login(values) {
   return http
     .post("/users/login/", values)
     .then((res) => {
       console.log(res.data);
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
+        return true;
       }
+      return false;
     })
     .catch((error) => {
       console.log("err: ", error);
+      return false;
     });
 }
 

@@ -33,9 +33,13 @@ function LoginForm(props) {
       password: "",
     },
     onSubmit: async (values) => {
-      await login(values);
-      navigate("/dashboard");
-      window.location.reload();
+      const loginSuccess = await login(values);
+      if (loginSuccess) {
+        navigate("/dashboard");
+        window.location.reload();
+      } else {
+        alert("incorrect username or password!");
+      }
     },
   });
   return (
