@@ -19,11 +19,11 @@ export default function GoogleLoginButton() {
         }
       })
       .catch((error) => {
+        alert("Something wrong, please try again later!");
         console.log("err: ", error);
       });
   }
   function onGoogleLoginFailure(error) {
-    alert("Something wrong, please try again later!");
     console.log("error", error);
   }
 

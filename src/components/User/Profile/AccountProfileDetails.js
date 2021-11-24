@@ -39,8 +39,8 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
           }
         })
         .catch((error) => {
-          alert("Please try again later");
-          console.log("err: ", error);
+          alert(error.response.data || "Please try again later");
+          console.log("err: ", JSON.stringify(error));
         });
     },
   });

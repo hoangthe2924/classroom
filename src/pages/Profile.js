@@ -18,16 +18,17 @@ function Profile(props) {
   const [item, setItem] = useState([]);
 
   async function getUserDetail() {
-    await http.get(`/users/info`).then(
+    const result = await http.get(`/users/info`).then(
       (result) => {
-        console.log("uppp");
-        setItem(result.data);
+        console.log("uppp", result.data);
+        return result.data;
         // return result;
       },
       (error) => {
         console.log(error);
       }
     );
+    setItem(result);
   }
   useEffect(() => {
     getUserDetail();
