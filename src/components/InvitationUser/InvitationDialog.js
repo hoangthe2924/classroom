@@ -17,8 +17,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import LinkInvitation from "./LinkInvitation";
-
-const LINK = "http://localhost:7000/classes/people/invite";
+import { DEFAULT_DOMAIN } from "../../axios-config";
 
 function validateEmail(email) {
   const re =
@@ -74,6 +73,7 @@ const InvitationDialog = ({ role, cjc }) => {
 
   const inviteHandler = () => {
     const token = JSON.parse(localStorage.getItem("user")).accessToken;
+    const LINK = DEFAULT_DOMAIN + '/classes/people/invite';
 
     axios
       .post(
@@ -91,7 +91,6 @@ const InvitationDialog = ({ role, cjc }) => {
         }
       )
       .then((res) => {
-        console.log("check status");
         switch (res.status) {
           case 401:
             localStorage.removeItem("access_token");

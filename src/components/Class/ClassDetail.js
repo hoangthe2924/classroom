@@ -22,6 +22,7 @@ export default function ClassDetail() {
           // return result;
         },
         (error) => {
+
           console.log(error);
         }
       );
