@@ -37,7 +37,7 @@ export default function PeopleTab({ items }) {
     fetchClass();
   }, []);
 
-  console.log("u", item.users);
+  // console.log("u", item.users);
   let teachers = item.users
     ? item.users.filter((user) => user.user_class.role === "teacher")
     : [];
@@ -59,7 +59,7 @@ export default function PeopleTab({ items }) {
         <Typography variant="h6" component="div">
           Teachers
         </Typography>
-        <InvitationDialog role="teacher" cjc=""/>
+        {items.requesterRole==="teacher" && <InvitationDialog role="teacher" cjc=""/>} 
       </Box>
       <List dense sx={{width: "60%",}}>
         {teachers &&
@@ -97,7 +97,7 @@ export default function PeopleTab({ items }) {
         <Typography variant="h6" component="div">
         Students
         </Typography>
-        <InvitationDialog role="student" cjc={items.cjc} />
+        {items.requesterRole==="teacher" && <InvitationDialog role="student" cjc={items.cjc} />}
       </Box>
       <List dense sx={{width: "60%",}}>
         {students &&
