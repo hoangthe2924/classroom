@@ -101,7 +101,7 @@ const InvitationDialog = ({ role }) => {
             break;
           default:
             setOpenErrorSBar(true);
-        };
+        }
       });
 
     //call api
@@ -121,7 +121,7 @@ const InvitationDialog = ({ role }) => {
       </IconButton>
       <Dialog
         maxWidth="xs"
-        fullWidth="true"
+        fullWidth
         open={openInvitationDialog}
         onClose={closeDialogHandler}
       >
@@ -170,8 +170,16 @@ const InvitationDialog = ({ role }) => {
         </Alert>
       </Snackbar>
 
-      <Snackbar open={openErrorSBar} autoHideDuration={4000} onClose={closeErrorBarHandler}>
-        <Alert onClose={closeErrorBarHandler} severity="error" sx={{ width: "100%" }}>
+      <Snackbar
+        open={openErrorSBar}
+        autoHideDuration={4000}
+        onClose={closeErrorBarHandler}
+      >
+        <Alert
+          onClose={closeErrorBarHandler}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           Send invitation fail!
         </Alert>
       </Snackbar>

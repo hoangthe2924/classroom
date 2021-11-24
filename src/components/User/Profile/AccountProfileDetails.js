@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -7,173 +7,109 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField
-} from '@mui/material';
+  TextField,
+} from "@mui/material";
+import { useFormik } from "formik";
+import http from "axios-config";
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
-
-export const AccountProfileDetails = (props) => {
-  const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+export const AccountProfileDetails = ({ item, onUpdate }) => {
+  const [values, setValues] = useState(item);
+  console.log("v", values);
+  console.log("i", item);
+  useEffect(() => {
+    setValues(item);
+  }, [item]);
+  const formik = useFormik({
+    initialValues: {
+      fullname: values.fullname || "",
+      studentId: values.studentId || "",
+      email: values.email || "",
+    },
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      await http
+        .put("/users/info", values)
+        .then((res) => {
+          console.log("res", res);
+          if (res.status === 200 || res.status === 201) {
+            onUpdate();
+            alert("Updated profile successfully!");
+          } else {
+            alert("Please try again later");
+          }
+        })
+        .catch((error) => {
+          alert("Please try again later");
+          console.log("err: ", error);
+        });
+    },
   });
-
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
-
   return (
-    <form
-      autoComplete="off"
-      noValidate
-      {...props}
-    >
+    <form onSubmit={formik.handleSubmit}>
       <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
-        />
+        <CardHeader subheader="The information can be edited" title="Profile" />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+          <Grid container spacing={3}>
+            <Grid item md={6} xs={12}>
               <TextField
-                fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
-                onChange={handleChange}
                 required
-                value={values.firstName}
+                margin="dense"
+                id="fullname"
+                name="fullname"
+                label="Full name"
+                type="text"
+                value={formik.values.fullname}
+                onChange={formik.handleChange}
+                fullWidth
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
-                fullWidth
-                label="Last name"
-                name="lastName"
-                onChange={handleChange}
                 required
-                value={values.lastName}
+                margin="dense"
+                id="studentId"
+                name="studentId"
+                label="Student Id"
+                type="tel"
+                disabled={!!values.studentId}
+                value={formik.values.studentId}
+                onChange={formik.handleChange}
+                fullWidth
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
-                fullWidth
-                label="Email Address"
+                required
+                margin="dense"
+                id="email"
                 name="email"
-                onChange={handleChange}
-                required
-                value={values.email}
+                label="Email Address"
+                type="email"
+                disabled
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                fullWidth
                 variant="outlined"
               />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={values.phone}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
             </Grid>
           </Grid>
         </CardContent>
         <Divider />
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            p: 2
+            display: "flex",
+            justifyContent: "flex-end",
+            p: 2,
           }}
         >
           <Button
             color="primary"
+            type="submit"
             variant="contained"
+            disabled={!formik.isValid || formik.isSubmitting}
           >
             Save details
           </Button>

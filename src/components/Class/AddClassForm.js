@@ -5,11 +5,24 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Snackbar,
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import http from "axios-config";
 import { useFormik } from "formik";
+import React, { useState } from "react";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function AddClassForm({ open, handleClose }) {
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState({
+    type: "error",
+    content: "",
+  });
+
   const formik = useFormik({
     initialValues: {
       className: "",
@@ -23,9 +36,17 @@ export default function AddClassForm({ open, handleClose }) {
           console.log("res", res);
           if (res.status === 200 || res.status === 201) {
             handleClose();
-            alert("Your question has been submited!");
+            setShowSnackbar(true);
+            setSnackbarContent({
+              type: "success",
+              content: "Added class successfully",
+            });
           } else {
-            alert("Please try again later");
+            setShowSnackbar(true);
+            setSnackbarContent({
+              type: "error",
+              content: "Please try again later",
+            });
           }
         })
         .catch((error) => {
@@ -89,6 +110,19 @@ export default function AddClassForm({ open, handleClose }) {
           </DialogActions>
         </form>
       </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setShowSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setShowSnackbar(false)}
+          severity={snackbarContent.type}
+          sx={{ width: "100%" }}
+        >
+          {snackbarContent.content}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
