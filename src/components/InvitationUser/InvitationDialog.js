@@ -16,8 +16,8 @@ import IconButton from "@mui/material/IconButton";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-
-const LINK = "http://localhost:7000/classes/people/invite";
+import LinkInvitation from "./LinkInvitation";
+import { DEFAULT_DOMAIN } from "../../axios-config";
 
 function validateEmail(email) {
   const re =
@@ -29,8 +29,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const InvitationDialog = ({ role }) => {
+const InvitationDialog = ({ role, cjc }) => {
   const [openInvitationDialog, setOpenInvitationDialog] = useState(false);
+  const [message, setMessage] = useState("");
   const [openSuccessSBar, setOpenSuccessSBar] = useState(false);
   const [openErrorSBar, setOpenErrorSBar] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -41,6 +42,7 @@ const InvitationDialog = ({ role }) => {
 
   const addEmailHandler = (event) => {
     const newEmail = event.target.value;
+
     const updatedEmailList = [...listEmail].concat(newEmail);
     if (
       validateEmail(newEmail) &&
@@ -70,7 +72,8 @@ const InvitationDialog = ({ role }) => {
   };
 
   const inviteHandler = () => {
-    //const JWTtoken = localStorage.get("access_token");
+    const token = JSON.parse(localStorage.getItem("user")).accessToken;
+    const LINK = DEFAULT_DOMAIN + "/classes/people/invite";
 
     axios
       .post(
@@ -82,8 +85,8 @@ const InvitationDialog = ({ role }) => {
         },
         {
           headers: {
-            Authorization: `Bearer`,
             "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -99,9 +102,17 @@ const InvitationDialog = ({ role }) => {
             setOpenSuccessSBar(true);
             setListEmail([]);
             break;
+          case 403:
+            console.log("403");
+            setOpenErrorSBar(true);
+            break;
           default:
             setOpenErrorSBar(true);
-        };
+        }
+      })
+      .catch((error) => {
+        setMessage(error.response.data.message);
+        setOpenErrorSBar(true);
       });
 
     //call api
@@ -121,15 +132,26 @@ const InvitationDialog = ({ role }) => {
       </IconButton>
       <Dialog
         maxWidth="xs"
-        fullWidth="true"
+        fullWidth
         open={openInvitationDialog}
         onClose={closeDialogHandler}
       >
         <DialogTitle>Invite {role}</DialogTitle>
         <DialogContent dividers>
-          <DialogContentText fontSize="12px">
-            Enter emails you want to invite
-          </DialogContentText>
+          {role === "teacher" && (
+            <DialogContentText fontSize="12px">
+              Enter emails to invite teachers
+            </DialogContentText>
+          )}
+          {role === "student" && (
+            <Fragment>
+              <DialogContentText fontSize="12px">
+                Enter emails to invite students or copy this link
+              </DialogContentText>
+              <LinkInvitation cjc={cjc} />
+            </Fragment>
+          )}
+
           <TextField
             autoFocus
             margin="dense"
@@ -170,9 +192,17 @@ const InvitationDialog = ({ role }) => {
         </Alert>
       </Snackbar>
 
-      <Snackbar open={openErrorSBar} autoHideDuration={4000} onClose={closeErrorBarHandler}>
-        <Alert onClose={closeErrorBarHandler} severity="error" sx={{ width: "100%" }}>
-          Send invitation fail!
+      <Snackbar
+        open={openErrorSBar}
+        autoHideDuration={4000}
+        onClose={closeErrorBarHandler}
+      >
+        <Alert
+          onClose={closeErrorBarHandler}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {message}
         </Alert>
       </Snackbar>
     </Fragment>

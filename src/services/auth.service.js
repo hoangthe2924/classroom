@@ -1,8 +1,7 @@
 import http from "axios-config";
 
-
 export function login(values) {
-    return http
+  return http
     .post("/users/login/", values)
     .then((res) => {
       console.log(res.data);
@@ -13,14 +12,14 @@ export function login(values) {
     .catch((error) => {
       console.log("err: ", error);
     });
-  }
+}
 
 export function logout() {
-    localStorage.removeItem("user");
+  localStorage.removeItem("user");
 }
 
 export function register(values) {
-    return http
+  return http
     .post("/users/register/", values)
     .then((res) => {
       console.log("res", res);
@@ -33,4 +32,9 @@ export function register(values) {
     .catch((error) => {
       console.log("err: ", error);
     });
-  }
+}
+
+export function getToken() {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user).accessToken : {};
+}

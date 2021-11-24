@@ -1,4 +1,4 @@
-import GoogleLogin from 'react-google-login';
+import GoogleLogin from "react-google-login";
 import http from "axios-config";
 
 export default function GoogleLoginButton() {
@@ -20,13 +20,15 @@ export default function GoogleLoginButton() {
         console.log('error', error);
     }
 
-    return (
+
+  return (
     <GoogleLogin
         clientId="422658476305-fmoeo3bvcecjbitqisbldegt5cmmt34m.apps.googleusercontent.com"
         buttonText="Login With Google"
         onSuccess={onGoogleLoginSuccess}
         onFailure={onGoogleLoginFailure}
         cookiePolicy={'single_host_origin'}
+
     />
-    )
+  );
 }

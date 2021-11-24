@@ -17,9 +17,9 @@ import { Button } from '@mui/material';
 import { mainListItems} from 'components/Dashboard/ListItems';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ClassList from "components/Class/ClassList";
-import LoginForm from "components/User/Login/LoginForm"
-import RegisterForm from 'components/User/Register/RegisterForm';
-import Profile from './Profile'
+import LoginForm from "components/User/Login/LoginForm";
+import RegisterForm from "components/User/Register/RegisterForm";
+import Profile from "./Profile";
 import ClassDetail from "components/Class/ClassDetail";
 
 function Copyright(props) {
@@ -128,8 +128,8 @@ function DashboardContent() {
               </Button>
             </Toolbar>
           </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar>
+          <Drawer variant="permanent" open={open}>
+            <Toolbar>
               <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>
@@ -157,9 +157,8 @@ function DashboardContent() {
                 <Route path={"class-list"} element={<ClassList />} />
                 <Route path={"login"} element={<LoginForm />} />
                 <Route path={"register"} element={<RegisterForm />} />
-                <Route path={"profile"} element={<Profile/>} />
+                <Route path={"profile"} element={<Profile />} />
                 <Route path="/class/:id" element={<ClassDetail />} />
-               
               </Routes>
               <Copyright sx={{ pt: 4 }} />
             </Container>
