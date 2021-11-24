@@ -63,7 +63,7 @@ export default function BasicTabs(props) {
         <OverviewTab item={props.item} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <PeopleTab />
+        <PeopleTab items={props.item} />
       </TabPanel>
     </Box>
   );

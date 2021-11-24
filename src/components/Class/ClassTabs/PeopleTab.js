@@ -10,11 +10,12 @@ import {
   ListItemText,
   Avatar,
   Typography,
-  Box,
+  Box, Grid
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InvitationDialog from "components/InvitationUser/InvitationDialog";
+import authHeader from "services/auth-header";
 
 export default function PeopleTab({ items }) {
   const [item, setItem] = useState([]);
@@ -23,7 +24,7 @@ export default function PeopleTab({ items }) {
   useEffect(() => {
     async function fetchClass() {
       let id = params.id;
-      await http.get(`/classes/${id}`).then(
+      await http.get(`/classes/${id}`, { headers: authHeader() }).then(
         (result) => {
           setItem(result.data);
           // return result;
@@ -44,7 +45,7 @@ export default function PeopleTab({ items }) {
     ? item.users.filter((user) => user.user_class.role === "student")
     : [];
   return (
-    <div>
+    <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
       <Box
         sx={{
           mt: 4,
@@ -58,9 +59,9 @@ export default function PeopleTab({ items }) {
         <Typography variant="h6" component="div">
           Teachers
         </Typography>
-        <InvitationDialog role="teacher"/>
+        <InvitationDialog role="teacher" cjc=""/>
       </Box>
-      <List dense>
+      <List dense sx={{width: "60%",}}>
         {teachers &&
           teachers.map((user) => (
             <ListItem
@@ -96,9 +97,9 @@ export default function PeopleTab({ items }) {
         <Typography variant="h6" component="div">
         Students
         </Typography>
-        <InvitationDialog role="student" />
+        <InvitationDialog role="student" cjc={items.cjc} />
       </Box>
-      <List dense>
+      <List dense sx={{width: "60%",}}>
         {students &&
           students.map((user) => (
             <ListItem
@@ -121,6 +122,6 @@ export default function PeopleTab({ items }) {
             </ListItem>
           ))}
       </List>
-    </div>
+    </Grid>
   );
 }
