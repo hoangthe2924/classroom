@@ -47,7 +47,8 @@ export default function ClassList() {
             );
           }
           fetchClass();
-    }, [open])
+    }, [open]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };

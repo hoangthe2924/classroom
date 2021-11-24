@@ -42,7 +42,7 @@ const InvitationDialog = ({ role, cjc }) => {
 
   const addEmailHandler = (event) => {
     const newEmail = event.target.value;
-    
+
     const updatedEmailList = [...listEmail].concat(newEmail);
     if (
       validateEmail(newEmail) &&
@@ -73,7 +73,7 @@ const InvitationDialog = ({ role, cjc }) => {
 
   const inviteHandler = () => {
     const token = JSON.parse(localStorage.getItem("user")).accessToken;
-    const LINK = DEFAULT_DOMAIN + '/classes/people/invite';
+    const LINK = DEFAULT_DOMAIN + "/classes/people/invite";
 
     axios
       .post(
@@ -109,7 +109,8 @@ const InvitationDialog = ({ role, cjc }) => {
           default:
             setOpenErrorSBar(true);
         }
-      }).catch((error)=>{
+      })
+      .catch((error) => {
         setMessage(error.response.data.message);
         setOpenErrorSBar(true);
       });
@@ -131,7 +132,7 @@ const InvitationDialog = ({ role, cjc }) => {
       </IconButton>
       <Dialog
         maxWidth="xs"
-        fullWidth={true}
+        fullWidth
         open={openInvitationDialog}
         onClose={closeDialogHandler}
       >
