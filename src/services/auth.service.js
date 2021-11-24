@@ -27,9 +27,9 @@ export function register(values) {
     .then((res) => {
       console.log("res", res);
       if (res.status === 200 || res.status === 201) {
-        alert("Your question has been submited!");
+        alert("Register Success!");
       } else {
-        alert("Please try again later");
+        alert("Please try again with different username/email!");
       }
     })
     .catch((error) => {
