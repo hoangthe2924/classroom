@@ -56,7 +56,6 @@ const LinkInvitation = ({ cjc }) => {
             aria-controls="menu-appbar"
             aria-haspopup="true"
             color="inherit"
-            iconStyle={{ width: 2, height: 2 }}
             onClick={copyToClipBoardHandler}
           >
             <ContentCopyIcon />

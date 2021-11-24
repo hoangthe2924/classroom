@@ -32,6 +32,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const InvitationDialog = ({ role, cjc }) => {
   const [openInvitationDialog, setOpenInvitationDialog] = useState(false);
+  const [message, setMessage] = useState("");
   const [openSuccessSBar, setOpenSuccessSBar] = useState(false);
   const [openErrorSBar, setOpenErrorSBar] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -42,6 +43,7 @@ const InvitationDialog = ({ role, cjc }) => {
 
   const addEmailHandler = (event) => {
     const newEmail = event.target.value;
+    
     const updatedEmailList = [...listEmail].concat(newEmail);
     if (
       validateEmail(newEmail) &&
@@ -89,6 +91,7 @@ const InvitationDialog = ({ role, cjc }) => {
         }
       )
       .then((res) => {
+        console.log("check status");
         switch (res.status) {
           case 401:
             localStorage.removeItem("access_token");
@@ -100,9 +103,16 @@ const InvitationDialog = ({ role, cjc }) => {
             setOpenSuccessSBar(true);
             setListEmail([]);
             break;
+          case 403:
+            console.log("403");
+            setOpenErrorSBar(true);
+            break;
           default:
             setOpenErrorSBar(true);
         }
+      }).catch((error)=>{
+        setMessage(error.response.data.message);
+        setOpenErrorSBar(true);
       });
 
     //call api
@@ -192,7 +202,7 @@ const InvitationDialog = ({ role, cjc }) => {
           severity="error"
           sx={{ width: "100%" }}
         >
-          Send invitation fail!
+          {message}
         </Alert>
       </Snackbar>
     </Fragment>
