@@ -2,7 +2,7 @@ import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import * as React from "react";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ClassList from "components/Class/ClassList";
 import LoginForm from "components/User/Login/LoginForm";
 import RegisterForm from "components/User/Register/RegisterForm";
@@ -10,7 +10,7 @@ import Profile from "./pages/Profile";
 import ClassDetail from "components/Class/ClassDetail";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
 const mdTheme = createTheme();
 
