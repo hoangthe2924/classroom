@@ -35,9 +35,13 @@ export default function ClassList() {
         async function fetchClass() {
             await http.get("/classes").then(
               (result) => {
+                if(result.status === 401){
+                  navigate("/login");
+                }
                 setItems(result.data);
               },
               (error) => {
+                navigate("/login");
                 console.log(error);
               }
             );
@@ -92,7 +96,7 @@ export default function ClassList() {
         <Grid item xs={12} sm={6} md={4} key={cls.id}>
           <Card
             onClick={() => {
-              navigate(`/class/${cls.id}`);
+              navigate(`/classes/${cls.id}`);
             }}
           >
             <CardActionArea sx={{ minHeight: 200 }}>
