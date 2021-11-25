@@ -73,7 +73,7 @@ const InvitationDialog = ({ role, cjc }) => {
 
   const inviteHandler = () => {
     const token = JSON.parse(localStorage.getItem("user")).accessToken;
-    const LINK = DEFAULT_DOMAIN + "/classes/people/invite";
+    const LINK = DEFAULT_DOMAIN + "classes/people/invite";
 
     axios
       .post(
