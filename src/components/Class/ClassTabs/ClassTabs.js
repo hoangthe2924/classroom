@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import OverviewTab from "components/Class/ClassTabs/OverviewTab";
 import PeopleTab from "components/Class/ClassTabs/PeopleTab";
-import GradeStructureTabs from "components/Class/ClassTabs/GradeStructureTabs";
+import DragAndDropForm from "components/Class/ClassTabs/DragAndDropForm";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -45,7 +45,7 @@ export default function BasicTabs(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  let isTeacher = props.item?.requesterRole === "teacher";
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -57,18 +57,20 @@ export default function BasicTabs(props) {
         >
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="People" {...a11yProps(1)} />
-          <Tab label="Grade Structure" {...a11yProps(2)} />
+          {isTeacher && <Tab label="Grade Structure" {...a11yProps(2)} />}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <OverviewTab item={props.item} />
+        <OverviewTab item={props.item} onChangeTab={setValue} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <PeopleTab items={props.item} />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        <GradeStructureTabs items={props.item} />
-      </TabPanel>
+      {isTeacher && (
+        <TabPanel value={value} index={2}>
+          <DragAndDropForm items={props.item} />
+        </TabPanel>
+      )}
     </Box>
   );
 }

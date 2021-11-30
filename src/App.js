@@ -67,7 +67,6 @@ function App() {
               }
             />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/testgrade" element={<DragAndDropForm />} />
           </Routes>
           <Copyright sx={{ pt: 4 }} />
         </MyAppBar>
