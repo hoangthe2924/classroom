@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import OverviewTab from "components/Class/ClassTabs/OverviewTab";
 import PeopleTab from "components/Class/ClassTabs/PeopleTab";
-
+import GradeStructureTabs from "components/Class/ClassTabs/GradeStructureTabs";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -57,6 +57,7 @@ export default function BasicTabs(props) {
         >
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="People" {...a11yProps(1)} />
+          <Tab label="Grade Structure" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -64,6 +65,9 @@ export default function BasicTabs(props) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <PeopleTab items={props.item} />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <GradeStructureTabs items={props.item} />
       </TabPanel>
     </Box>
   );
