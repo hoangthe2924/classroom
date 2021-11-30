@@ -1,4 +1,5 @@
 import http from "../axios-config";
+import authHeader from "services/auth-header";
 
 export const login = (values) => {
   return async (dispatch) => {
@@ -24,8 +25,9 @@ export const logout = () => {
 
 export const checkIsLoggedIn = () => {
   return async (dispatch) => {
+    console.log("storage", localStorage.getItem("user"));
     return await http
-      .get("/users/info/")
+      .get("/users/info/", { headers: authHeader() })
       .then((res) => {
         console.log("checkIsLoggedIn", res.data);
         if (res.data.id) {
