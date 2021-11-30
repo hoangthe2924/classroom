@@ -12,6 +12,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
+import DragAndDropForm from "components/Class/ClassTabs/DragAndDropForm";
 const mdTheme = createTheme();
 
 function Copyright(props) {
@@ -44,6 +45,8 @@ function App() {
             <Route path={"profile"} element={<Profile />} />
             <Route path="/classes/:id" element={<ClassDetail />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/testgrade" element={<DragAndDropForm />} />
+
           </Routes>
           <Copyright sx={{ pt: 4 }} />
         </MyAppBar>
