@@ -9,30 +9,19 @@ import { Paper, Button, Typography, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
-
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
+  return `${num?.toFixed(2)}`;
 }
 
 function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+  return items?.assignments
+    ?.map(({ point }) => point)
+    .reduce((sum, i) => sum + i, 0);
 }
-const rows = [
-  createRow("Midterm", 100, 1.15),
-  createRow("Final term", 10, 45.99),
-  createRow("Exercise", 2, 17.99),
-];
 
-const invoiceSubtotal = subtotal(rows);
 export default function GradeStructure({ onChangeTab, item }) {
+  const invoiceSubtotal = subtotal(item);
   console.log("role", item?.requesterRole);
+  item?.assignments?.sort((a, b) => (a.order > b.order ? 1 : -1));
   return (
     <TableContainer component={Paper}>
       <Typography variant={"h5"} marginLeft="10px" style={{ float: "left" }}>
@@ -51,16 +40,16 @@ export default function GradeStructure({ onChangeTab, item }) {
         <TableHead>
           <TableRow>
             <TableCell align="left" colSpan={1}>
-              Details
+              Title
             </TableCell>
-            <TableCell align="right">Price</TableCell>
+            <TableCell align="right">Point</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
+          {item?.assignments?.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell>{row.title}</TableCell>
+              <TableCell align="right">{row.point}</TableCell>
             </TableRow>
           ))}
           <TableRow>
