@@ -21,9 +21,9 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
   }, [item]);
   const formik = useFormik({
     initialValues: {
-      fullname: values.fullname || "",
-      studentId: values.studentId || "",
-      email: values.email || "",
+      fullname: values?.fullname || "",
+      studentId: values?.studentId || "",
+      email: values?.email || "",
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -73,7 +73,7 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
                 name="studentId"
                 label="Student Id"
                 type="tel"
-                disabled={!!values.studentId}
+                disabled={!!values?.studentId}
                 value={formik.values.studentId}
                 onChange={formik.handleChange}
                 fullWidth

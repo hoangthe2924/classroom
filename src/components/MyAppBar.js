@@ -16,6 +16,7 @@ import React, { useEffect } from "react";
 import * as actions from "../actions/index.js";
 import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -104,13 +105,8 @@ function MyAppBar(props) {
           ></Typography>
           {loginStatus === true ? (
             <div>
-              <Button
-                variant="outlined"
-                color="inherit"
-                href="/profile"
-                sx={{ mr: 2 }}
-              >
-                Profile
+              <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>
+                <NavLink to="/profile">Profile</NavLink>
               </Button>
               <Button
                 variant="outlined"

@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
-import http from "../../axios-config";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ClassTabs from "components/Class/ClassTabs/ClassTabs";
-
+import { fetchClassDetail } from "services/class.service";
 
 export default function ClassDetail() {
   const [item, setItem] = useState([]);
   const { search } = useLocation();
   const navigate = useNavigate();
   const cjc = new URLSearchParams(search).get("cjc");
-  const strQuery = (cjc)? `?cjc=${cjc}`:'';
+  const strQuery = cjc ? `?cjc=${cjc}` : "";
   let params = useParams();
 
   useEffect(() => {
     async function fetchClass() {
       console.log("fetchdetail");
       let id = params.id;
-      await http.get(`/classes/${id}`+strQuery).then(
+      await fetchClassDetail(id, strQuery).then(
         (result) => {
-          if(result.status === 401){
+          if (result.status === 401) {
             navigate("/login");
           }
           setItem(result.data);

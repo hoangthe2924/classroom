@@ -39,5 +39,6 @@ export function register(values) {
 
 export function getToken() {
   const user = localStorage.getItem("user");
+  console.log("tk", user);
   return user ? JSON.parse(user).accessToken : {};
 }

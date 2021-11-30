@@ -2,7 +2,7 @@ import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import * as React from "react";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ClassList from "components/Class/ClassList";
 import LoginForm from "components/User/Login/LoginForm";
 import RegisterForm from "components/User/Register/RegisterForm";
@@ -12,6 +12,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
+import ProtectedRoute from "components/Routes/ProtectedRoute";
 const mdTheme = createTheme();
 
 function Copyright(props) {
@@ -38,11 +39,32 @@ function App() {
       <ThemeProvider theme={mdTheme}>
         <MyAppBar>
           <Routes>
-            <Route path={"classes"} element={<ClassList />} />
+            <Route
+              path={"classes"}
+              element={
+                <ProtectedRoute>
+                  <ClassList />
+                </ProtectedRoute>
+              }
+            />
             <Route path={"login"} element={<LoginForm />} />
             <Route path={"register"} element={<RegisterForm />} />
-            <Route path={"profile"} element={<Profile />} />
-            <Route path="/classes/:id" element={<ClassDetail />} />
+            <Route
+              path={"profile"}
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/classes/:id"
+              element={
+                <ProtectedRoute>
+                  <ClassDetail />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
           <Copyright sx={{ pt: 4 }} />

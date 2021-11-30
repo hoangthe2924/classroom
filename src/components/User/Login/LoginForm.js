@@ -35,92 +35,93 @@ function LoginForm(props) {
     onSubmit: async (values) => {
       const loginSuccess = await login(values);
       if (loginSuccess) {
+        props.checkLoginStatus();
         navigate("/dashboard");
-        window.location.reload();
+        // window.location.reload();
       } else {
         alert("incorrect username or password!");
       }
     },
   });
+  if (loginStatus === true) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <div>
-      {loginStatus === false ? (
-        <React.Fragment>
-          <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
+      <React.Fragment>
+        <ThemeProvider theme={theme}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
               <Box
-                sx={{
-                  marginTop: 8,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
+                component="form"
+                onSubmit={formik.handleSubmit}
+                noValidate
+                sx={{ mt: 1 }}
               >
-                <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                  Sign in
-                </Typography>
-                <Box
-                  component="form"
-                  onSubmit={formik.handleSubmit}
-                  noValidate
-                  sx={{ mt: 1 }}
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  value={formik.values.subject}
+                  onChange={formik.handleChange}
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={formik.values.subject}
+                  onChange={formik.handleChange}
+                />
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Remember me"
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
                 >
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
-                    value={formik.values.subject}
-                    onChange={formik.handleChange}
-                    autoFocus
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={formik.values.subject}
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                  />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                  >
-                    Sign In
-                  </Button>
-                  <GoogleLoginButton />
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <Link href="/register" variant="body2">
-                        {"Don't have an account? Sign Up"}
-                      </Link>
-                    </Grid>
+                  Sign In
+                </Button>
+                <GoogleLoginButton />
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Link href="/register" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
                   </Grid>
-                </Box>
+                </Grid>
               </Box>
-            </Container>
-          </ThemeProvider>
-        </React.Fragment>
-      ) : (
-        <Navigate to="/dashboard" />
-      )}
+            </Box>
+          </Container>
+        </ThemeProvider>
+      </React.Fragment>
+      )
     </div>
   );
 }

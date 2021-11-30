@@ -8,15 +8,15 @@ import {
   Snackbar,
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
-import http from "axios-config";
 import { useFormik } from "formik";
 import React, { useState } from "react";
+import { addClass } from "services/class.service";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function AddClassForm({ open, handleClose }) {
+export default function AddClassForm({ open, handleClose, onSuccess }) {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({
     type: "error",
@@ -30,8 +30,7 @@ export default function AddClassForm({ open, handleClose }) {
       description: "",
     },
     onSubmit: async (values) => {
-      await http
-        .post("/classes/", values)
+      await addClass(values)
         .then((res) => {
           console.log("res", res);
           if (res.status === 200 || res.status === 201) {
@@ -41,6 +40,7 @@ export default function AddClassForm({ open, handleClose }) {
               type: "success",
               content: "Added class successfully",
             });
+            onSuccess();
           } else {
             setShowSnackbar(true);
             setSnackbarContent({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -17,8 +17,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { register } from "services/auth.service";
 import * as Yup from "yup";
 import { useNavigate, Navigate } from "react-router-dom";
+import * as actions from "../../../actions/index";
+import { connect } from "react-redux";
 
-export default function LoginForm() {
+function RegisterForm(props) {
+  const { loginStatus } = props;
+  useEffect(() => {
+    props.checkLoginStatus();
+    console.log("stt", loginStatus);
+  }, [loginStatus]);
+
   const theme = createTheme();
   let navigate = useNavigate();
   const validationSchema = Yup.object().shape({
@@ -43,6 +51,10 @@ export default function LoginForm() {
     },
     validationSchema: validationSchema,
   });
+
+  if (loginStatus === true) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -162,3 +174,18 @@ export default function LoginForm() {
     </React.Fragment>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    loginStatus: state.loginStatus,
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    checkLoginStatus: () => {
+      dispatch(actions.checkIsLoggedIn());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);
