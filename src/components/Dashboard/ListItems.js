@@ -4,7 +4,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import HomeIcon from "@mui/icons-material/Home";
+import SchoolIcon from '@mui/icons-material/School';
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -19,7 +19,7 @@ export const mainListItems = (
     </ListItem>
     <ListItem component={NavLink} to="/classes" button>
       <ListItemIcon>
-        <HomeIcon />
+        <SchoolIcon />
       </ListItemIcon>
       <ListItemText primary="Classes" />
     </ListItem>

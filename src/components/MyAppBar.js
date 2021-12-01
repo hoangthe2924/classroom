@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Button } from "@mui/material";
+import { Button, ListItem, ListItemIcon } from "@mui/material";
 import { mainListItems } from "components/Dashboard/ListItems";
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
@@ -70,7 +70,7 @@ function MyAppBar(props) {
     props.checkLoginStatus();
     console.log("stt", loginStatus);
   }, [loginStatus]);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -125,11 +125,19 @@ function MyAppBar(props) {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <Toolbar>
+      <Toolbar disableGutters>
+        <ListItem button onClick={toggleDrawer}>
+          <ListItemIcon>
+            <ChevronLeftIcon />
+          </ListItemIcon>
+        </ListItem>
+      </Toolbar>
+        {/* 
+
           <IconButton onClick={toggleDrawer}>
             <ChevronLeftIcon />
           </IconButton>
-        </Toolbar>
+         */}
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
