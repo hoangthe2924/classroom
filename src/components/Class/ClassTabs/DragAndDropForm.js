@@ -72,21 +72,23 @@ export default function DragAndDropForm({ onUpdate }) {
   const handleOnDragEnd = async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
-    const item1 = { ...items[result.source.index] };
+    // const item1 = { ...items[result.source.index] };
+    // const item2 = { ...items[result.destination.index] };
 
-    const item2 = { ...items[result.destination.index] };
+    // const tmpOrder = item1.order;
+    // item1.order = item2.order;
+    // item2.order = tmpOrder;
 
-    const tmpOrder = item1.order;
-    item1.order = item2.order;
-    item2.order = tmpOrder;
-
-    const reorderList = [item1].concat(item2);
+    // const reorderList = [item1].concat(item2);
 
     const itemList = Array.from(items);
-    const [reorderedItem] = itemList.splice(result.source.index, 1);
-    itemList.splice(result.destination.index, 0, reorderedItem);
+    [itemList[result.source.index], itemList[result.destination.index]] = [itemList[result.destination.index], itemList[result.source.index]];
+    //const [reorderedItem] = itemList.splice(result.source.index, 1);
+    //itemList.splice(result.destination.index, 0, reorderedItem);
 
-    setItems(itemList);
+    const reorderList = itemList.map((item, idx)=>{return {...item, order: idx}});
+
+    setItems(reorderList);
     console.log(reorderList);
     const newOrderList = { listAssignment: reorderList };
     const res = await updateAssignmentOrder(params.id, newOrderList);
