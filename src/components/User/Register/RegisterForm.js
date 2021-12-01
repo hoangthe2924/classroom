@@ -142,7 +142,7 @@ function RegisterForm(props) {
                     <Alert severity="error">{formik.errors.password}</Alert>
                   )}
                 </Grid>
-                <Grid item xs={12}>
+                <Grid container justifyContent="center">
                   <FormControlLabel
                     control={
                       <Checkbox value="allowExtraEmails" color="primary" />
@@ -159,13 +159,11 @@ function RegisterForm(props) {
               >
                 Sign Up
               </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item xs={12}>
+              <Grid container justifyContent="center">
                   <Link href="/login" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>
-              </Grid>
             </Box>
           </Box>
         </Container>
