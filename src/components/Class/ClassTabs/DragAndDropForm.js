@@ -83,7 +83,8 @@ export default function DragAndDropForm() {
 
     setItems(itemList);
     console.log(reorderList);
-    const res = await updateAssignmentOrder(params.id,reorderList);
+    const newOrderList = {listAssignment: reorderList};
+    const res = await updateAssignmentOrder(params.id,newOrderList);
   }
 
   const handleEditGradeTitle = (index, title) => {
