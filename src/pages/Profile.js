@@ -11,7 +11,6 @@ function Profile() {
   async function getUserDetail() {
     const result = await getUserInfo().then(
       (result) => {
-        console.log("uppp", result.data);
         return result.data;
         // return result;
       },

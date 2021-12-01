@@ -24,7 +24,6 @@ function RegisterForm(props) {
   const { loginStatus } = props;
   useEffect(() => {
     props.checkLoginStatus();
-    console.log("stt", loginStatus);
   }, [loginStatus]);
 
   const theme = createTheme();

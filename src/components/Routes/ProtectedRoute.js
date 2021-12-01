@@ -5,12 +5,10 @@ import { useEffect } from "react";
 
 function ProtectedRoute(props, { children, alternativePath = "/login" }) {
   const { loginStatus } = props;
-  console.log("st", loginStatus);
-  console.log("child", props.children);
+  
 
   useEffect(() => {
     props.checkLoginStatus();
-    console.log("sttPro", loginStatus);
   }, []);
 
   return loginStatus === true ? props.children : <Navigate to="/login" />;

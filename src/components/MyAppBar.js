@@ -68,7 +68,6 @@ function MyAppBar(props) {
   const { loginStatus } = props;
   useEffect(() => {
     props.checkLoginStatus();
-    console.log("stt", loginStatus);
   }, [loginStatus]);
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {

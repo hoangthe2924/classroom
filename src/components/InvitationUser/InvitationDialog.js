@@ -103,7 +103,6 @@ const InvitationDialog = ({ role, cjc }) => {
             setListEmail([]);
             break;
           case 403:
-            console.log("403");
             setOpenErrorSBar(true);
             break;
           default:

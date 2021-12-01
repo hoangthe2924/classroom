@@ -32,7 +32,6 @@ export default function AddClassForm({ open, handleClose, onSuccess }) {
     onSubmit: async (values) => {
       await addClass(values)
         .then((res) => {
-          console.log("res", res);
           if (res.status === 200 || res.status === 201) {
             handleClose();
             setShowSnackbar(true);
