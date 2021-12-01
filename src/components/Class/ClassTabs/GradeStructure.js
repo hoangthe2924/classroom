@@ -20,7 +20,6 @@ function subtotal(items) {
 
 export default function GradeStructure({ onChangeTab, item }) {
   const invoiceSubtotal = subtotal(item);
-  console.log("role", item?.requesterRole);
   item?.assignments?.sort((a, b) => (a.order > b.order ? 1 : -1));
   return (
     <TableContainer component={Paper}>

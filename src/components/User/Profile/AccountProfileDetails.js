@@ -14,8 +14,7 @@ import http from "axios-config";
 
 export const AccountProfileDetails = ({ item, onUpdate }) => {
   const [values, setValues] = useState(item);
-  console.log("v", values);
-  console.log("i", item);
+
   useEffect(() => {
     setValues(item);
   }, [item]);
@@ -30,7 +29,6 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
       await http
         .put("/users/info", values)
         .then((res) => {
-          console.log("res", res);
           if (res.status === 200 || res.status === 201) {
             onUpdate();
             alert("Updated profile successfully!");

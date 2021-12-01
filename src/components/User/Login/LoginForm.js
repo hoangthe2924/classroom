@@ -23,7 +23,6 @@ function LoginForm(props) {
   const { loginStatus } = props;
   useEffect(() => {
     props.checkLoginStatus();
-    console.log("stt", loginStatus);
   }, [loginStatus]);
   const theme = createTheme();
   let navigate = useNavigate();
@@ -47,10 +46,9 @@ function LoginForm(props) {
     return <Navigate to="/dashboard" />;
   }
   return (
-    <div>
       <React.Fragment>
         <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs">
+          <Container justifyContent="center" component="main" maxWidth="xs">
             <CssBaseline />
             <Box
               sx={{
@@ -108,21 +106,20 @@ function LoginForm(props) {
                 >
                   Sign In
                 </Button>
-                <GoogleLoginButton />
-                <Grid container>
-                  <Grid item xs={12}>
+                
+                <Grid container justifyContent="center">
+                  <GoogleLoginButton />
+                </Grid>
+                <Grid sx={{ mt: 2, mb: 2 }} container justifyContent="center">
                     <Link href="/register" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
-                  </Grid>
                 </Grid>
               </Box>
             </Box>
           </Container>
         </ThemeProvider>
       </React.Fragment>
-      )
-    </div>
   );
 }
 

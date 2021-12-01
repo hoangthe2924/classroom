@@ -6,7 +6,6 @@ export const login = (values) => {
     return await http
       .post("/users/login/", values)
       .then((res) => {
-        console.log(res.data);
         if (res.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(res.data));
           dispatch(changeState(true));
@@ -25,21 +24,16 @@ export const logout = () => {
 
 export const checkIsLoggedIn = () => {
   return async (dispatch) => {
-    console.log("storage", localStorage.getItem("user"));
     return await http
       .get("/users/info/", { headers: authHeader() })
       .then((res) => {
-        console.log("checkIsLoggedIn", res.data);
         if (res.data.id) {
-          console.log("true");
           dispatch(changeState(true));
           return;
         }
-        console.log("falsess");
         dispatch(changeState(false));
       })
       .catch((error) => {
-        console.log("errr: ", error);
         dispatch(changeState(false));
       });
   };

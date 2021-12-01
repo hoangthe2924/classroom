@@ -36,7 +36,6 @@ function ClassList(props) {
   }, []);
 
   async function fetchClass() {
-    console.log("fet");
     await fetchAllClasses().then(
       (result) => {
         setItems(result.data);
@@ -53,7 +52,6 @@ function ClassList(props) {
   };
 
   const handleClose = (formik) => () => {
-    console.log("close");
     formik.resetForm();
     setOpen(false);
   };

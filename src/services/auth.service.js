@@ -4,7 +4,6 @@ export async function login(values) {
   return http
     .post("/users/login/", values)
     .then((res) => {
-      console.log(res.data);
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
         return true;
@@ -25,7 +24,6 @@ export function register(values) {
   return http
     .post("/users/register/", values)
     .then((res) => {
-      console.log("res", res);
       if (res.status === 200 || res.status === 201) {
         alert("Register Success!");
       } else {
@@ -39,6 +37,5 @@ export function register(values) {
 
 export function getToken() {
   const user = localStorage.getItem("user");
-  console.log("tk", user);
   return user ? JSON.parse(user).accessToken : {};
 }

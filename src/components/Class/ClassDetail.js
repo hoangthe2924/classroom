@@ -13,7 +13,6 @@ export default function ClassDetail() {
   let params = useParams();
 
   async function fetchClass() {
-    console.log("fetchdetail");
     let id = params.id;
     await fetchClassDetail(id, strQuery).then(
       (result) => {
