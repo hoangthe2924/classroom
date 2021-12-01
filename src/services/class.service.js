@@ -12,3 +12,23 @@ export function fetchClassDetail(classId, strQuery) {
 export function addClass(values) {
   return http.post("/classes/", values, { headers: authHeader() });
 }
+
+export function addNewAssignment(classId, values) {
+  return http.post(`/classes/${classId}/assignments`, values, { headers: authHeader() });
+}
+
+export function getAssignment(classId) {
+  return http.get(`/classes/${classId}/assignments`, { headers: authHeader() });
+}
+
+export function updateAssignmentInfo(classId, values) {
+  return http.put(`/classes/${classId}/assignments`,values, { headers: authHeader() });
+}
+
+export function updateAssignmentOrder(classId, values) {
+  return http.put(`/classes/${classId}/assignments/order`,values, { headers: authHeader() });
+}
+
+export function deleteAssignment(classId, assignmentId) {
+  return http.delete(`/classes/${classId}/assignments/${assignmentId}`, { headers: authHeader() });
+}

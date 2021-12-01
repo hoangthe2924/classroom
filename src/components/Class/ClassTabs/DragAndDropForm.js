@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { useParams } from "react-router-dom";
+
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   Card,
@@ -18,67 +21,81 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import CheckIcon from "@mui/icons-material/Check";
 import { useFormik } from "formik";
+import {addNewAssignment, getAssignment, deleteAssignment, updateAssignmentInfo, updateAssignmentOrder} from "services/class.service"
+import { useEffect } from "react";
 
-const data = [
-  {
-    id: "gary",
-    name: "Gary Goodspeed",
-  },
-  {
-    id: "cato",
-    name: "Little Cato",
-  },
-  {
-    id: "kvn",
-    name: "KVN",
-  },
-  {
-    id: "mooncake",
-    name: "Mooncake",
-  },
-  {
-    id: "quinn",
-    name: "Quinn Ergon",
-  },
-];
 
 export default function DragAndDropForm() {
-  const [items, setItems] = useState(data);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    async function fetchAssignments() {
+        const res = await getAssignment(params.id);
+        const data = res.data ? res.data : [];
+        setItems(data);
+    }
+
+    if (params) {
+        fetchAssignments();
+    } else {
+        navigate('/', { replace: true });
+    }
+}, [params, navigate]);
+
   const [tempData, setTempData] = useState(null);
   const [onEditModeIndex, setOnEditModeIndex] = React.useState(-1);
 
   const formik = useFormik({
     initialValues: {
-      id: "",
-      name: "",
+      title: "",
+      point: "",
     },
     onSubmit: async (values) => {
-      const newItems = items.concat([{ id: values.id, name: values.name }]);
+      const order = items.length + 1;
+      values.order = order;
+      const newItem = values;
+      const newItems = items.concat(newItem);
       setItems(newItems);
+      const res = await addNewAssignment(params.id,values);
+
     },
   });
 
-  function handleOnDragEnd(result) {
+  const handleOnDragEnd = async (result) => {
     if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
+    const item1 = {...items[result.source.index]};
+
+    const item2 = {...items[result.destination.index]};
+
+    const tmpOrder = item1.order;
+    item1.order = item2.order;
+    item2.order = tmpOrder;
+
+    const reorderList = [item1].concat(item2);
 
     const itemList = Array.from(items);
     const [reorderedItem] = itemList.splice(result.source.index, 1);
     itemList.splice(result.destination.index, 0, reorderedItem);
 
     setItems(itemList);
-    console.log(itemList);
+    console.log(reorderList);
+    const res = await updateAssignmentOrder(params.id,reorderList);
   }
 
   const handleEditGradeTitle = (index, title) => {
-    setTempData({ id: items[index].id, name: title });
+    setTempData({ id: items[index].id, title: title, point: items[index].point, order: items[index].order});
   };
 
-  const handleEditGradeDetail = (index, detail) => {
-    setTempData({ id: items[index].id, name: detail });
+  const handleEditGradePoint = (index, point) => {
+    setTempData({ id: items[index].id, title: items[index].title, point: point, order: items[index].order });
   };
 
   const handleEditGradeForm = async (index) => {
-    setTempData({ id: items[index].id, name: items[index].name });
+    setTempData({ id: items[index].id, title: items[index].title, point: items[index].point, order: items[index].order });
     setOnEditModeIndex(index);
   };
 
@@ -90,13 +107,18 @@ export default function DragAndDropForm() {
     setItems(newItems);
     setOnEditModeIndex(-1);
     setTempData(null);
+    console.log(tempData);
+    const res = await updateAssignmentInfo(params.id,tempData);
   };
 
   const handleDeleteGradeForm = async (index) => {
+    const deleteItem = items[index];
+    console.log(deleteItem);
     let p1 = items.slice(0, index);
     let p2 = items.slice(index + 1);
     const newItems = p1.concat(p2);
     setItems(newItems);
+    const res = await deleteAssignment(params.id,deleteItem.id);
   };
 
   return (
@@ -119,9 +141,9 @@ export default function DragAndDropForm() {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
-                    {items.map(({ id, name }, index) => {
+                    {items.map(({ title, point, order }, index) => {
                       return (
-                        <Draggable key={id} draggableId={id} index={index}>
+                        <Draggable key={title+order} draggableId={title+order} index={index}>
                           {(provided) => (
                             <Card
                               variant="outlined"
@@ -142,8 +164,8 @@ export default function DragAndDropForm() {
                                     id="form-title"
                                     value={
                                       onEditModeIndex === index
-                                        ? tempData["id"]
-                                        : id
+                                        ? tempData["title"]
+                                        : title
                                     }
                                     disabled={!(onEditModeIndex === index)}
                                     onChange={(e) => {
@@ -160,18 +182,18 @@ export default function DragAndDropForm() {
                                   sx={{ marginBottom: 0, width: "80%" }}
                                 >
                                   <InputLabel htmlFor="form-detail">
-                                    Grade Detail
+                                    Grade Point
                                   </InputLabel>
                                   <FilledInput
                                     id="form-detail"
                                     value={
                                       onEditModeIndex === index
-                                        ? tempData["name"]
-                                        : name
+                                        ? tempData["point"]
+                                        : point
                                     }
                                     disabled={!(onEditModeIndex === index)}
                                     onChange={(e) => {
-                                      handleEditGradeDetail(
+                                      handleEditGradePoint(
                                         index,
                                         e.target.value
                                       );
@@ -235,11 +257,11 @@ export default function DragAndDropForm() {
                   <TextField
                     required
                     margin="dense"
-                    id="id"
-                    name="id"
+                    id="title"
+                    name="title"
                     label="Grade Title"
                     type="text"
-                    value={formik.values.id}
+                    value={formik.values.title}
                     onChange={formik.handleChange}
                     fullWidth
                     variant="standard"
@@ -248,11 +270,11 @@ export default function DragAndDropForm() {
                   <TextField
                     required
                     margin="dense"
-                    id="name"
-                    name="name"
-                    label="Grade Detail"
+                    id="point"
+                    name="point"
+                    label="Grade Point"
                     type="text"
-                    value={formik.values.name}
+                    value={formik.values.point}
                     onChange={formik.handleChange}
                     fullWidth
                     variant="standard"
