@@ -15,6 +15,8 @@ import {
   InputLabel,
   FilledInput,
   TextField,
+  Box,
+  CircularProgress
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -61,10 +63,11 @@ export default function DragAndDropForm({ onUpdate }) {
     onSubmit: async (values) => {
       const order = items.length + 1;
       values.order = order;
-      const newItem = values;
+      let newItem = values;
+      const res = await addNewAssignment(params.id, values);
+      newItem.id = res.data.id;
       const newItems = items.concat(newItem);
       setItems(newItems);
-      const res = await addNewAssignment(params.id, values);
       onUpdate();
     },
   });
@@ -92,6 +95,8 @@ export default function DragAndDropForm({ onUpdate }) {
     console.log(reorderList);
     const newOrderList = { listAssignment: reorderList };
     const res = await updateAssignmentOrder(params.id, newOrderList);
+    onUpdate();
+
   };
 
   const handleEditGradeTitle = (index, title) => {
@@ -132,6 +137,8 @@ export default function DragAndDropForm({ onUpdate }) {
     setTempData(null);
     console.log(tempData);
     const res = await updateAssignmentInfo(params.id, tempData);
+    onUpdate();
+
   };
 
   const handleDeleteGradeForm = async (index) => {
@@ -142,10 +149,13 @@ export default function DragAndDropForm({ onUpdate }) {
     const newItems = p1.concat(p2);
     setItems(newItems);
     const res = await deleteAssignment(params.id, deleteItem.id);
+    onUpdate();
+
   };
 
   return (
     <React.Fragment>
+      
       <Card sx={{ minWidth: 400 }}>
         <CardContent>
           <Typography variant={"h4"} align="center" gutterBottom>
@@ -308,7 +318,11 @@ export default function DragAndDropForm({ onUpdate }) {
                   />
                 </form>
               </CardContent>
-              <CardActions disableSpacing>
+              {formik.isSubmitting && (<Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>)}
+              {!formik.isSubmitting && 
+              (<CardActions disableSpacing>
                 <Button
                   size="small"
                   color="secondary"
@@ -317,7 +331,8 @@ export default function DragAndDropForm({ onUpdate }) {
                 >
                   Confirm
                 </Button>
-              </CardActions>
+              </CardActions>)}
+              
             </Card>
           </Container>
         </CardContent>
