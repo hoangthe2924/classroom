@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { AccountProfile } from "components/User/Profile/AccountProfile";
 import { AccountProfileDetails } from "components/User/Profile/AccountProfileDetails";
-import http from "../axios-config";
+import { getUserInfo } from "services/user.service";
 
 function Profile() {
   const [item, setItem] = useState([]);
 
   async function getUserDetail() {
-    const result = await http.get(`/users/info`).then(
+    const result = await getUserInfo().then(
       (result) => {
         console.log("uppp", result.data);
         return result.data;

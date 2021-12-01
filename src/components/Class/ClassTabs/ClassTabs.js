@@ -68,7 +68,7 @@ export default function BasicTabs(props) {
       </TabPanel>
       {isTeacher && (
         <TabPanel value={value} index={2}>
-          <DragAndDropForm items={props.item} />
+          <DragAndDropForm items={props.item} onUpdate={props.onUpdate} />
         </TabPanel>
       )}
     </Box>

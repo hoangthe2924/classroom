@@ -12,29 +12,32 @@ export default function ClassDetail() {
   const strQuery = cjc ? `?cjc=${cjc}` : "";
   let params = useParams();
 
-  useEffect(() => {
-    async function fetchClass() {
-      console.log("fetchdetail");
-      let id = params.id;
-      await fetchClassDetail(id, strQuery).then(
-        (result) => {
-          if (result.status === 401) {
-            navigate("/login");
-          }
-          setItem(result.data);
-          // return result;
-        },
-        (error) => {
+  async function fetchClass() {
+    console.log("fetchdetail");
+    let id = params.id;
+    await fetchClassDetail(id, strQuery).then(
+      (result) => {
+        if (result.status === 401) {
           navigate("/login");
-          console.log(error);
         }
-      );
-    }
+        setItem(result.data);
+        // return result;
+      },
+      (error) => {
+        navigate("/login");
+        console.log(error);
+      }
+    );
+  }
+  function handleUpdate() {
+    fetchClass();
+  }
+  useEffect(() => {
     fetchClass();
   }, []);
   return (
     <Card variant="outlined">
-      <ClassTabs item={item} />
+      <ClassTabs item={item} onUpdate={handleUpdate} />
     </Card>
   );
 }
