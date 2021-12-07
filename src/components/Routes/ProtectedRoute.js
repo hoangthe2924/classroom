@@ -3,9 +3,8 @@ import * as actions from "../../actions/index";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 
-function ProtectedRoute(props, { children, alternativePath = "/login" }) {
+function ProtectedRoute(props) {
   const { loginStatus } = props;
-  
 
   useEffect(() => {
     props.checkLoginStatus();

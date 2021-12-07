@@ -3,16 +3,15 @@ import Dashboard from "./pages/Dashboard";
 import * as React from "react";
 
 import { Routes, Route } from "react-router-dom";
-import ClassList from "components/Class/ClassList";
-import LoginForm from "components/User/Login/LoginForm";
-import RegisterForm from "components/User/Register/RegisterForm";
+import ClassList from "pages/ClassList";
+import Login from "pages/Login";
+import Register from "pages/Register";
 import Profile from "./pages/Profile";
-import ClassDetail from "components/Class/ClassDetail";
+import ClassDetail from "pages/ClassDetail";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
-import DragAndDropForm from "components/Class/ClassTabs/DragAndDropForm";
 import ProtectedRoute from "components/Routes/ProtectedRoute";
 const mdTheme = createTheme();
 
@@ -48,8 +47,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path={"login"} element={<LoginForm />} />
-            <Route path={"register"} element={<RegisterForm />} />
+            <Route path={"login"} element={<Login />} />
+            <Route path={"register"} element={<Register />} />
             <Route
               path={"profile"}
               element={

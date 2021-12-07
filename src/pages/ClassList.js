@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import * as PropTypes from "prop-types";
-import AddClassForm from "./AddClassForm";
+import AddClassForm from "components/Class/AddClassForm";
 import { useNavigate, Navigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
 
