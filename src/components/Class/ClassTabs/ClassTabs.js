@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import OverviewTab from "components/Class/ClassTabs/OverviewTab";
 import PeopleTab from "components/Class/ClassTabs/PeopleTab";
 import DragAndDropForm from "components/Class/ClassTabs/DragAndDropForm";
+import StudentImport from "components/Class/ClassTabs/StudentImport";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -58,6 +59,7 @@ export default function BasicTabs(props) {
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="People" {...a11yProps(1)} />
           {isTeacher && <Tab label="Grade Structure" {...a11yProps(2)} />}
+          <Tab label="Student Import" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -71,6 +73,9 @@ export default function BasicTabs(props) {
           <DragAndDropForm items={props.item} onUpdate={props.onUpdate} />
         </TabPanel>
       )}
+      <TabPanel value={value} index={3}>
+        <StudentImport items={props.item} />
+      </TabPanel>
     </Box>
   );
 }
