@@ -110,7 +110,11 @@ const InvitationDialog = ({ role, cjc }) => {
         }
       })
       .catch((error) => {
-        setMessage(error.response.data.message);
+        let err_msg = "Something went wrong!";
+        if(error.response.data.message && error.response.data.message.length!==0){
+          err_msg = error.response.data.message;
+        }
+        setMessage(err_msg);
         setOpenErrorSBar(true);
       });
 
