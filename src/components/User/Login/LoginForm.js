@@ -20,7 +20,6 @@ import * as actions from "../../../store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 
 function LoginForm(props) {
-
   //const { loginStatus } = props;
   const loginStatus = useSelector(state => state.loginStatus);
   const dispatch = useDispatch();
@@ -35,6 +34,7 @@ function LoginForm(props) {
 
   const theme = createTheme();
   let navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -44,7 +44,7 @@ function LoginForm(props) {
       const loginSuccess = await login(values);
       if (loginSuccess) {
         checkLoginStatus();
-        navigate("/dashboard");
+        // navigate(navigateLink);
         // window.location.reload();
       } else {
         alert("incorrect username or password!");
@@ -52,12 +52,16 @@ function LoginForm(props) {
     },
   });
   if (loginStatus === true) {
-    return <Navigate to="/dashboard" />;
+    let navigateLink = localStorage.getItem('prev-link');
+    if(!navigateLink){
+      navigateLink = '/profile';
+    }
+    return <Navigate to={navigateLink} />;
   }
   return (
       <React.Fragment>
         <ThemeProvider theme={theme}>
-          <Container justifyContent="center" component="main" maxWidth="xs">
+          <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
               sx={{

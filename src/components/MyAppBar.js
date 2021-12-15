@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Button, ListItem, ListItemIcon } from "@mui/material";
-import { mainListItems } from "components/Dashboard/ListItems";
+import { MainListItems } from "components/Dashboard/ListItems";
 import { connect, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import * as actions from "../store/actions/index.js";
@@ -17,7 +17,7 @@ import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
 
-const drawerWidth = 250;
+const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -132,7 +132,7 @@ function MyAppBar(props) {
           </ListItem>
         </Toolbar>
         <Divider />
-        {mainListItems(open, classList)}
+        <MainListItems open={open} classList={classList} />
         <Divider />
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

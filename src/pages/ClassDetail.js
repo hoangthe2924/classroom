@@ -12,6 +12,8 @@ export default function ClassDetail() {
   const strQuery = cjc ? `?cjc=${cjc}` : "";
   let params = useParams();
 
+  localStorage.removeItem('prev-link');
+
   async function fetchClass() {
     let id = params.id;
     await fetchClassDetail(id, strQuery).then(

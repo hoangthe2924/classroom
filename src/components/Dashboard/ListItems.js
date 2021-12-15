@@ -13,7 +13,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
 
-export const mainListItems = (open, classList) => {
+export const MainListItems = ({open, classList}) => {
   const teachingClasses = classList.filter(
     (item) => item.user_class.role === "teacher"
   );
@@ -43,7 +43,7 @@ export const mainListItems = (open, classList) => {
   });
 
   const classItems = (
-    <Box sx={{ width: 250 }} role="presentation">
+    <Box>
       <Divider />
       <List>
         <ListSubheader>Teaching</ListSubheader>

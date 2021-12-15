@@ -15,7 +15,16 @@ function ProtectedRoute(props) {
     checkLoginStatus();
   }, []);
 
-  return loginStatus === true ? props.children : <Navigate to="/login" />;
+  if(loginStatus===true){
+    return props.children;
+  }
+  else{
+    localStorage.removeItem('prev-link');
+    localStorage.setItem('prev-link', `${window.location.pathname+window.location.search}`);
+    return <Navigate to="/login" />;
+  }
+
+  //return loginStatus === true ? props.children : <Navigate to="/login" />;
 }
 
 export default ProtectedRoute;

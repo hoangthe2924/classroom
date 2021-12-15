@@ -8,6 +8,8 @@ import { getUserInfo } from "services/user.service";
 function Profile() {
   const [item, setItem] = useState([]);
 
+  localStorage.removeItem('prev-link');
+
   async function getUserDetail() {
     const result = await getUserInfo().then(
       (result) => {
