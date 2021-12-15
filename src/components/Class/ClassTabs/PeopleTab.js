@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
-import InvitationDialog from "components/InvitationUser/InvitationDialog";
+import InvitationDialog from "components/Class/InvitationUser/InvitationDialog";
 import authHeader from "services/auth-header";
 
 export default function PeopleTab({ items }) {

@@ -16,14 +16,23 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { login } from "services/auth.service";
 import GoogleLoginButton from "./GoogleLogin";
 import { useNavigate, Navigate } from "react-router-dom";
-import * as actions from "../../../actions/index";
-import { connect } from "react-redux";
+import * as actions from "../../../store/actions/index";
+import { useDispatch, useSelector } from "react-redux";
 
 function LoginForm(props) {
-  const { loginStatus } = props;
+
+  //const { loginStatus } = props;
+  const loginStatus = useSelector(state => state.loginStatus);
+  const dispatch = useDispatch();
+
+  const checkLoginStatus = () => {
+    dispatch(actions.checkIsLoggedIn());
+  };
+
   useEffect(() => {
-    props.checkLoginStatus();
+    checkLoginStatus();
   }, [loginStatus]);
+
   const theme = createTheme();
   let navigate = useNavigate();
   const formik = useFormik({
@@ -34,7 +43,7 @@ function LoginForm(props) {
     onSubmit: async (values) => {
       const loginSuccess = await login(values);
       if (loginSuccess) {
-        props.checkLoginStatus();
+        checkLoginStatus();
         navigate("/dashboard");
         // window.location.reload();
       } else {
@@ -123,17 +132,19 @@ function LoginForm(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    loginStatus: state.loginStatus,
-  };
-};
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    checkLoginStatus: () => {
-      dispatch(actions.checkIsLoggedIn());
-    },
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     loginStatus: state.loginStatus,
+//   };
+// };
+// const mapDispatchToProps = (dispatch, props) => {
+//   return {
+//     checkLoginStatus: () => {
+      
+//     },
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+//export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+
+export default LoginForm;

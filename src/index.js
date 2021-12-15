@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { applyMiddleware, compose, createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import myReducer from "./reducers/index";
+import myReducer from "./store/reducers/index";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { BrowserRouter } from "react-router-dom";
