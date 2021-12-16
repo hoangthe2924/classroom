@@ -51,13 +51,18 @@ function LoginForm(props) {
       }
     },
   });
+
   if (loginStatus === true) {
     let navigateLink = localStorage.getItem('prev-link');
     if(!navigateLink){
-      navigateLink = '/profile';
+      navigateLink = '/dashboard';
     }
+    //localStorage.removeItem('prev-link'); //if we remove this line, it works
+    //console.log(navigateLink); //question
+
     return <Navigate to={navigateLink} />;
   }
+
   return (
       <React.Fragment>
         <ThemeProvider theme={theme}>

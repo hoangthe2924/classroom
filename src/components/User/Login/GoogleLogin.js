@@ -14,7 +14,11 @@ export default function GoogleLoginButton() {
       .then((res) => {
         if (res.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(res.data));
-          navigate("/dashboard");
+          let navigateLink = localStorage.getItem('prev-link');
+          if(!navigateLink){
+            navigateLink = '/dashboard';
+          }
+          navigate(navigateLink);
           window.location.reload();
         }
       })
