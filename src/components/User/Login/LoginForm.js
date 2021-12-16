@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { login } from "services/auth.service";
 import GoogleLoginButton from "./GoogleLogin";
 import { useNavigate, Navigate } from "react-router-dom";
-import * as actions from "../../../store/actions/index";
+import * as actions from "store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 
 function LoginForm(props) {

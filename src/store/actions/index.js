@@ -1,6 +1,6 @@
 import http from "../../axios-config";
 import authHeader from "services/auth-header";
-import { fetchAllClasses } from "../../services/class.service";
+import { fetchAllClasses } from "services/class.service";
 
 export const login = (values) => {
   return async (dispatch) => {

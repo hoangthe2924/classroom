@@ -4,7 +4,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ClassTabs from "components/Class/ClassTabs/ClassTabs";
 import { fetchClassDetail } from "services/class.service";
 
-export default function ClassDetail() {
+export default function ClassDetail({changeTitle}) {
   const [item, setItem] = useState([]);
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -35,7 +35,18 @@ export default function ClassDetail() {
   }
   useEffect(() => {
     fetchClass();
+
+    return () => {
+      changeTitle("");
+    };
   }, []);
+
+  const { className } = item;
+
+  useEffect(()=>{
+    changeTitle(className);
+  }, [className, changeTitle]);
+
   return (
     <Card variant="outlined">
       <ClassTabs item={item} onUpdate={handleUpdate} />

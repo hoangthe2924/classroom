@@ -12,7 +12,7 @@ import { Button, ListItem, ListItemIcon } from "@mui/material";
 import { MainListItems } from "components/Dashboard/ListItems";
 import { connect, useSelector } from "react-redux";
 import React, { useEffect } from "react";
-import * as actions from "../store/actions/index.js";
+import * as actions from "store/actions/index.js";
 import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
@@ -100,8 +100,8 @@ function MyAppBar(props) {
             variant="h6"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1 }}
-          ></Typography>
+            sx={{ flexGrow: 1, userSelect: "none" }}
+          >{props.title}</Typography>
           {loginStatus === true ? (
             <div>
               <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>

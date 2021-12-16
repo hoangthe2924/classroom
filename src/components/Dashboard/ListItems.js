@@ -23,10 +23,10 @@ export const MainListItems = ({open, classList}) => {
   const teachingClassItems = teachingClasses.map((item) => {
     return (
         <ListItem key={item.id} component={NavLink} to={`/classes/${item.id}`} button>
-          <ListItemIcon>
+          <ListItemIcon style={{minWidth: '40px'}}>
             <SchoolIcon />
           </ListItemIcon>
-          <ListItemText primary={item.classname} />
+          <ListItemText primaryTypographyProps={{fontSize: '14px'}} primary={item.classname} />
         </ListItem>
     );
   });
@@ -34,10 +34,10 @@ export const MainListItems = ({open, classList}) => {
   const studyingClassItems = studyingClasses.map((item) => {
     return (
         <ListItem key={item.id} component={NavLink} to={`/classes/${item.id}`} button>
-          <ListItemIcon>
+          <ListItemIcon style={{minWidth: '40px'}}>
             <SchoolIcon />
           </ListItemIcon>
-          <ListItemText primary={item.classname} />
+          <ListItemText primaryTypographyProps={{fontSize: '14px'}} primary={item.classname} />
         </ListItem>
     );
   });
@@ -71,7 +71,7 @@ export const MainListItems = ({open, classList}) => {
             <ListItemIcon>
               <SchoolIcon />
             </ListItemIcon>
-            <ListItemText primary="{Classes}" />
+            <ListItemText primary="Classes" />
           </ListItem>
         )}
       </List>
