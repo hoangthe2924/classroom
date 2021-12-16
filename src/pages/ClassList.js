@@ -29,6 +29,8 @@ function ClassList(props) {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
 
+  localStorage.removeItem('prev-link');
+
   const navigate = useNavigate();
 
   useEffect(() => {

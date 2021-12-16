@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { register } from "services/auth.service";
 import * as Yup from "yup";
 import { useNavigate, Navigate } from "react-router-dom";
-import * as actions from "../../../actions/index";
+import * as actions from "../../../store/actions/index";
 import { connect } from "react-redux";
 
 function RegisterForm(props) {

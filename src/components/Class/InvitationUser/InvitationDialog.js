@@ -17,7 +17,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import LinkInvitation from "./LinkInvitation";
-import { DEFAULT_DOMAIN } from "../../axios-config";
+import { DEFAULT_DOMAIN } from "../../../axios-config";
 
 function validateEmail(email) {
   const re =

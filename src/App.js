@@ -34,10 +34,16 @@ function Copyright(props) {
 }
 
 function App() {
+  const [title, setTitle] = React.useState("");
+
+  const changeTitle = (newTitle) => {
+    setTitle(newTitle);
+  };
+
   return (
     <div>
       <ThemeProvider theme={mdTheme}>
-        <MyAppBar>
+        <MyAppBar title={title}>
           <Routes>
             <Route
               path={"classes"}
@@ -61,7 +67,7 @@ function App() {
               path="/classes/:id"
               element={
                 <ProtectedRoute>
-                  <ClassDetail />
+                  <ClassDetail changeTitle={changeTitle} />
                 </ProtectedRoute>
               }
             />

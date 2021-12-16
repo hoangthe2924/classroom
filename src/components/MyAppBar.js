@@ -3,17 +3,16 @@ import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Button, ListItem, ListItemIcon } from "@mui/material";
-import { mainListItems } from "components/Dashboard/ListItems";
-import { connect } from "react-redux";
+import { MainListItems } from "components/Dashboard/ListItems";
+import { connect, useSelector } from "react-redux";
 import React, { useEffect } from "react";
-import * as actions from "../actions/index.js";
+import * as actions from "store/actions/index.js";
 import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
@@ -43,7 +42,7 @@ const Drawer = styled(MuiDrawer, {
 })(({ theme, open }) => ({
   "& .MuiDrawer-paper": {
     position: "relative",
-    whiteSpace: "nowrap",
+    whiteSpace: "normal",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -66,6 +65,7 @@ const Drawer = styled(MuiDrawer, {
 
 function MyAppBar(props) {
   const { loginStatus } = props;
+  const classList = useSelector((state) => state.classList);
   useEffect(() => {
     props.checkLoginStatus();
   }, [loginStatus]);
@@ -100,8 +100,8 @@ function MyAppBar(props) {
             variant="h6"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1 }}
-          ></Typography>
+            sx={{ flexGrow: 1, userSelect: "none" }}
+          >{props.title}</Typography>
           {loginStatus === true ? (
             <div>
               <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>
@@ -124,21 +124,15 @@ function MyAppBar(props) {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-      <Toolbar disableGutters>
-        <ListItem button onClick={toggleDrawer}>
-          <ListItemIcon>
-            <ChevronLeftIcon />
-          </ListItemIcon>
-        </ListItem>
-      </Toolbar>
-        {/* 
-
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-         */}
+        <Toolbar disableGutters>
+          <ListItem button onClick={toggleDrawer}>
+            <ListItemIcon>
+              <ChevronLeftIcon />
+            </ListItemIcon>
+          </ListItem>
+        </Toolbar>
         <Divider />
-        <List>{mainListItems}</List>
+        <MainListItems open={open} classList={classList} />
         <Divider />
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useState } from "react";
+import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -11,11 +11,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
+  Typography,
+  IconButton,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-export default function StudentList({ customers, ...rest }) 
-{
+export default function StudentList({ customers, ...rest }) {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -37,11 +38,18 @@ export default function StudentList({ customers, ...rest })
     let newSelectedCustomerIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(
+        selectedCustomerIds,
+        id
+      );
     } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(
+        selectedCustomerIds.slice(1)
+      );
     } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(
+        selectedCustomerIds.slice(0, -1)
+      );
     } else if (selectedIndex > 0) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(
         selectedCustomerIds.slice(0, selectedIndex),
@@ -62,83 +70,79 @@ export default function StudentList({ customers, ...rest })
 
   return (
     <Card {...rest}>
-        <Box sx={{ minWidth: 1050 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
+      <Box sx={{ minWidth: 1050 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  checked={selectedCustomerIds.length === customers.length}
+                  color="primary"
+                  indeterminate={
+                    selectedCustomerIds.length > 0 &&
+                    selectedCustomerIds.length < customers.length
+                  }
+                  onChange={handleSelectAll}
+                />
+              </TableCell>
+              <TableCell align="center" sx={{ maxWidth: "200px" }}>
+                  Name
+                  <IconButton
+                    aria-label="more"
+                    sx={{ position:"absolute", right: 1, top: 1 }}
+                    data-id={null}
+                    onClick={null}
+                  > 
+                    <MoreVertIcon
+                      sx={{
+                        color: "#123456",
+                        "&:hover, &:focus-within": { color: "black" },
+                      }}
+                  />
+                  </IconButton>
+              </TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Phone</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {customers.slice(0, limit).map((customer) => (
+              <TableRow
+                hover
+                key={customer.id}
+                selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+              >
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
+                    checked={selectedCustomerIds.indexOf(customer.id) !== -1}
+                    onChange={(event) => handleSelectOne(event, customer.id)}
+                    value="true"
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      display: "flex",
+                    }}
+                  >
+                    <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}></Avatar>
+                    <Typography color="textPrimary" variant="body1">
+                      {customer.name}
+                    </Typography>
+                  </Box>
                 </TableCell>
+                <TableCell>{customer.email}</TableCell>
                 <TableCell>
-                  Email
+                  {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                 </TableCell>
-                <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
+                <TableCell>{customer.phone}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {customers.slice(0, limit).map((customer) => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex'
-                      }}
-                    >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                      </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    {customer.email}
-                  </TableCell>
-                  <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
-                  <TableCell>
-                    {customer.phone}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
+            ))}
+          </TableBody>
+        </Table>
+      </Box>
       <TablePagination
         component="div"
         count={customers.length}
@@ -150,8 +154,8 @@ export default function StudentList({ customers, ...rest })
       />
     </Card>
   );
-};
+}
 
 StudentList.propTypes = {
-  customers: PropTypes.array.isRequired
+  customers: PropTypes.array.isRequired,
 };
