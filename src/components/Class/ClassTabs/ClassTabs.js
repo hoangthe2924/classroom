@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import OverviewTab from "components/Class/ClassTabs/OverviewTab";
 import PeopleTab from "components/Class/ClassTabs/PeopleTab";
 import DragAndDropForm from "components/Class/ClassTabs/DragAndDropForm";
-import StudentImport from "components/Class/ClassTabs/StudentImport";
+import GradeBoard from "components/Class/ClassTabs/GradeBoard";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -74,7 +74,7 @@ export default function BasicTabs(props) {
         </TabPanel>
       )}
       <TabPanel value={value} index={3}>
-        <StudentImport items={props.item} />
+        <GradeBoard items={props.item} />
       </TabPanel>
     </Box>
   );

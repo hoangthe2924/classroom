@@ -101,11 +101,18 @@ function MyAppBar(props) {
             color="inherit"
             noWrap
             sx={{ flexGrow: 1, userSelect: "none" }}
-          >{props.title}</Typography>
+          >
+            {props.title}
+          </Typography>
           {loginStatus === true ? (
             <div>
               <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>
-                <NavLink to="/profile">Profile</NavLink>
+                <NavLink
+                  to="/profile"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Profile
+                </NavLink>
               </Button>
               <Button
                 variant="outlined"

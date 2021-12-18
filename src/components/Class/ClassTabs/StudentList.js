@@ -1,161 +1,140 @@
-import { useState } from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import {
-  Avatar,
-  Box,
-  Card,
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Typography,
-  IconButton,
-} from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+  GridColumnMenu,
+  GridColumnMenuContainer,
+  GridFilterMenuItem,
+  SortGridMenuItems,
+  DataGrid,
+} from "@mui/x-data-grid";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 
-export default function StudentList({ customers, ...rest }) {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
+  ({ theme, ownerState }) => ({
+    background: theme.palette[ownerState.color].main,
+    color: theme.palette[ownerState.color].contrastText,
+  })
+);
 
-  const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
+const StyledGridColumnMenu = styled(GridColumnMenu)(
+  ({ theme, ownerState }) => ({
+    background: theme.palette[ownerState.color].main,
+    color: theme.palette[ownerState.color].contrastText,
+  })
+);
 
-    if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
-    } else {
-      newSelectedCustomerIds = [];
-    }
+function CustomColumnMenuComponent(props) {
+  const { hideMenu, currentColumn, color, ...other } = props;
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds,
-        id
-      );
-    } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(1)
-      );
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, -1)
-      );
-    } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
+  if (currentColumn.field === "name") {
+    return (
+      <StyledGridColumnMenuContainer
+        hideMenu={hideMenu}
+        currentColumn={currentColumn}
+        ownerState={{ color }}
+        {...other}
+      >
+        <SortGridMenuItems onClick={hideMenu} column={currentColumn} />
+        <GridFilterMenuItem onClick={hideMenu} column={currentColumn} />
+      </StyledGridColumnMenuContainer>
+    );
+  }
+  if (currentColumn.field === "stars") {
+    return (
+      <StyledGridColumnMenuContainer
+        hideMenu={hideMenu}
+        currentColumn={currentColumn}
+        ownerState={{ color }}
+        {...other}
+      >
+        <Box
+          sx={{
+            width: 127,
+            height: 160,
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <StarOutlineIcon sx={{ fontSize: 80 }} />
+        </Box>
+      </StyledGridColumnMenuContainer>
+    );
+  }
   return (
-    <Card {...rest}>
-      <Box sx={{ minWidth: 1050 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedCustomerIds.length === customers.length}
-                  color="primary"
-                  indeterminate={
-                    selectedCustomerIds.length > 0 &&
-                    selectedCustomerIds.length < customers.length
-                  }
-                  onChange={handleSelectAll}
-                />
-              </TableCell>
-              <TableCell align="center" sx={{ maxWidth: "200px" }}>
-                  Name
-                  <IconButton
-                    aria-label="more"
-                    sx={{ position:"absolute", right: 1, top: 1 }}
-                    data-id={null}
-                    onClick={null}
-                  > 
-                    <MoreVertIcon
-                      sx={{
-                        color: "#123456",
-                        "&:hover, &:focus-within": { color: "black" },
-                      }}
-                  />
-                  </IconButton>
-              </TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Phone</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {customers.slice(0, limit).map((customer) => (
-              <TableRow
-                hover
-                key={customer.id}
-                selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                    onChange={(event) => handleSelectOne(event, customer.id)}
-                    value="true"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Box
-                    sx={{
-                      alignItems: "center",
-                      display: "flex",
-                    }}
-                  >
-                    <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}></Avatar>
-                    <Typography color="textPrimary" variant="body1">
-                      {customer.name}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell>{customer.email}</TableCell>
-                <TableCell>
-                  {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                </TableCell>
-                <TableCell>{customer.phone}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
-      <TablePagination
-        component="div"
-        count={customers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
-    </Card>
+    <StyledGridColumnMenu
+      hideMenu={hideMenu}
+      currentColumn={currentColumn}
+      ownerState={{ color }}
+      {...other}
+    />
   );
 }
 
-StudentList.propTypes = {
-  customers: PropTypes.array.isRequired,
+CustomColumnMenuComponent.propTypes = {
+  color: PropTypes.string.isRequired,
+  currentColumn: PropTypes.object.isRequired,
+  hideMenu: PropTypes.func.isRequired,
 };
+
+export { CustomColumnMenuComponent };
+
+export default function CustomColumnMenu(props) {
+  const { items } = props;
+  console.log("as", items);
+  const [color, setColor] = React.useState("primary");
+  let columns = [
+    { field: "studentId", headerName: "Student ID", width: 150 },
+    { field: "fullName", headerName: "Full Name", width: 150 },
+  ];
+  items.assignments.forEach((assignment) => {
+    columns.push({
+      field: assignment.id.toString(),
+      headerName: assignment.title,
+      editable: true,
+      type: "number",
+    });
+  });
+  columns.push({
+    field: "total",
+    headerName: "Total",
+  });
+  console.log("as", columns);
+
+  const rows = [
+    {
+      id: 1,
+      studentId: "Open source",
+      fullName: "MUI",
+    },
+    {
+      id: 2,
+      studentId: "Enterprise",
+      fullName: "DataGrid",
+    },
+  ];
+  return (
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
+      <div style={{ height: 250, width: "100%", marginTop: 16 }}>
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          components={{
+            ColumnMenu: CustomColumnMenuComponent,
+          }}
+          componentsProps={{
+            columnMenu: { color },
+          }}
+        />
+      </div>
+    </div>
+  );
+}
