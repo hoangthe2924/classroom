@@ -14,21 +14,39 @@ export function addClass(values) {
 }
 
 export function addNewAssignment(classId, values) {
-  return http.post(`/classes/${classId}/assignments`, values, { headers: authHeader() });
+  return http.post(`/classes/${classId}/assignments`, values, {
+    headers: authHeader(),
+  });
 }
 
 export function getAssignment(classId) {
   return http.get(`/classes/${classId}/assignments`, { headers: authHeader() });
 }
 
+export function getStudentList(classId) {
+  return http.get(`/classes/${classId}/studentList`, { headers: authHeader() });
+}
+
+export function updateStudentList(classId, values) {
+  return http.put(`/classes/${classId}/studentList`, values, {
+    headers: authHeader(),
+  });
+}
+
 export function updateAssignmentInfo(classId, values) {
-  return http.put(`/classes/${classId}/assignments`,values, { headers: authHeader() });
+  return http.put(`/classes/${classId}/assignments`, values, {
+    headers: authHeader(),
+  });
 }
 
 export function updateAssignmentOrder(classId, values) {
-  return http.put(`/classes/${classId}/assignments/order`,values, { headers: authHeader() });
+  return http.put(`/classes/${classId}/assignments/order`, values, {
+    headers: authHeader(),
+  });
 }
 
 export function deleteAssignment(classId, assignmentId) {
-  return http.delete(`/classes/${classId}/assignments/${assignmentId}`, { headers: authHeader() });
+  return http.delete(`/classes/${classId}/assignments/${assignmentId}`, {
+    headers: authHeader(),
+  });
 }
