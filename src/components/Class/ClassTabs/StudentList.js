@@ -112,7 +112,7 @@ function CustomToolbar(props) {
         Import
       </Button>
       <Link
-        to="/StudentList.csv"
+        to="/StudentList.xlsx"
         target="_blank"
         download
         style={{ textDecoration: "none" }}

@@ -46,7 +46,7 @@ export default function ImportDialog(props) {
       <DialogTitle>Import Student List</DialogTitle>
       <input
         type="file"
-        accept=".csv,.xlsx,.xls"
+        accept=".xlsx"
         onChange={handleChange}
         // style={{ display: "none" }}
       />
