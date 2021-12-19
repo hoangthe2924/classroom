@@ -25,7 +25,6 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
-import { CountertopsOutlined } from "@mui/icons-material";
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
   ({ theme, ownerState }) => ({
@@ -103,7 +102,7 @@ function CustomToolbar(props) {
 
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport csvOptions={{ allColumns: true }} />
+      <GridToolbarExport csvOptions={{ allColumns: true, utf8WithBom: true }} />
       <Button
         startIcon={<SaveIcon fontSize="small" />}
         sx={{ mr: 1 }}
@@ -206,7 +205,8 @@ export default function StudentList(props) {
       () =>
         columns.concat({
           field: "__HIDDEN__",
-          width: -5,
+          width: 0,
+          disableExport: true,
           // hide: true,
           renderCell: (params) => {
             apiRef.current = params.api;
