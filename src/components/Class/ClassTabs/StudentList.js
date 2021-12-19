@@ -4,7 +4,6 @@ import { useRef, useState, useEffect } from "react";
 import { useMemo } from "react";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import {
@@ -17,7 +16,7 @@ import {
   GridToolbarExport,
   gridClasses,
 } from "@mui/x-data-grid";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import { MenuItem } from "@mui/material";
 import ImportDialog from "components/Class/ClassTabs/ImportDialog/ImportDialog";
 
 import { Link } from "react-router-dom";
@@ -56,7 +55,11 @@ function CustomColumnMenuComponent(props) {
       </StyledGridColumnMenuContainer>
     );
   }
-  if (currentColumn.field === "stars") {
+  if (
+    currentColumn.field !== "fullName" &&
+    currentColumn.field !== "studentId" &&
+    currentColumn.field !== "total"
+  ) {
     return (
       <StyledGridColumnMenuContainer
         hideMenu={hideMenu}
@@ -64,18 +67,9 @@ function CustomColumnMenuComponent(props) {
         ownerState={{ color }}
         {...other}
       >
-        <Box
-          sx={{
-            width: 127,
-            height: 160,
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <StarOutlineIcon sx={{ fontSize: 80 }} />
-        </Box>
+        <MenuItem onClick={() => console.log(currentColumn["field"])}>
+          Import Grade
+        </MenuItem>
       </StyledGridColumnMenuContainer>
     );
   }
