@@ -10,7 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Button, ListItem, ListItemIcon } from "@mui/material";
 import { MainListItems } from "components/Dashboard/ListItems";
-import { connect, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect } from "react";
 import * as actions from "store/actions/index.js";
 import { styled } from "@mui/material/styles";
@@ -64,10 +64,20 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function MyAppBar(props) {
-  const { loginStatus } = props;
-  const classList = useSelector((state) => state.classList);
+  const loginStatus = useSelector(state => state.loginStatus);
+  const classList = useSelector(state => state.classList);
+  const dispatch = useDispatch();
+
+  const checkLoginStatus = () => {
+    dispatch(actions.checkIsLoggedIn());
+  };
+
+  const logOut = () => {
+    dispatch(actions.logout());
+  };
+
   useEffect(() => {
-    props.checkLoginStatus();
+    checkLoginStatus();
   }, [loginStatus]);
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
@@ -111,7 +121,7 @@ function MyAppBar(props) {
                 variant="outlined"
                 color="inherit"
                 href="/dashboard"
-                onClick={() => props.logOut()}
+                onClick={() => logOut()}
               >
                 Logout
               </Button>
@@ -155,20 +165,4 @@ function MyAppBar(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    loginStatus: state.loginStatus,
-  };
-};
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    checkLoginStatus: () => {
-      dispatch(actions.checkIsLoggedIn());
-    },
-    logOut: () => {
-      dispatch(actions.logout());
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyAppBar);
+export default MyAppBar;
