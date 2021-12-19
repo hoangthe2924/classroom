@@ -130,6 +130,7 @@ export default function StudentList(props) {
   const params = useParams();
   const navigate = useNavigate();
   const { items } = props;
+  const assignments = items.assignments;
   const [color, setColor] = React.useState("primary");
 
   const [rows, setRows] = useState([]);
@@ -175,11 +176,19 @@ export default function StudentList(props) {
     console.log("close", value);
   };
 
+  function getTotal(params) {
+    let total = 0;
+    assignments.forEach(
+      (assignment) => (total += params.row[assignment.id.toString()] || 0)
+    );
+    return total;
+  }
+
   const columns = [
     { field: "studentId", headerName: "Student ID", flex: 1.0 },
     { field: "fullName", headerName: "Full Name", flex: 1.0, minWidth: 150 },
   ];
-  items.assignments.forEach((assignment) => {
+  assignments.forEach((assignment) => {
     columns.push({
       field: assignment.id.toString(),
       headerName: assignment.title,
@@ -192,6 +201,7 @@ export default function StudentList(props) {
     field: "total",
     headerName: "Total",
     flex: 1.0,
+    valueGetter: getTotal,
   });
   function useApiRef() {
     const apiRef = useRef(null);
