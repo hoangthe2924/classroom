@@ -1,27 +1,55 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import Card from "@mui/material/Card";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ClassTabs from "components/Class/ClassTabs/ClassTabs";
-import { fetchClassDetail } from "services/class.service";
+import { fetchClassDetail, fetchAllClasses } from "services/class.service";
+import { Fragment } from "react";
+import { useDispatch } from "react-redux";
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function ClassDetail({changeTitle}) {
   const [item, setItem] = useState([]);
+  const [open, setOpen] = useState(false);
   const { search } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cjc = new URLSearchParams(search).get("cjc");
   const strQuery = cjc ? `?cjc=${cjc}` : "";
-  let params = useParams();
+  let { id } = useParams();
 
-  localStorage.removeItem('prev-link');
+  async function fetchClasses() {
+    await fetchAllClasses().then(
+      (result) => {
+        console.log(result.data);
+        dispatch({type: "FETCH", payload: result.data});
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
   async function fetchClass() {
-    let id = params.id;
     await fetchClassDetail(id, strQuery).then(
       (result) => {
         if (result.status === 401) {
           navigate("/login");
         }
-        setItem(result.data);
+        
+        const data = result.data;
+        if(data?.newMember){
+          fetchClasses();
+          setOpen(true);
+        }
+
+        delete data.newMember;
+        setItem(data);
+
         // return result;
       },
       (error) => {
@@ -30,26 +58,52 @@ export default function ClassDetail({changeTitle}) {
       }
     );
   }
+
   function handleUpdate() {
     fetchClass();
   }
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
   useEffect(() => {
     fetchClass();
+    localStorage.removeItem('prev-link');
+  }, [id]);
+
+  useEffect(()=>{
 
     return () => {
       changeTitle("");
     };
-  }, []);
+  },[]);
 
   const { className } = item;
 
   useEffect(()=>{
     changeTitle(className);
-  }, [className, changeTitle]);
+  }, [className]);
 
   return (
+    <Fragment>
     <Card variant="outlined">
       <ClassTabs item={item} onUpdate={handleUpdate} />
     </Card>
+    <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Welcome to the class!
+        </Alert>
+      </Snackbar>
+    </Fragment>
   );
 }

@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import * as PropTypes from "prop-types";
 import AddClassForm from "components/Class/AddClassForm";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
+import {useSelector, useDispatch} from 'react-redux';
 
 function LoadingButton(props) {
   return null;
@@ -27,23 +28,22 @@ LoadingButton.propTypes = {
 
 function ClassList(props) {
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState([]);
-
-  localStorage.removeItem('prev-link');
+  const listClass = useSelector(state => state.classList);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchClass();
+    localStorage.removeItem('prev-link');
   }, []);
 
   async function fetchClass() {
     await fetchAllClasses().then(
       (result) => {
-        setItems(result.data);
+        dispatch({type: "FETCH", payload: result.data});
       },
       (error) => {
-        navigate("/login");
         console.log(error);
       }
     );
@@ -86,7 +86,7 @@ function ClassList(props) {
             onSuccess={handleSuccess}
           />
         </Grid>
-        {items.map((cls) => (
+        {listClass.map((cls) => (
           <Grid item xs={12} sm={6} md={4} key={cls.id}>
             <Card
               onClick={() => {
