@@ -83,7 +83,7 @@ export default function DragAndDropForm({ onUpdate }) {
 
     setItems(reorderList);
     const newOrderList = { listAssignment: reorderList };
-    const res = await updateAssignmentOrder(params.id, newOrderList);
+    await updateAssignmentOrder(params.id, newOrderList);
     onUpdate();
 
   };
@@ -124,7 +124,7 @@ export default function DragAndDropForm({ onUpdate }) {
     setItems(newItems);
     setOnEditModeIndex(-1);
     setTempData(null);
-    const res = await updateAssignmentInfo(params.id, tempData);
+    await updateAssignmentInfo(params.id, tempData);
     onUpdate();
 
   };
@@ -136,9 +136,9 @@ export default function DragAndDropForm({ onUpdate }) {
     const newItems = p1.concat(p2);
     const reorderList = newItems.map((item, idx)=>{return {...item, order: idx}});
     setItems(reorderList);
-    const res1 = await deleteAssignment(params.id, deleteItem.id);
+    await deleteAssignment(params.id, deleteItem.id);
     const newOrderList = { listAssignment: reorderList };
-    const res2 = await updateAssignmentOrder(params.id, newOrderList);
+    await updateAssignmentOrder(params.id, newOrderList);
 
     onUpdate();
 

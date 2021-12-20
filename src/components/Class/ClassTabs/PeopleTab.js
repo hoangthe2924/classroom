@@ -35,7 +35,7 @@ export default function PeopleTab({ items }) {
       );
     }
     fetchClass();
-  }, []);
+  }, [params]);
 
   let teachers = item.users
     ? item.users.filter((user) => user.user_class.role === "teacher")
