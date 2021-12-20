@@ -16,7 +16,7 @@ import {
   GridToolbarExport,
   gridClasses,
 } from "@mui/x-data-grid";
-import { MenuItem } from "@mui/material";
+import { MenuItem, Grid } from "@mui/material";
 import ImportDialog from "components/Class/ClassTabs/ImportDialog/ImportDialog";
 
 import { Link } from "react-router-dom";
@@ -96,23 +96,17 @@ function CustomToolbar(props) {
 
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport csvOptions={{ allColumns: true, utf8WithBom: true }} />
-      <Button
-        startIcon={<SaveIcon fontSize="small" />}
-        sx={{ mr: 1 }}
-        onClick={handleSave}
-      >
-        Save
-      </Button>
+      <GridToolbarExport sx={{ mr: 1, ml: 2 }} csvOptions={{ allColumns: true, utf8WithBom: true }} />
       <Button
         startIcon={<UploadIcon fontSize="small" />}
-        sx={{ mr: 1 }}
+        sx={{ mr: 1, ml: 2 }}
         onClick={handleClickOpen}
       >
         Import
       </Button>
+      <Grid container justifyContent="flex-end">
       <Link
-        to="/StudentList.csv"
+        to="/StudentList.xlsx"
         target="_blank"
         download
         style={{ textDecoration: "none" }}
@@ -121,6 +115,9 @@ function CustomToolbar(props) {
           Download Template
         </Button>
       </Link>
+
+      </Grid>
+      
     </GridToolbarContainer>
   );
 }
@@ -248,7 +245,20 @@ export default function StudentList(props) {
           }}
         />
       </div>
-      <Button onClick={handleClickButton}>Show data</Button>
+      <Grid container justifyContent="flex-start">
+        <Button onClick={handleClickButton}>Show data</Button>
+
+      </Grid>
+      <Grid container justifyContent="flex-end">
+        <Button
+          startIcon={<SaveIcon fontSize="small" />}
+          sx={{ mr: 1 }}
+          onClick={handleSave}
+        >
+          Save
+        </Button>
+      </Grid>
+
       <ImportDialog open={open} onClose={handleClose} />
     </div>
   );
