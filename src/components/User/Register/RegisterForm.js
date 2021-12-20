@@ -24,7 +24,7 @@ function RegisterForm(props) {
   const { loginStatus } = props;
   useEffect(() => {
     props.checkLoginStatus();
-  }, [loginStatus]);
+  }, [props]);
 
   const theme = createTheme();
   let navigate = useNavigate();

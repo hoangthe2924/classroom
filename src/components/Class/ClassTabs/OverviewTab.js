@@ -5,7 +5,6 @@ import GradeStructure from "components/Class/ClassTabs/GradeStructure";
 import { Grid } from "@mui/material";
 
 export default function OverviewTab({ item, onChangeTab }) {
-  const [value, setValue] = React.useState(0);
 
   return (
     <div>

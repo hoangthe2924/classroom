@@ -41,7 +41,7 @@ export default function ImportGradeDialog(props) {
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Import Grade List</DialogTitle>
       <input
         type="file"

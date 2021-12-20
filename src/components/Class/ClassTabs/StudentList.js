@@ -61,7 +61,7 @@ function CustomColumnMenuComponent(props) {
       }
       return newAssignments
     })
-    const res = await updateFinalize(currentColumn["field"], params.id)
+    await updateFinalize(currentColumn["field"], params.id)
   }
 
   function updateGrade(rows, grade) {
@@ -149,7 +149,7 @@ CustomColumnMenuComponent.propTypes = {
 export { CustomColumnMenuComponent };
 
 function CustomToolbar(props) {
-  const { handleClickOpen, handleSave } = props;
+  const { handleClickOpen } = props;
 
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
@@ -195,14 +195,12 @@ export default function StudentList(props) {
   const navigate = useNavigate();
   const { items } = props;
   const [assignments, setAssignments] = React.useState(items.assignments);
-  const [color, setColor] = React.useState("primary");
+  const [color] = React.useState("primary");
 
   const [rows, setRows] = useState([]);
   const [isOpenImportStudent, setIsOpenImportStudent] = useState(false);
   const [isSavingData, setIsSavingData] = useState(false);
 
-  const [selectedValue, setSelectedValue] = useState([]);
-  var requestCount = 0
 
   useEffect(() => {
     function addGrades(grades, rows) {
@@ -235,21 +233,19 @@ export default function StudentList(props) {
     } else {
       navigate("/", { replace: true });
     }
-  }, [params, navigate]);
+  }, [params, navigate, assignments]);
 
   const handleClickOpen = () => {
     setIsOpenImportStudent(true);
-    setSelectedValue([]);
   };
 
   const handleSave = async () => {
     setIsSavingData(true)
     const body = { studentList: [...apiRef.current?.getRowModels().values()] } || { studentList: null };
-    const res = await updateStudentList(params.id, body);
-    var data = res.data ? res.data : [];
+    await updateStudentList(params.id, body);
     var count = 0;
     async function updateGradeAsync(assignmentId, body, classId) {
-      const res = await updateStudentGrades(assignmentId, body, classId)
+      await updateStudentGrades(assignmentId, body, classId)
       count += 1
       console.log(assignments.length)
       if (count === assignments.length) {
@@ -265,7 +261,6 @@ export default function StudentList(props) {
 
   const handleClose = (value) => {
     setIsOpenImportStudent(false);
-    setSelectedValue(value);
     if (value) {
       value.forEach((vl) => {
         setRows((prevrows) => [...prevrows, vl]);
@@ -323,17 +318,12 @@ export default function StudentList(props) {
             return null;
           },
         }),
-      [columns]
+      []
     );
     return { apiRef, columns: _columns };
   }
 
   const { apiRef, columns: columns2 } = useApiRef();
-
-  const handleClickButton = () => {
-    console.log([...apiRef.current?.getRowModels().entries()] || "empty");
-    const res = [...apiRef.current?.getRowModels().values()];
-  };
 
   return (
     <div
@@ -370,10 +360,6 @@ export default function StudentList(props) {
         </Box>
 
       </div>
-      <Grid container justifyContent="flex-start">
-        <Button onClick={handleClickButton}>Show data</Button>
-
-      </Grid>
       <Grid container justifyContent="flex-end">
         {isSavingData ? (<CircularProgress />) : (
           <>
