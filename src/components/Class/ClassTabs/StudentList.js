@@ -16,8 +16,9 @@ import {
   GridToolbarExport,
   gridClasses,
 } from "@mui/x-data-grid";
-import { MenuItem, Grid, Box, Tooltip } from "@mui/material";
-import ImportDialog from "components/Class/ClassTabs/ImportDialog/ImportDialog";
+import { MenuItem, Grid } from "@mui/material";
+import ImportStudentDialog from "components/Class/ClassTabs/ImportDialog/ImportStudentDialog";
+import ImportGradeDialog from "components/Class/ClassTabs/ImportDialog/ImportGradeDialog";
 import { Link } from "react-router-dom";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -25,6 +26,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
 import Typography from "@mui/material/Typography";
 import AnchorElTooltips from "./utils/AnchorElTooltips";
+import { getStudentGrades, updateStudentGrades } from "services/grade.service";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
   ({ theme, ownerState }) => ({
@@ -41,7 +44,44 @@ const StyledGridColumnMenu = styled(GridColumnMenu)(
 );
 
 function CustomColumnMenuComponent(props) {
-  const { hideMenu, currentColumn, color, ...other } = props;
+  const { hideMenu, currentColumn, color, rows, setRows,  ...other } = props;
+  const [isOpenImportGrade, setIsOpenImportGrade] = useState(false);
+
+  function handleImportGrade() {
+    console.log(currentColumn["field"])
+    setIsOpenImportGrade(true)
+  }
+
+  function updateGrade(rows, grade) {
+    var data = rows.slice()
+    var checkExist = false
+      for (const row of data) {
+          if (row.studentId === grade.studentId) {
+            checkExist = true
+            console.log(currentColumn["field"])
+            row[currentColumn["field"]] = grade.grade
+            console.log(row)
+            break
+          }
+      }
+      if (!checkExist) {
+        delete grade.guid
+        grade[currentColumn["field"]] = grade.grade
+        data.push(grade)
+      }
+      console.log(data)
+      return data
+  }
+
+  const handleClose = (value) => {
+    setIsOpenImportGrade(false);
+    if (value) {
+      value.forEach((vl) => {
+        setRows((prevrows) => updateGrade(prevrows, vl));
+      });
+    }
+    console.log("close", value);
+  };
 
   if (currentColumn.field === "name") {
     return (
@@ -68,9 +108,10 @@ function CustomColumnMenuComponent(props) {
         ownerState={{ color }}
         {...other}
       >
-        <MenuItem onClick={() => console.log(currentColumn["field"])}>
+        <MenuItem onClick={handleImportGrade}>
           Import Grade
         </MenuItem>
+        <ImportGradeDialog open={isOpenImportGrade}  onClose={handleClose}/>
       </StyledGridColumnMenuContainer>
     );
   }
@@ -110,20 +151,32 @@ function CustomToolbar(props) {
       </Button>
       <Grid container justifyContent="flex-end">
         <Link
-          to="/StudentList.xlsx"
+          to="/StudentTemplate.xlsx"
           target="_blank"
           download
           style={{ textDecoration: "none" }}
         >
           <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
-            Download Template
+            Download Student Template
+          </Button>
+        </Link>
+        <Link
+          to="/GradingTemplate.xlsx"
+          target="_blank"
+          download
+          style={{ textDecoration: "none" }}
+        >
+          <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
+            Download Grade Template
           </Button>
         </Link>
       </Grid>
+
     </GridToolbarContainer>
   );
 }
 export { CustomToolbar };
+
 
 export default function StudentList(props) {
   const params = useParams();
@@ -133,16 +186,37 @@ export default function StudentList(props) {
   const [color, setColor] = React.useState("primary");
 
   const [rows, setRows] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [isOpenImportStudent, setIsOpenImportStudent] = useState(false);
+  const [isSavingData, setIsSavingData] = useState(false);
+
   const [selectedValue, setSelectedValue] = useState([]);
+  var requestCount = 0
 
   useEffect(() => {
+    function addGrades(grades, rows) {
+      var data = rows.slice()
+      for (const row of data) {
+        for (const grade of grades) {
+          if (row.id === grade.studentIdFk) {
+            row[grade.assignmentId] = grade.grade
+          }
+        }
+      } 
+      return data
+    }
+    async function getAssignmentGrades(assignmentId, classId) {
+      const res = await getStudentGrades(assignmentId, classId)
+      let grades = res.data ? res.data : [];
+      setRows((prevState) => addGrades(grades, prevState))
+    }
     async function fetchStudentList() {
       const res = await getStudentList(params.id);
-      const data = res.data ? res.data : [];
+      var data = res.data ? res.data : [];
       setRows(data);
+      for (const assignment of assignments) {
+        getAssignmentGrades(assignment.id.toString(), params.id)
+      }
     }
-
     if (params) {
       fetchStudentList();
     } else {
@@ -151,21 +225,34 @@ export default function StudentList(props) {
   }, [params, navigate]);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setIsOpenImportStudent(true);
     setSelectedValue([]);
   };
 
   const handleSave = async () => {
-    const body = { studentList: rows };
+    setIsSavingData(true)
+    const body = { studentList: [...apiRef.current?.getRowModels().values()] } || { studentList: null };
     const res = await updateStudentList(params.id, body);
-    // newItem.id = res.data.id;
-    // const newItems = items.concat(newItem);
-    console.log("resSave", res);
-    setRows(res.data);
+    var data = res.data ? res.data : [];
+    var count = 0;
+    async function updateGradeAsync(assignmentId, body, classId) {
+      const res = await updateStudentGrades(assignmentId, body, classId)
+      count += 1
+      console.log(assignments.length)
+      if (count === assignments.length)
+      {
+        setIsSavingData(false)
+      }
+    }
+    assignments.forEach(
+      (assignment) => {
+        updateGradeAsync(assignment.id.toString(), body, params.id)
+      }
+    );
   };
 
   const handleClose = (value) => {
-    setOpen(false);
+    setIsOpenImportStudent(false);
     setSelectedValue(value);
     if (value) {
       value.forEach((vl) => {
@@ -177,9 +264,15 @@ export default function StudentList(props) {
 
   function getTotal(params) {
     let total = 0;
+    let totalPoint = 0;
+    let totalFactor = 0;
     assignments.forEach(
-      (assignment) => (total += params.row[assignment.id.toString()] || 0)
+      (assignment) => {
+        totalPoint += params.row[assignment.id.toString()] * assignment.point || 0
+        totalFactor += assignment.point || 0
+      }
     );
+    total = totalPoint / totalFactor
     return total;
   }
 
@@ -223,6 +316,7 @@ export default function StudentList(props) {
     flex: 1.0,
     valueGetter: getTotal,
   });
+
   function useApiRef() {
     const apiRef = useRef(null);
     const _columns = useMemo(
@@ -243,10 +337,12 @@ export default function StudentList(props) {
   }
 
   const { apiRef, columns: columns2 } = useApiRef();
+
   const handleClickButton = () => {
     console.log([...apiRef.current?.getRowModels().entries()] || "empty");
     const res = [...apiRef.current?.getRowModels().values()];
   };
+
   return (
     <div
       style={{
@@ -263,7 +359,7 @@ export default function StudentList(props) {
             Toolbar: CustomToolbar,
           }}
           componentsProps={{
-            columnMenu: { color },
+            columnMenu: { color, rows, setRows },
             toolbar: { handleClickOpen, handleSave },
           }}
         />
@@ -272,16 +368,21 @@ export default function StudentList(props) {
         <Button onClick={handleClickButton}>Show data</Button>
       </Grid>
       <Grid container justifyContent="flex-end">
-        <Button
+        {isSavingData ? (<CircularProgress />) : (
+          <>
+          <Button
           startIcon={<SaveIcon fontSize="small" />}
           sx={{ mr: 1 }}
           onClick={handleSave}
         >
           Save
         </Button>
+          </>
+        ) }
+        
       </Grid>
 
-      <ImportDialog open={open} onClose={handleClose} />
+      <ImportStudentDialog open={isOpenImportStudent} onClose={handleClose} />
     </div>
   );
 }
