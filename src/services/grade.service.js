@@ -9,8 +9,13 @@ export function getStudentGrades(assignmentId, classId) {
 }
 
 export function updateStudentGrades(assignmentId, values, classId) {
-    console.log(values)
     return http.put(`/grades/${assignmentId}/studentGrades?classID=${classId}`, values, {
+        headers: authHeader(),
+    });
+}
+
+export function updateFinalize(assignmentId, classId) {
+    return http.put(`/grades/${assignmentId}/finalize?classID=${classId}`, {
         headers: authHeader(),
     });
 }

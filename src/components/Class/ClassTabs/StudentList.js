@@ -16,7 +16,7 @@ import {
   GridToolbarExport,
   gridClasses,
 } from "@mui/x-data-grid";
-import { MenuItem, Grid } from "@mui/material";
+import { MenuItem, Grid, Box } from "@mui/material";
 import ImportStudentDialog from "components/Class/ClassTabs/ImportDialog/ImportStudentDialog";
 import ImportGradeDialog from "components/Class/ClassTabs/ImportDialog/ImportGradeDialog";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
-import { getStudentGrades, updateStudentGrades } from "services/grade.service";
+import { getStudentGrades, updateStudentGrades, updateFinalize } from "services/grade.service";
 import CircularProgress from '@mui/material/CircularProgress';
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
@@ -42,33 +42,44 @@ const StyledGridColumnMenu = styled(GridColumnMenu)(
 );
 
 function CustomColumnMenuComponent(props) {
-  const { hideMenu, currentColumn, color, rows, setRows,  ...other } = props;
+  const { hideMenu, currentColumn, color, rows, setRows, assignments, setAssignments, ...other } = props;
   const [isOpenImportGrade, setIsOpenImportGrade] = useState(false);
+  const params = useParams();
 
   function handleImportGrade() {
-    console.log(currentColumn["field"])
     setIsOpenImportGrade(true)
+  }
+
+  async function handleFinalize() {
+    setAssignments((assignments)=> {
+      let newAssignments = assignments.slice()
+      for (const assignment of newAssignments) {
+        if (assignment.id.toString() === currentColumn["field"]) {
+          assignment.finalize = !assignment.finalize
+          break
+        }
+      }
+      return newAssignments
+    })
+    const res = await updateFinalize(currentColumn["field"], params.id)
   }
 
   function updateGrade(rows, grade) {
     var data = rows.slice()
     var checkExist = false
-      for (const row of data) {
-          if (row.studentId === grade.studentId) {
-            checkExist = true
-            console.log(currentColumn["field"])
-            row[currentColumn["field"]] = grade.grade
-            console.log(row)
-            break
-          }
+    for (const row of data) {
+      if (row.studentId === grade.studentId) {
+        checkExist = true
+        row[currentColumn["field"]] = grade.grade
+        break
       }
-      if (!checkExist) {
-        delete grade.guid
-        grade[currentColumn["field"]] = grade.grade
-        data.push(grade)
-      }
-      console.log(data)
-      return data
+    }
+    if (!checkExist) {
+      delete grade.guid
+      grade[currentColumn["field"]] = grade.grade
+      data.push(grade)
+    }
+    return data
   }
 
   const handleClose = (value) => {
@@ -104,12 +115,18 @@ function CustomColumnMenuComponent(props) {
         hideMenu={hideMenu}
         currentColumn={currentColumn}
         ownerState={{ color }}
+        sx={{
+
+        }}
         {...other}
       >
         <MenuItem onClick={handleImportGrade}>
           Import Grade
         </MenuItem>
-        <ImportGradeDialog open={isOpenImportGrade}  onClose={handleClose}/>
+        <MenuItem onClick={handleFinalize}>
+          Mark as Finalize
+        </MenuItem>
+        <ImportGradeDialog open={isOpenImportGrade} onClose={handleClose} />
       </StyledGridColumnMenuContainer>
     );
   }
@@ -177,7 +194,7 @@ export default function StudentList(props) {
   const params = useParams();
   const navigate = useNavigate();
   const { items } = props;
-  const assignments = items.assignments;
+  const [assignments, setAssignments] = React.useState(items.assignments);
   const [color, setColor] = React.useState("primary");
 
   const [rows, setRows] = useState([]);
@@ -194,9 +211,10 @@ export default function StudentList(props) {
         for (const grade of grades) {
           if (row.id === grade.studentIdFk) {
             row[grade.assignmentId] = grade.grade
+            row.finalize = grade.finalize
           }
         }
-      } 
+      }
       return data
     }
     async function getAssignmentGrades(assignmentId, classId) {
@@ -234,8 +252,7 @@ export default function StudentList(props) {
       const res = await updateStudentGrades(assignmentId, body, classId)
       count += 1
       console.log(assignments.length)
-      if (count === assignments.length)
-      {
+      if (count === assignments.length) {
         setIsSavingData(false)
       }
     }
@@ -278,6 +295,7 @@ export default function StudentList(props) {
   assignments.forEach((assignment) => {
     columns.push({
       field: assignment.id.toString(),
+      headerClassName: assignment.finalize ? 'finalize' : 'unfinalize',
       headerName: assignment.title,
       editable: true,
       type: "number",
@@ -323,20 +341,34 @@ export default function StudentList(props) {
         width: "100%",
       }}
     >
-      <div style={{ width: "100%", marginTop: 16 }}>
-        <DataGrid
-          autoHeight
-          columns={columns2}
-          rows={rows}
-          components={{
-            ColumnMenu: CustomColumnMenuComponent,
-            Toolbar: CustomToolbar,
+      <div style={{
+        width: "100%", marginTop: 16,
+      }}>
+        <Box
+          sx={{
+            '.finalize': {
+              backgroundColor: 'rgba(255, 7, 0, 0.55)',
+            },
+            '.unfinalize': {
+              backgroundColor: 'rgba(157, 255, 118, 0.49)'
+            },
           }}
-          componentsProps={{
-            columnMenu: { color, rows, setRows },
-            toolbar: { handleClickOpen, handleSave },
-          }}
-        />
+        >
+          <DataGrid
+            autoHeight
+            columns={columns2}
+            rows={rows}
+            components={{
+              ColumnMenu: CustomColumnMenuComponent,
+              Toolbar: CustomToolbar,
+            }}
+            componentsProps={{
+              columnMenu: { color, rows, setRows, assignments, setAssignments },
+              toolbar: { handleClickOpen, handleSave },
+            }}
+          />
+        </Box>
+
       </div>
       <Grid container justifyContent="flex-start">
         <Button onClick={handleClickButton}>Show data</Button>
@@ -345,16 +377,16 @@ export default function StudentList(props) {
       <Grid container justifyContent="flex-end">
         {isSavingData ? (<CircularProgress />) : (
           <>
-          <Button
-          startIcon={<SaveIcon fontSize="small" />}
-          sx={{ mr: 1 }}
-          onClick={handleSave}
-        >
-          Save
-        </Button>
+            <Button
+              startIcon={<SaveIcon fontSize="small" />}
+              sx={{ mr: 1 }}
+              onClick={handleSave}
+            >
+              Save
+            </Button>
           </>
-        ) }
-        
+        )}
+
       </Grid>
 
       <ImportStudentDialog open={isOpenImportStudent} onClose={handleClose} />
