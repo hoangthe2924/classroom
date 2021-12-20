@@ -300,7 +300,6 @@ export default function StudentList(props) {
       flex: 1.0,
       minWidth: 150,
       renderCell: (params) => {
-        console.log(params.value);
         if (params.value.extra) {
           return (
             <AnchorElTooltips title={params.value.extra.fullname} content={params.value.val} color="#e8586e"/>
@@ -344,7 +343,7 @@ export default function StudentList(props) {
             return null;
           },
         }),
-      []
+      [columns]
     );
     return { apiRef, columns: _columns };
   }
