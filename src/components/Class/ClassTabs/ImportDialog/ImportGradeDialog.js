@@ -3,7 +3,7 @@ import { useState } from "react";
 import Excel from "exceljs";
 import { guid } from "services/helper";
 
-export default function ImportDialog(props) {
+export default function ImportGradeDialog(props) {
   const { onClose, open } = props;
   const workbook = new Excel.Workbook();
   const [fileExcel, setFileExcel] = useState();
@@ -31,10 +31,9 @@ export default function ImportDialog(props) {
           studentList.push({
             id: guid(),
             studentId: sheet.getRow(i).values[1],
-            fullName: sheet.getRow(i).values[2],
+            grade: sheet.getRow(i).values[2],
           });
         }
-        console.log("list", studentList);
         onClose(studentList);
         setFileExcel(null);
       });
@@ -42,8 +41,8 @@ export default function ImportDialog(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Import Student List</DialogTitle>
+    <Dialog open={open}>
+      <DialogTitle>Import Grade List</DialogTitle>
       <input
         type="file"
         accept=".xlsx"
