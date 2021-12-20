@@ -25,6 +25,8 @@ import UploadIcon from "@mui/icons-material/Upload";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
 import { getStudentGrades, updateStudentGrades, updateFinalize } from "services/grade.service";
+import Typography from "@mui/material/Typography";
+import AnchorElTooltips from "./utils/AnchorElTooltips";
 import CircularProgress from '@mui/material/CircularProgress';
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
@@ -153,7 +155,10 @@ function CustomToolbar(props) {
 
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport sx={{ mr: 1, ml: 2 }} csvOptions={{ allColumns: true, utf8WithBom: true }} />
+      <GridToolbarExport
+        sx={{ mr: 1, ml: 2 }}
+        csvOptions={{ allColumns: true, utf8WithBom: true }}
+      />
       <Button
         startIcon={<UploadIcon fontSize="small" />}
         sx={{ mr: 1, ml: 2 }}
@@ -284,9 +289,29 @@ export default function StudentList(props) {
   }
 
   const columns = [
-    { field: "studentId", headerName: "Student ID", flex: 1.0 },
-    { field: "fullName", headerName: "Full Name", flex: 1.0, minWidth: 150 },
+    {
+      field: "studentId",
+      headerName: "Student ID",
+      flex: 1.0,
+    },
+    {
+      field: "fullName",
+      headerName: "Full Name",
+      flex: 1.0,
+      minWidth: 150,
+      renderCell: (params) => {
+        console.log(params.value);
+        if (params.value.extra) {
+          return (
+            <AnchorElTooltips title={params.value.extra.fullname} content={params.value.val} color="#e8586e"/>
+          );
+        } else {
+          return <Typography>{params.value.val}</Typography>;
+        }
+      },
+    },
   ];
+
   assignments.forEach((assignment) => {
     columns.push({
       field: assignment.id.toString(),
@@ -297,6 +322,7 @@ export default function StudentList(props) {
       flex: 1.0,
     });
   });
+
   columns.push({
     field: "total",
     headerName: "Total",
