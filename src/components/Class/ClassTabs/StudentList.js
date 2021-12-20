@@ -24,10 +24,14 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
-import { getStudentGrades, updateStudentGrades, updateFinalize } from "services/grade.service";
+import {
+  getStudentGrades,
+  updateStudentGrades,
+  updateFinalize,
+} from "services/grade.service";
 import Typography from "@mui/material/Typography";
 import AnchorElTooltips from "./utils/AnchorElTooltips";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
   ({ theme, ownerState }) => ({
@@ -44,44 +48,53 @@ const StyledGridColumnMenu = styled(GridColumnMenu)(
 );
 
 function CustomColumnMenuComponent(props) {
-  const { hideMenu, currentColumn, color, rows, setRows, assignments, setAssignments, ...other } = props;
+  const {
+    hideMenu,
+    currentColumn,
+    color,
+    rows,
+    setRows,
+    assignments,
+    setAssignments,
+    ...other
+  } = props;
   const [isOpenImportGrade, setIsOpenImportGrade] = useState(false);
   const params = useParams();
 
   function handleImportGrade() {
-    setIsOpenImportGrade(true)
+    setIsOpenImportGrade(true);
   }
 
   async function handleFinalize() {
-    setAssignments((assignments)=> {
-      let newAssignments = assignments.slice()
+    setAssignments((assignments) => {
+      let newAssignments = assignments.slice();
       for (const assignment of newAssignments) {
         if (assignment.id.toString() === currentColumn["field"]) {
-          assignment.finalize = !assignment.finalize
-          break
+          assignment.finalize = !assignment.finalize;
+          break;
         }
       }
-      return newAssignments
-    })
-    await updateFinalize(currentColumn["field"], params.id)
+      return newAssignments;
+    });
+    await updateFinalize(currentColumn["field"], params.id);
   }
 
   function updateGrade(rows, grade) {
-    var data = rows.slice()
-    var checkExist = false
+    var data = rows.slice();
+    var checkExist = false;
     for (const row of data) {
       if (row.studentId === grade.studentId) {
-        checkExist = true
-        row[currentColumn["field"]] = grade.grade
-        break
+        checkExist = true;
+        row[currentColumn["field"]] = grade.grade;
+        break;
       }
     }
     if (!checkExist) {
-      delete grade.guid
-      grade[currentColumn["field"]] = grade.grade
-      data.push(grade)
+      delete grade.guid;
+      grade[currentColumn["field"]] = grade.grade;
+      data.push(grade);
     }
-    return data
+    return data;
   }
 
   const handleClose = (value) => {
@@ -117,17 +130,11 @@ function CustomColumnMenuComponent(props) {
         hideMenu={hideMenu}
         currentColumn={currentColumn}
         ownerState={{ color }}
-        sx={{
-
-        }}
+        sx={{}}
         {...other}
       >
-        <MenuItem onClick={handleImportGrade}>
-          Import Grade
-        </MenuItem>
-        <MenuItem onClick={handleFinalize}>
-          Mark as Finalize
-        </MenuItem>
+        <MenuItem onClick={handleImportGrade}>Import Grade</MenuItem>
+        <MenuItem onClick={handleFinalize}>Mark as Finalize</MenuItem>
         <ImportGradeDialog open={isOpenImportGrade} onClose={handleClose} />
       </StyledGridColumnMenuContainer>
     );
@@ -188,12 +195,10 @@ function CustomToolbar(props) {
           </Button>
         </Link>
       </Grid>
-
     </GridToolbarContainer>
   );
 }
 export { CustomToolbar };
-
 
 export default function StudentList(props) {
   const params = useParams();
@@ -206,31 +211,30 @@ export default function StudentList(props) {
   const [isOpenImportStudent, setIsOpenImportStudent] = useState(false);
   const [isSavingData, setIsSavingData] = useState(false);
 
-
   useEffect(() => {
     function addGrades(grades, rows) {
-      var data = rows.slice()
+      var data = rows.slice();
       for (const row of data) {
         for (const grade of grades) {
           if (row.id === grade.studentIdFk) {
-            row[grade.assignmentId] = grade.grade
-            row.finalize = grade.finalize
+            row[grade.assignmentId] = grade.grade;
+            row.finalize = grade.finalize;
           }
         }
       }
-      return data
+      return data;
     }
     async function getAssignmentGrades(assignmentId, classId) {
-      const res = await getStudentGrades(assignmentId, classId)
+      const res = await getStudentGrades(assignmentId, classId);
       let grades = res.data ? res.data : [];
-      setRows((prevState) => addGrades(grades, prevState))
+      setRows((prevState) => addGrades(grades, prevState));
     }
     async function fetchStudentList() {
       const res = await getStudentList(params.id);
       var data = res.data ? res.data : [];
       setRows(data);
       for (const assignment of assignments) {
-        getAssignmentGrades(assignment.id.toString(), params.id)
+        getAssignmentGrades(assignment.id.toString(), params.id);
       }
     }
     if (params) {
@@ -245,23 +249,23 @@ export default function StudentList(props) {
   };
 
   const handleSave = async () => {
-    setIsSavingData(true)
-    const body = { studentList: [...apiRef.current?.getRowModels().values()] } || { studentList: null };
+    setIsSavingData(true);
+    const body = {
+      studentList: [...apiRef.current?.getRowModels().values()],
+    } || { studentList: null };
     await updateStudentList(params.id, body);
     var count = 0;
     async function updateGradeAsync(assignmentId, body, classId) {
-      await updateStudentGrades(assignmentId, body, classId)
-      count += 1
-      console.log(assignments.length)
+      await updateStudentGrades(assignmentId, body, classId);
+      count += 1;
+      console.log(assignments.length);
       if (count === assignments.length) {
-        setIsSavingData(false)
+        setIsSavingData(false);
       }
     }
-    assignments.forEach(
-      (assignment) => {
-        updateGradeAsync(assignment.id.toString(), body, params.id)
-      }
-    );
+    assignments.forEach((assignment) => {
+      updateGradeAsync(assignment.id.toString(), body, params.id);
+    });
   };
 
   const handleClose = (value) => {
@@ -278,13 +282,12 @@ export default function StudentList(props) {
     let total = 0;
     let totalPoint = 0;
     let totalFactor = 0;
-    assignments.forEach(
-      (assignment) => {
-        totalPoint += params.row[assignment.id.toString()] * assignment.point || 0
-        totalFactor += assignment.point || 0
-      }
-    );
-    total = totalPoint / totalFactor
+    assignments.forEach((assignment) => {
+      totalPoint +=
+        params.row[assignment.id.toString()] * assignment.point || 0;
+      totalFactor += assignment.point || 0;
+    });
+    total = totalPoint / totalFactor;
     return total;
   }
 
@@ -302,11 +305,17 @@ export default function StudentList(props) {
       renderCell: (params) => {
         if (params.value.extra) {
           return (
-            <AnchorElTooltips title={params.value.extra.fullname} content={params.value.val} color="#e8586e"/>
+            <AnchorElTooltips
+              title={params.value.extra.fullname}
+              content={params.value.val}
+              color="blue"
+            />
           );
-        } else {
+        }
+        if (params.value.val) {
           return <Typography>{params.value.val}</Typography>;
         }
+        return <Typography>{params.value}</Typography>;
       },
     },
   ];
@@ -314,7 +323,7 @@ export default function StudentList(props) {
   assignments.forEach((assignment) => {
     columns.push({
       field: assignment.id.toString(),
-      headerClassName: assignment.finalize ? 'finalize' : 'unfinalize',
+      headerClassName: assignment.finalize ? "finalize" : "unfinalize",
       headerName: assignment.title,
       editable: true,
       type: "number",
@@ -356,16 +365,19 @@ export default function StudentList(props) {
         width: "100%",
       }}
     >
-      <div style={{
-        width: "100%", marginTop: 16,
-      }}>
+      <div
+        style={{
+          width: "100%",
+          marginTop: 16,
+        }}
+      >
         <Box
           sx={{
-            '.finalize': {
-              backgroundColor: 'rgba(255, 7, 0, 0.55)',
+            ".finalize": {
+              backgroundColor: "rgba(255, 7, 0, 0.55)",
             },
-            '.unfinalize': {
-              backgroundColor: 'rgba(157, 255, 118, 0.49)'
+            ".unfinalize": {
+              backgroundColor: "rgba(157, 255, 118, 0.49)",
             },
           }}
         >
@@ -383,10 +395,11 @@ export default function StudentList(props) {
             }}
           />
         </Box>
-
       </div>
       <Grid container justifyContent="flex-end">
-        {isSavingData ? (<CircularProgress />) : (
+        {isSavingData ? (
+          <CircularProgress />
+        ) : (
           <>
             <Button
               startIcon={<SaveIcon fontSize="small" />}
@@ -397,7 +410,6 @@ export default function StudentList(props) {
             </Button>
           </>
         )}
-
       </Grid>
 
       <ImportStudentDialog open={isOpenImportStudent} onClose={handleClose} />
