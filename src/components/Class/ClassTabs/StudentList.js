@@ -16,14 +16,15 @@ import {
   GridToolbarExport,
   gridClasses,
 } from "@mui/x-data-grid";
-import { MenuItem, Grid } from "@mui/material";
+import { MenuItem, Grid, Box, Tooltip } from "@mui/material";
 import ImportDialog from "components/Class/ClassTabs/ImportDialog/ImportDialog";
-
 import { Link } from "react-router-dom";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
+import Typography from "@mui/material/Typography";
+import AnchorElTooltips from "./utils/AnchorElTooltips";
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
   ({ theme, ownerState }) => ({
@@ -96,7 +97,10 @@ function CustomToolbar(props) {
 
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport sx={{ mr: 1, ml: 2 }} csvOptions={{ allColumns: true, utf8WithBom: true }} />
+      <GridToolbarExport
+        sx={{ mr: 1, ml: 2 }}
+        csvOptions={{ allColumns: true, utf8WithBom: true }}
+      />
       <Button
         startIcon={<UploadIcon fontSize="small" />}
         sx={{ mr: 1, ml: 2 }}
@@ -105,19 +109,17 @@ function CustomToolbar(props) {
         Import
       </Button>
       <Grid container justifyContent="flex-end">
-      <Link
-        to="/StudentList.xlsx"
-        target="_blank"
-        download
-        style={{ textDecoration: "none" }}
-      >
-        <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
-          Download Template
-        </Button>
-      </Link>
-
+        <Link
+          to="/StudentList.xlsx"
+          target="_blank"
+          download
+          style={{ textDecoration: "none" }}
+        >
+          <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
+            Download Template
+          </Button>
+        </Link>
       </Grid>
-      
     </GridToolbarContainer>
   );
 }
@@ -182,9 +184,29 @@ export default function StudentList(props) {
   }
 
   const columns = [
-    { field: "studentId", headerName: "Student ID", flex: 1.0 },
-    { field: "fullName", headerName: "Full Name", flex: 1.0, minWidth: 150 },
+    {
+      field: "studentId",
+      headerName: "Student ID",
+      flex: 1.0,
+    },
+    {
+      field: "fullName",
+      headerName: "Full Name",
+      flex: 1.0,
+      minWidth: 150,
+      renderCell: (params) => {
+        console.log(params.value);
+        if (params.value.extra) {
+          return (
+            <AnchorElTooltips title={params.value.extra.fullname} content={params.value.val} color="#e8586e"/>
+          );
+        } else {
+          return <Typography>{params.value.val}</Typography>;
+        }
+      },
+    },
   ];
+
   assignments.forEach((assignment) => {
     columns.push({
       field: assignment.id.toString(),
@@ -194,6 +216,7 @@ export default function StudentList(props) {
       flex: 1.0,
     });
   });
+
   columns.push({
     field: "total",
     headerName: "Total",
@@ -247,7 +270,6 @@ export default function StudentList(props) {
       </div>
       <Grid container justifyContent="flex-start">
         <Button onClick={handleClickButton}>Show data</Button>
-
       </Grid>
       <Grid container justifyContent="flex-end">
         <Button
