@@ -59,7 +59,7 @@ export default function BasicTabs(props) {
           <Tab label="Overview" {...a11yProps(0)} />
           <Tab label="People" {...a11yProps(1)} />
           {isTeacher && <Tab label="Grade Structure" {...a11yProps(2)} />}
-          <Tab label="Student Import" {...a11yProps(3)} />
+          <Tab label="Grades" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
