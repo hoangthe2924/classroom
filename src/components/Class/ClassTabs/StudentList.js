@@ -1,10 +1,6 @@
 import * as React from "react";
-import PropTypes from "prop-types";
-import { useRef, useState, useEffect } from "react";
-import { useMemo } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import { useParams } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import {
   GridColumnMenu,
@@ -16,189 +12,22 @@ import {
   GridToolbarExport,
   gridClasses,
 } from "@mui/x-data-grid";
-import { MenuItem, Grid, Box } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 import ImportStudentDialog from "components/Class/ClassTabs/ImportDialog/ImportStudentDialog";
-import ImportGradeDialog from "components/Class/ClassTabs/ImportDialog/ImportGradeDialog";
-import { Link } from "react-router-dom";
-import DownloadIcon from "@mui/icons-material/Download";
-import UploadIcon from "@mui/icons-material/Upload";
+import { useParams } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
 import {
   getStudentGrades,
   updateStudentGrades,
-  updateFinalize,
 } from "services/grade.service";
 import Typography from "@mui/material/Typography";
 import AnchorElTooltips from "./utils/AnchorElTooltips";
 import CircularProgress from "@mui/material/CircularProgress";
+import CustomToolbar from "./utils/CustomToolbar";
+import CustomColumnMenuComponent from "./utils/CustomColumnMenuComponent";
 
-const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
-  ({ theme, ownerState }) => ({
-    background: theme.palette[ownerState.color].main,
-    color: theme.palette[ownerState.color].contrastText,
-  })
-);
 
-const StyledGridColumnMenu = styled(GridColumnMenu)(
-  ({ theme, ownerState }) => ({
-    background: theme.palette[ownerState.color].main,
-    color: theme.palette[ownerState.color].contrastText,
-  })
-);
-
-function CustomColumnMenuComponent(props) {
-  const {
-    hideMenu,
-    currentColumn,
-    color,
-    rows,
-    setRows,
-    assignments,
-    setAssignments,
-    ...other
-  } = props;
-  const [isOpenImportGrade, setIsOpenImportGrade] = useState(false);
-  const params = useParams();
-
-  function handleImportGrade() {
-    setIsOpenImportGrade(true);
-  }
-
-  async function handleFinalize() {
-    setAssignments((assignments) => {
-      let newAssignments = assignments.slice();
-      for (const assignment of newAssignments) {
-        if (assignment.id.toString() === currentColumn["field"]) {
-          assignment.finalize = !assignment.finalize;
-          break;
-        }
-      }
-      return newAssignments;
-    });
-    await updateFinalize(currentColumn["field"], params.id);
-  }
-
-  function updateGrade(rows, grade) {
-    var data = rows.slice();
-    var checkExist = false;
-    for (const row of data) {
-      if (row.studentId === grade.studentId) {
-        checkExist = true;
-        row[currentColumn["field"]] = grade.grade;
-        break;
-      }
-    }
-    if (!checkExist) {
-      delete grade.guid;
-      grade[currentColumn["field"]] = grade.grade;
-      data.push(grade);
-    }
-    return data;
-  }
-
-  const handleClose = (value) => {
-    setIsOpenImportGrade(false);
-    if (value) {
-      value.forEach((vl) => {
-        setRows((prevrows) => updateGrade(prevrows, vl));
-      });
-    }
-    console.log("close", value);
-  };
-
-  if (currentColumn.field === "name") {
-    return (
-      <StyledGridColumnMenuContainer
-        hideMenu={hideMenu}
-        currentColumn={currentColumn}
-        ownerState={{ color }}
-        {...other}
-      >
-        <SortGridMenuItems onClick={hideMenu} column={currentColumn} />
-        <GridFilterMenuItem onClick={hideMenu} column={currentColumn} />
-      </StyledGridColumnMenuContainer>
-    );
-  }
-  if (
-    currentColumn.field !== "fullName" &&
-    currentColumn.field !== "studentId" &&
-    currentColumn.field !== "total"
-  ) {
-    return (
-      <StyledGridColumnMenuContainer
-        hideMenu={hideMenu}
-        currentColumn={currentColumn}
-        ownerState={{ color }}
-        sx={{}}
-        {...other}
-      >
-        <MenuItem onClick={handleImportGrade}>Import Grade</MenuItem>
-        <MenuItem onClick={handleFinalize}>Mark as Finalize</MenuItem>
-        <ImportGradeDialog open={isOpenImportGrade} onClose={handleClose} />
-      </StyledGridColumnMenuContainer>
-    );
-  }
-  return (
-    <StyledGridColumnMenu
-      hideMenu={hideMenu}
-      currentColumn={currentColumn}
-      ownerState={{ color }}
-      {...other}
-    />
-  );
-}
-
-CustomColumnMenuComponent.propTypes = {
-  color: PropTypes.string.isRequired,
-  currentColumn: PropTypes.object.isRequired,
-  hideMenu: PropTypes.func.isRequired,
-};
-
-export { CustomColumnMenuComponent };
-
-function CustomToolbar(props) {
-  const { handleClickOpen } = props;
-
-  return (
-    <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport
-        sx={{ mr: 1, ml: 2 }}
-        csvOptions={{ allColumns: true, utf8WithBom: true }}
-      />
-      <Button
-        startIcon={<UploadIcon fontSize="small" />}
-        sx={{ mr: 1, ml: 2 }}
-        onClick={handleClickOpen}
-      >
-        Import
-      </Button>
-      <Grid container justifyContent="flex-end">
-        <Link
-          to="/StudentTemplate.xlsx"
-          target="_blank"
-          download
-          style={{ textDecoration: "none" }}
-        >
-          <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
-            Download Student Template
-          </Button>
-        </Link>
-        <Link
-          to="/GradingTemplate.xlsx"
-          target="_blank"
-          download
-          style={{ textDecoration: "none" }}
-        >
-          <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
-            Download Grade Template
-          </Button>
-        </Link>
-      </Grid>
-    </GridToolbarContainer>
-  );
-}
-export { CustomToolbar };
 
 export default function StudentList(props) {
   const params = useParams();
