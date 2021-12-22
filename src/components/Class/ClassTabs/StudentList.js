@@ -132,6 +132,7 @@ export default function StudentList(props) {
         }
         return <Typography>{params.value}</Typography>;
       },
+      valueFormatter: ({ value }) => `${value.val}`,
     },
   ];
 
