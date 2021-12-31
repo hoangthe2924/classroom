@@ -13,6 +13,10 @@ export function addClass(values) {
   return http.post("/classes/", values, { headers: authHeader() });
 }
 
+export function checkClassAvailable(values) {
+  return http.post(`/classes/available/${values.CJC}`, { headers: authHeader() });
+}
+
 export function addNewAssignment(classId, values) {
   return http.post(`/classes/${classId}/assignments`, values, {
     headers: authHeader(),

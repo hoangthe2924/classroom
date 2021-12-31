@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import * as PropTypes from "prop-types";
 import AddClassForm from "components/Class/AddClassForm";
+import JoinClassForm from "components/Class/JoinClassForm";
 import { useNavigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
 import {useSelector, useDispatch} from 'react-redux';
@@ -28,6 +29,7 @@ LoadingButton.propTypes = {
 
 function ClassList(props) {
   const [open, setOpen] = useState(false);
+  const [openJoinClassForm, setOpenJoinClassForm] = useState(false);
   const listClass = useSelector(state => state.classList);
   const dispatch = useDispatch();
 
@@ -62,6 +64,15 @@ function ClassList(props) {
     fetchClass();
   };
 
+  const handleClickOpenJoinClassForm = () => {
+    setOpenJoinClassForm(true);
+  };
+
+  const handleCloseJoinClassForm = (formik) => () => {
+    formik.resetForm();
+    setOpenJoinClassForm(false);
+  };
+
   return (
     <div>
       <Grid
@@ -80,9 +91,21 @@ function ClassList(props) {
           >
             Add Class
           </Button>
+          <Button
+            variant="outlined"
+            sx={{ float: "center" }}
+            onClick={handleClickOpenJoinClassForm}
+          >
+            Join Class
+          </Button>
           <AddClassForm
             open={open}
             handleClose={handleClose}
+            onSuccess={handleSuccess}
+          />
+          <JoinClassForm
+            open={openJoinClassForm}
+            handleClose={handleCloseJoinClassForm}
             onSuccess={handleSuccess}
           />
         </Grid>
