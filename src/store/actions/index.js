@@ -39,6 +39,7 @@ export const checkIsLoggedIn = () => {
       .get("/users/info/", { headers: authHeader() })
       .then((res) => {
         if (res.data.id) {
+          localStorage.setItem('mssv', JSON.stringify(res.data.studentId));
           dispatch(changeState(true));
           fetchAllClasses().then(
             (result) => {
@@ -51,10 +52,12 @@ export const checkIsLoggedIn = () => {
           return;
         }
         dispatch(changeState(false));
+        localStorage.removeItem('mssv');
         dispatch({type: "DELETE"});
       })
       .catch((error) => {
         dispatch(changeState(false));
+        localStorage.removeItem('mssv');
         dispatch({type: "DELETE"});
       });
   };

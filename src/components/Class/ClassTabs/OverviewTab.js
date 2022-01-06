@@ -1,7 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
-import GradeStructure from "components/Class/ClassTabs/GradeStructure";
+import GradeStructure from "components/Class/ClassTabs/GradeStructureTab";
 import { Grid } from "@mui/material";
 
 export default function OverviewTab({ item, onChangeTab }) {
