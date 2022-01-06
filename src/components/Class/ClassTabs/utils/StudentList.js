@@ -10,16 +10,15 @@ import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";
 import { getStudentGrades, updateStudentGrades } from "services/grade.service";
 import Typography from "@mui/material/Typography";
-import AnchorElTooltips from "./utils/AnchorElTooltips";
+import AnchorElTooltips from "./AnchorElTooltips";
 import CircularProgress from "@mui/material/CircularProgress";
-import CustomToolbar from "./utils/CustomToolbar";
-import CustomColumnMenuComponent from "./utils/CustomColumnMenuComponent";
+import CustomToolbar from "./CustomToolbar";
+import CustomColumnMenuComponent from "./CustomColumnMenuComponent";
 
-export default function StudentList(props) {
+export default function StudentList({ ListAssignment }) {
   const params = useParams();
   const navigate = useNavigate();
-  const { items } = props;
-  const [assignments, setAssignments] = React.useState(items.assignments);
+  const [assignments, setAssignments] = React.useState(ListAssignment);
   const [color] = React.useState("primary");
 
   const [rows, setRows] = useState([]);
