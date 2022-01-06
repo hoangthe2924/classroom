@@ -19,3 +19,9 @@ export function updateFinalize(assignmentId, classId) {
         headers: authHeader(),
     });
 }
+
+export function getStudentGradesDetail(studentId, classId) {
+    return http.get(`/grades/studentGradeDetail?classId=${classId}&studentId=${studentId}`,{ 
+        headers: authHeader(),
+    });
+}

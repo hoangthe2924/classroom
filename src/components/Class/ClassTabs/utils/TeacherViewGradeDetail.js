@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import StudentList from "./StudentList";
 
-export default function GradeBoard({ items }) {
+const TeacherViewGradeDetail = ({ListAssignment}) => {
   return (
-    <Box>
+    <>
       <Box
         sx={{
           alignItems: "center",
@@ -19,8 +19,10 @@ export default function GradeBoard({ items }) {
         <Box sx={{ m: 1 }}></Box>
       </Box>
       <Box sx={{ mt: 3 }}>
-        <StudentList items={items} />
+        <StudentList ListAssignment={ListAssignment} />
       </Box>
-    </Box>
+    </>
   );
-}
+};
+
+export default TeacherViewGradeDetail;
