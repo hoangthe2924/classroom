@@ -2,34 +2,36 @@ import http from "../../axios-config";
 import authHeader from "services/auth-header";
 import { fetchAllClasses } from "services/class.service";
 
-export const login = (values) => {
-  return async (dispatch) => {
-    return await http
-      .post("/users/login/", values)
-      .then((res) => {
-        if (res.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(res.data));
-          dispatch(changeState(true));
+export const login = (values) => async (dispatch) => {
+  return http
+    .post("/users/login/", values)
+    .then((res) => {
+      if (res.data.accessToken) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        dispatch(changeState(true));
 
-          fetchAllClasses().then(
-            (result) => {
-              dispatch({type: "FETCH", payload: result.data});
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
-        }
-      })
-      .catch((error) => console.log(error));
-  };
+        fetchAllClasses().then(
+          (result) => {
+            dispatch({ type: "FETCH", payload: result.data });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return true;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
 };
 
 export const logout = () => {
   return async (dispatch) => {
     localStorage.removeItem("user");
     dispatch(changeState(false));
-    dispatch({type: "DELETE"});
+    dispatch({ type: "DELETE" });
   };
 };
 
@@ -39,11 +41,11 @@ export const checkIsLoggedIn = () => {
       .get("/users/info/", { headers: authHeader() })
       .then((res) => {
         if (res.data.id) {
-          localStorage.setItem('mssv', JSON.stringify(res.data.studentId));
+          localStorage.setItem("mssv", JSON.stringify(res.data.studentId));
           dispatch(changeState(true));
           fetchAllClasses().then(
             (result) => {
-              dispatch({type: "FETCH", payload: result.data});
+              dispatch({ type: "FETCH", payload: result.data });
             },
             (error) => {
               console.log(error);
@@ -52,13 +54,13 @@ export const checkIsLoggedIn = () => {
           return;
         }
         dispatch(changeState(false));
-        localStorage.removeItem('mssv');
-        dispatch({type: "DELETE"});
+        localStorage.removeItem("mssv");
+        dispatch({ type: "DELETE" });
       })
       .catch((error) => {
         dispatch(changeState(false));
-        localStorage.removeItem('mssv');
-        dispatch({type: "DELETE"});
+        localStorage.removeItem("mssv");
+        dispatch({ type: "DELETE" });
       });
   };
 };
