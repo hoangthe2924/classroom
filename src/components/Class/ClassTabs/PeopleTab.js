@@ -1,7 +1,4 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import http from "../../../axios-config";
 import {
   List,
   ListItem,
@@ -15,33 +12,13 @@ import {
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InvitationDialog from "components/Class/InvitationUser/InvitationDialog";
-import authHeader from "services/auth-header";
 
 export default function PeopleTab({ items }) {
-  const [item, setItem] = useState([]);
-  let params = useParams();
-
-  useEffect(() => {
-    async function fetchClass() {
-      let id = params.id;
-      await http.get(`/classes/${id}`, { headers: authHeader() }).then(
-        (result) => {
-          setItem(result.data);
-          // return result;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    }
-    fetchClass();
-  }, [params]);
-
-  let teachers = item.users
-    ? item.users.filter((user) => user.user_class.role === "teacher")
+  let teachers = items.users
+    ? items.users.filter((user) => user.user_class.role === "teacher")
     : [];
-  let students = item.users
-    ? item.users.filter((user) => user.user_class.role === "student")
+  let students = items.users
+    ? items.users.filter((user) => user.user_class.role === "student")
     : [];
   return (
     <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
