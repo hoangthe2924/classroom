@@ -13,6 +13,7 @@ import JoinClassForm from "components/Class/JoinClassForm";
 import { useNavigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
 import {useSelector, useDispatch} from 'react-redux';
+import Loading from "components/Loading";
 
 function LoadingButton(props) {
   return null;
@@ -29,6 +30,7 @@ LoadingButton.propTypes = {
 
 function ClassList(props) {
   const [open, setOpen] = useState(false);
+  const [openLoading, setOpenLoading] = useState(false);
   const [openJoinClassForm, setOpenJoinClassForm] = useState(false);
   const listClass = useSelector(state => state.classList);
   const dispatch = useDispatch();
@@ -41,6 +43,7 @@ function ClassList(props) {
   }, []);
 
   async function fetchClass() {
+    setOpenLoading(true);
     await fetchAllClasses().then(
       (result) => {
         dispatch({type: "FETCH", payload: result.data});
@@ -49,6 +52,7 @@ function ClassList(props) {
         console.log(error);
       }
     );
+    setOpenLoading(false);
   }
 
   const handleClickOpen = () => {
@@ -130,6 +134,7 @@ function ClassList(props) {
           </Grid>
         ))}
       </Grid>
+      <Loading open={openLoading} />
     </div>
   );
 }
