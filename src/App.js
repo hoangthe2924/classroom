@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
 import ProtectedRoute from "components/Routes/ProtectedRoute";
+import { SocketContext, socket } from 'context/socket';
+
 const mdTheme = createTheme();
 
 function Copyright(props) {
@@ -42,40 +44,42 @@ function App() {
 
   return (
     <div>
-      <ThemeProvider theme={mdTheme}>
-        <MyAppBar title={title}>
-          <Routes>
-            <Route
-              path={"classes"}
-              element={
-                <ProtectedRoute>
-                  <ClassList />
-                </ProtectedRoute>
-              }
-            />
-            <Route path={"login"} element={<Login />} />
-            <Route path={"register"} element={<Register />} />
-            <Route
-              path={"profile"}
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/classes/:id"
-              element={
-                <ProtectedRoute>
-                  <ClassDetail changeTitle={changeTitle} />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-          <Copyright sx={{ pt: 4 }} />
-        </MyAppBar>
-      </ThemeProvider>
+      <SocketContext.Provider value={socket}>
+        <ThemeProvider theme={mdTheme}>
+          <MyAppBar title={title}>
+            <Routes>
+              <Route
+                path={"classes"}
+                element={
+                  <ProtectedRoute>
+                    <ClassList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path={"login"} element={<Login />} />
+              <Route path={"register"} element={<Register />} />
+              <Route
+                path={"profile"}
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/classes/:id"
+                element={
+                  <ProtectedRoute>
+                    <ClassDetail changeTitle={changeTitle} />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+            <Copyright sx={{ pt: 4 }} />
+          </MyAppBar>
+        </ThemeProvider>
+      </SocketContext.Provider>
     </div>
   );
 }
