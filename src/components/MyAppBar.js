@@ -16,7 +16,7 @@ import * as actions from "store/actions/index.js";
 import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
-
+import Notification from "./Notification";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -116,6 +116,7 @@ function MyAppBar(props) {
           </Typography>
           {loginStatus === true ? (
             <div>
+              <Notification />
               <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>
                 <NavLink
                   to="/profile"
