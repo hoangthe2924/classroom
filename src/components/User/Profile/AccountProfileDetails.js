@@ -14,6 +14,7 @@ import http from "axios-config";
 
 export const AccountProfileDetails = ({ item, onUpdate }) => {
   const [values, setValues] = useState(item);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     setValues(item);
@@ -40,6 +41,7 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
           alert(error.response.data || "Please try again later");
           console.log("err: ", JSON.stringify(error));
         });
+      setEditing(false);
     },
   });
   return (
@@ -57,6 +59,7 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
                 name="fullname"
                 label="Full name"
                 type="text"
+                disabled={!editing}
                 value={formik.values.fullname}
                 onChange={formik.handleChange}
                 fullWidth
@@ -71,7 +74,7 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
                 name="studentId"
                 label="Student Id"
                 type="tel"
-                disabled={!!values?.studentId}
+                disabled={!!values?.studentId || !editing}
                 value={formik.values.studentId}
                 onChange={formik.handleChange}
                 fullWidth
@@ -103,14 +106,27 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
             p: 2,
           }}
         >
-          <Button
-            color="primary"
-            type="submit"
-            variant="contained"
-            disabled={!formik.isValid || formik.isSubmitting}
-          >
-            Save details
-          </Button>
+          {!editing ? (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={(e) => {
+                e.preventDefault();
+                setEditing(true);
+              }}
+            >
+              Edit
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              type="submit"
+              variant="contained"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
+              Save
+            </Button>
+          )}
         </Box>
       </Card>
     </form>
