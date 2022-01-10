@@ -54,3 +54,7 @@ export function deleteAssignment(classId, assignmentId) {
     headers: authHeader(),
   });
 }
+
+export function invitePeople(listEmail, classID, role) {
+  return http.post(`/classes/people/invite`,{listEmail, classID, role}, {headers: authHeader()});
+}

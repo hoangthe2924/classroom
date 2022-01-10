@@ -14,6 +14,7 @@ import AnchorElTooltips from "./AnchorElTooltips";
 import CircularProgress from "@mui/material/CircularProgress";
 import CustomToolbar from "./CustomToolbar";
 import CustomColumnMenuComponent from "./CustomColumnMenuComponent";
+import Loading from "components/Loading";
 
 export default function StudentList({ ListAssignment }) {
   const params = useParams();
@@ -21,6 +22,7 @@ export default function StudentList({ ListAssignment }) {
   const [assignments, setAssignments] = React.useState(ListAssignment);
   const [color] = React.useState("primary");
 
+  const [openLoading, setOpenLoading] = useState(false);
   const [rows, setRows] = useState([]);
   const [isOpenImportStudent, setIsOpenImportStudent] = useState(false);
   const [isSavingData, setIsSavingData] = useState(false);
@@ -39,17 +41,21 @@ export default function StudentList({ ListAssignment }) {
       return data;
     }
     async function getAssignmentGrades(assignmentId, classId) {
+      setOpenLoading(true);
       const res = await getStudentGrades(assignmentId, classId);
       let grades = res.data ? res.data : [];
       setRows((prevState) => addGrades(grades, prevState));
+      setOpenLoading(false);
     }
     async function fetchStudentList() {
+      setOpenLoading(true);
       const res = await getStudentList(params.id);
       var data = res.data ? res.data : [];
       setRows(data);
       for (const assignment of assignments) {
         getAssignmentGrades(assignment.id.toString(), params.id);
       }
+      setOpenLoading(false);
     }
     if (params) {
       fetchStudentList();
@@ -226,8 +232,8 @@ export default function StudentList({ ListAssignment }) {
           </>
         )}
       </Grid>
-
       <ImportStudentDialog open={isOpenImportStudent} onClose={handleClose} />
+      <Loading open={openLoading} />
     </div>
   );
 }

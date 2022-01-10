@@ -17,7 +17,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import LinkInvitation from "./LinkInvitation";
-import { DEFAULT_DOMAIN } from "../../../axios-config";
+import { invitePeople } from "services/class.service";
 
 function validateEmail(email) {
   const re =
@@ -71,26 +71,8 @@ const InvitationDialog = ({ role, cjc }) => {
     setOpenErrorSBar(false);
   };
 
-  const inviteHandler = () => {
-    const token = JSON.parse(localStorage.getItem("user")).accessToken;
-    const LINK = DEFAULT_DOMAIN + "classes/people/invite";
-
-    axios
-      .post(
-        LINK,
-        {
-          listEmail: listEmail,
-          classID: id,
-          role: role,
-        },
-        {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
+  const inviteHandler = async () => {
+    await invitePeople(listEmail, id, role).then((res) => {
         switch (res.status) {
           case 401:
             localStorage.removeItem("access_token");
@@ -101,9 +83,6 @@ const InvitationDialog = ({ role, cjc }) => {
             setOpenInvitationDialog(false);
             setOpenSuccessSBar(true);
             setListEmail([]);
-            break;
-          case 403:
-            setOpenErrorSBar(true);
             break;
           default:
             setOpenErrorSBar(true);

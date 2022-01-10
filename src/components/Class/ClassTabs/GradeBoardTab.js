@@ -4,7 +4,6 @@ import TeacherViewGradeDetail from "./utils/TeacherViewGradeDetail";
 
 export default function GradeBoard({ items }) {
   const role = items.requesterRole;
-  console.log(role);
 
   const studentId = JSON.parse(localStorage.getItem("mssv"));
 
