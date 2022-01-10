@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   Typography,
+  Chip,
 } from "@mui/material";
 
 export const AccountProfile = ({ item }) => (
@@ -24,6 +25,9 @@ export const AccountProfile = ({ item }) => (
             width: 64,
           }}
         />
+        {item?.isAdmin && (
+          <Chip label="Admin" color="error" size="small" sx={{ mb: 3 }} />
+        )}
         <Typography color="textPrimary" gutterBottom variant="h5">
           {item?.fullname}
         </Typography>

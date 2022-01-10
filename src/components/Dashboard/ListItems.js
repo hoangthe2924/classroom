@@ -13,32 +13,48 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
 
-export const MainListItems = ({open, classList}) => {
+export const MainListItems = ({ open, classList }) => {
   const teachingClasses = classList.filter(
-    (item) => item.user_class.role === "teacher"
+    (item) => item.user_class?.role === "teacher"
   );
   const studyingClasses = classList.filter(
-    (item) => item.user_class.role === "student"
+    (item) => item.user_class?.role === "student"
   );
   const teachingClassItems = teachingClasses.map((item) => {
     return (
-        <ListItem key={item.id} component={NavLink} to={`/classes/${item.id}`} button>
-          <ListItemIcon style={{minWidth: '40px'}}>
-            <SchoolIcon />
-          </ListItemIcon>
-          <ListItemText primaryTypographyProps={{fontSize: '14px'}} primary={item.classname} />
-        </ListItem>
+      <ListItem
+        key={item.id}
+        component={NavLink}
+        to={`/classes/${item.id}`}
+        button
+      >
+        <ListItemIcon style={{ minWidth: "40px" }}>
+          <SchoolIcon />
+        </ListItemIcon>
+        <ListItemText
+          primaryTypographyProps={{ fontSize: "14px" }}
+          primary={item.classname}
+        />
+      </ListItem>
     );
   });
 
   const studyingClassItems = studyingClasses.map((item) => {
     return (
-        <ListItem key={item.id} component={NavLink} to={`/classes/${item.id}`} button>
-          <ListItemIcon style={{minWidth: '40px'}}>
-            <SchoolIcon />
-          </ListItemIcon>
-          <ListItemText primaryTypographyProps={{fontSize: '14px'}} primary={item.classname} />
-        </ListItem>
+      <ListItem
+        key={item.id}
+        component={NavLink}
+        to={`/classes/${item.id}`}
+        button
+      >
+        <ListItemIcon style={{ minWidth: "40px" }}>
+          <SchoolIcon />
+        </ListItemIcon>
+        <ListItemText
+          primaryTypographyProps={{ fontSize: "14px" }}
+          primary={item.classname}
+        />
+      </ListItem>
     );
   });
 
@@ -53,7 +69,7 @@ export const MainListItems = ({open, classList}) => {
       <List>
         <ListSubheader>Studying</ListSubheader>
         {studyingClassItems}
-      </List>   
+      </List>
     </Box>
   );
 
