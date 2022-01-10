@@ -5,12 +5,14 @@ import TeacherViewGradeDetail from "./utils/TeacherViewGradeDetail";
 export default function GradeBoard({ items }) {
   const role = items.requesterRole;
 
-  const studentId = JSON.parse(localStorage.getItem('mssv'));
+  const studentId = JSON.parse(localStorage.getItem("mssv"));
 
   return (
     <Box>
-      {(role === "teacher") && <TeacherViewGradeDetail ListAssignment={items.assignments} />}
-      {(role === "student") && <StudentViewGradeDetail studentID={studentId} />}
+      {(role === "teacher" || role === "admin") && (
+        <TeacherViewGradeDetail ListAssignment={items.assignments} />
+      )}
+      {role === "student" && <StudentViewGradeDetail studentID={studentId} />}
     </Box>
   );
 }
