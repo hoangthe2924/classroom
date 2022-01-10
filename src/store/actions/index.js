@@ -3,7 +3,7 @@ import authHeader from "services/auth-header";
 import { fetchAllClasses } from "services/class.service";
 
 export const login = (values) => async (dispatch) => {
-  return http
+  return await http
     .post("/users/login/", values)
     .then((res) => {
       if (res.data.accessToken) {
