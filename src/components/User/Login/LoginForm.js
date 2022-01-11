@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import GoogleLoginButton from "./GoogleLogin";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import * as actions from "store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,7 +22,7 @@ function LoginForm(props) {
   //const { loginStatus } = props;
   const loginStatus = useSelector((state) => state.loginStatus);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const checkLoginStatus = () => {
     dispatch(actions.checkIsLoggedIn());
   };
@@ -42,9 +42,13 @@ function LoginForm(props) {
       const tryLogin = dispatch(actions.login(values));
       tryLogin.then((loginSuccess) => {
         if (loginSuccess) {
-          checkLoginStatus();
-          // navigate(navigateLink);
-          // window.location.reload();
+          // checkLoginStatus();
+          let navigateLink = localStorage.getItem("prev-link");
+          if (!navigateLink) {
+            navigateLink = "/dashboard";
+          }
+          navigate(navigateLink);
+          window.location.reload();
         } else {
           alert("incorrect username or password!");
         }

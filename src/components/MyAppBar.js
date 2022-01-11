@@ -42,7 +42,7 @@ const Drawer = styled(MuiDrawer, {
 })(({ theme, open }) => ({
   "& .MuiDrawer-paper": {
     position: "relative",
-    whiteSpace: "normal",
+    whiteSpace: "nowrap",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -64,8 +64,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function MyAppBar(props) {
-  const loginStatus = useSelector(state => state.loginStatus);
-  const classList = useSelector(state => state.classList);
+  const loginStatus = useSelector((state) => state.loginStatus);
+  const classList = useSelector((state) => state.classList);
+  const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
 
   const checkLoginStatus = () => {
@@ -149,7 +150,11 @@ function MyAppBar(props) {
           </ListItem>
         </Toolbar>
         <Divider />
-        <MainListItems open={open} classList={classList} />
+        <MainListItems
+          open={open}
+          classList={classList}
+          isAdmin={currentUser.isAdmin}
+        />
         <Divider />
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

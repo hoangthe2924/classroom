@@ -3,10 +3,12 @@ import * as actions from "store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-function ProtectedRoute(props) {
-  const loginStatus = useSelector(state => state.loginStatus);
+function ProtectedRoute({ children, adminRoute }) {
+  const loginStatus = useSelector((state) => state.loginStatus);
+  const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
-
+  console.log("cur", currentUser);
+  console.log("isadmin", adminRoute);
   const checkLoginStatus = () => {
     dispatch(actions.checkIsLoggedIn());
   };
@@ -15,16 +17,26 @@ function ProtectedRoute(props) {
     checkLoginStatus();
   }, []);
 
-  if(loginStatus===true){
-    return props.children;
-  }
-  else{
-    localStorage.removeItem('prev-link');
-    localStorage.setItem('prev-link', `${window.location.pathname+window.location.search}`);
+  if (loginStatus === true) {
+    if (adminRoute) {
+      if (currentUser.isAdmin) {
+        return children;
+      }
+      return <Navigate to="/dashboard" />;
+    }
+    return children;
+  } else {
+    localStorage.removeItem("prev-link");
+    localStorage.setItem(
+      "prev-link",
+      `${window.location.pathname + window.location.search}`
+    );
     return <Navigate to="/login" />;
   }
 
   //return loginStatus === true ? props.children : <Navigate to="/login" />;
 }
-
+ProtectedRoute.defaultProps = {
+  adminRoute: false,
+};
 export default ProtectedRoute;

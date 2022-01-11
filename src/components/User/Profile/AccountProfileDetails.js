@@ -31,8 +31,8 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
         .put("/users/info", values)
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            onUpdate();
             alert("Updated profile successfully!");
+            onUpdate();
           } else {
             alert("Please try again later");
           }
@@ -68,7 +68,6 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
-                required
                 margin="dense"
                 id="studentId"
                 name="studentId"

@@ -7,13 +7,16 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SchoolIcon from "@mui/icons-material/School";
+import PersonIcon from "@mui/icons-material/Person";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import ApartmentIcon from "@mui/icons-material/Apartment";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
 
-export const MainListItems = ({ open, classList }) => {
+export const MainListItems = ({ open, classList, isAdmin }) => {
   const teachingClasses = classList.filter(
     (item) => item.user_class?.role === "teacher"
   );
@@ -92,6 +95,29 @@ export const MainListItems = ({ open, classList }) => {
         )}
       </List>
       {open && classItems}
+      {isAdmin && (
+        <List>
+          <Divider />
+          <ListItem component={NavLink} to="/manage/admins" button>
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Admins" />
+          </ListItem>
+          <ListItem component={NavLink} to="/manage/users" button>
+            <ListItemIcon>
+              <SupervisorAccountIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Users" />
+          </ListItem>
+          <ListItem component={NavLink} to="/manage/classes" button>
+            <ListItemIcon>
+              <ApartmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Classes" />
+          </ListItem>
+        </List>
+      )}
     </React.Fragment>
   );
 };
