@@ -13,7 +13,8 @@ import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import DoDisturbOnIcon from "@mui/icons-material/DoDisturbOn";
 import { changeStatusGradeReview } from "services/grade.service";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-
+import { useContext } from "react";
+import { SocketContext } from 'context/socket';
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -31,6 +32,7 @@ export default function GradeReviewContent({
   openLoading,
   isTeacher,
 }) {
+  const socket = useContext(SocketContext);
   const { id, expectedGrade, reviewMessage, gdCommentList, status } =
     gradeReviewInfo.gradeReviewRequests[0];
 
@@ -42,11 +44,13 @@ export default function GradeReviewContent({
 
   const handleApprove = async () => {
     await changeStatusGradeReview(id, "approved", assignmentId);
+    socket.emit('grade review final', studentId);
     onUpdate();
   };
 
   const handleDeny = async () => {
     await changeStatusGradeReview(id, "denied", assignmentId);
+    socket.emit('grade review final', studentId);
     onUpdate();
   };
 
@@ -119,6 +123,7 @@ export default function GradeReviewContent({
           gradeReviewId={id}
           assignmentId={assignmentId}
           openLoading={openLoading}
+          studentId={studentId}
         />
         <Divider sx={{ mt: 2 }} />
         <CommentGradeReview comments={gdCommentList} />

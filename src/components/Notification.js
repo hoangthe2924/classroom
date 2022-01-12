@@ -139,7 +139,7 @@ export default function Notification() {
                 return (
                   <MenuItem key={notification.id} onClick={handleClose}>
                     <Alert severity="success">
-                    <AlertTitle>Giáo viên {notification.fromUser.fullname} đã phúc khảo điểm của bạn.</AlertTitle>
+                    <AlertTitle>Giáo viên {notification.fromUser.fullname} đã hoàn thành yêu cầu phúc khảo điểm của bạn.</AlertTitle>
 
                       <Stack
                         direction="row"
