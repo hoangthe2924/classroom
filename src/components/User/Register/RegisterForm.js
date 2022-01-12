@@ -32,11 +32,11 @@ function RegisterForm(props) {
     fullname: Yup.string()
       .min(2, "Too Short!")
       .max(50, "Too Long!")
-      .required("First Name is required"),
+      .required("Fullname is required"),
     username: Yup.string()
       .min(2, "Too Short!")
       .max(50, "Too Long!")
-      .required("First Name is required"),
+      .required("Username is required"),
     email: Yup.string().email("Email is invalid").required("Email is required"),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
@@ -160,10 +160,10 @@ function RegisterForm(props) {
                 Sign Up
               </Button>
               <Grid container justifyContent="center">
-                  <Link href="/login" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
+                <Link href="/login" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
             </Box>
           </Box>
         </Container>

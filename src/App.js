@@ -16,6 +16,7 @@ import ProtectedRoute from "components/Routes/ProtectedRoute";
 import ManageAdmins from "pages/ManageAdmins";
 import ManageUsers from "pages/ManageUsers";
 import ManageClasses from "pages/ManageClasses";
+import ManageUserDetail from "pages/ManageUserDetail";
 let mdTheme = createTheme();
 
 function Copyright(props) {
@@ -87,6 +88,14 @@ function App() {
               element={
                 <ProtectedRoute adminRoute={true}>
                   <ManageUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/manage/users/:id"
+              element={
+                <ProtectedRoute adminRoute={true}>
+                  <ManageUserDetail />
                 </ProtectedRoute>
               }
             />

@@ -13,7 +13,7 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function ClassDetail({changeTitle}) {
+export default function ClassDetail({ changeTitle }) {
   const [item, setItem] = useState([]);
   const [open, setOpen] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function ClassDetail({changeTitle}) {
     await fetchAllClasses().then(
       (result) => {
         console.log(result.data);
-        dispatch({type: "FETCH", payload: result.data});
+        dispatch({ type: "FETCH", payload: result.data });
       },
       (error) => {
         console.log(error);
@@ -44,10 +44,11 @@ export default function ClassDetail({changeTitle}) {
       (result) => {
         if (result.status === 401) {
           navigate("/login");
+          return;
         }
-        
+
         const data = result.data;
-        if(data?.newMember){
+        if (data?.newMember) {
           fetchClasses();
           setOpen(true);
         }
@@ -71,42 +72,37 @@ export default function ClassDetail({changeTitle}) {
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
   useEffect(() => {
     fetchClass();
-    localStorage.removeItem('prev-link');
+    localStorage.removeItem("prev-link");
   }, [id]);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     return () => {
       changeTitle("");
     };
-  },[]);
+  }, []);
 
   const { className } = item;
 
-  useEffect(()=>{
+  useEffect(() => {
     changeTitle(className);
   }, [className]);
 
   return (
     <Fragment>
-    <Card variant="outlined">
-      <ClassTabs item={item} onUpdate={handleUpdate} />
-    </Card>
-    <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      <Card variant="outlined">
+        <ClassTabs item={item} onUpdate={handleUpdate} />
+      </Card>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={open}
         autoHideDuration={3000}
         onClose={handleClose}
       >
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           Welcome to the class!
         </Alert>
       </Snackbar>

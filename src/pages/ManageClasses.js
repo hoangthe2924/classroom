@@ -2,23 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
 import { useSelector, useDispatch } from "react-redux";
-import SearchBar from "material-ui-search-bar";
+import SearchField from "react-search-field";
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  Grid,
-  Typography,
-  Button,
-} from "@mui/material";
+import { Typography, IconButton, Card, Tooltip } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function ManageClasses() {
   const [openLoading, setOpenLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [rows, setRows] = useState([]);
   const listClass = useSelector((state) => state.classList);
-  console.log("lc", listClass);
+  const [rows, setRows] = useState(listClass);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -32,25 +25,27 @@ function ManageClasses() {
     setOpenLoading(true);
     await fetchAllClasses().then(
       (result) => {
+        if (result.status === 401 || result.status === 400) {
+          navigate("/login");
+          return;
+        }
         dispatch({ type: "FETCH", payload: result.data });
+        setRows(result.data);
       },
       (error) => {
         console.log(error);
+        navigate("/login");
       }
     );
     setOpenLoading(false);
   }
 
   const requestSearch = (searchedVal) => {
+    console.log("text", searchText);
     const filteredRows = listClass.filter((row) => {
-      return row.className.toLowerCase().includes(searchedVal.toLowerCase());
+      return row.classname.toLowerCase().includes(searchedVal.toLowerCase());
     });
     setRows(filteredRows);
-  };
-
-  const cancelSearch = () => {
-    setSearchText("");
-    requestSearch(searchText);
   };
 
   const columns = [
@@ -65,46 +60,50 @@ function ManageClasses() {
       flex: 1.0,
     },
     {
-      field: "owner.username",
-      headerName: "owner",
+      field: "owner",
+      headerName: "Created by",
       flex: 1.0,
+      renderCell: (params) => {
+        return <Typography>{params.value.username}</Typography>;
+      },
     },
     {
       field: "createdAt",
-      headerName: "createdAt",
-      flex: 1.0,
+      headerName: "Created on",
+      renderCell: (params) => {
+        return (
+          <Typography>
+            {new Date(params.value).toLocaleDateString("vi-VN")}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "id",
+      headerName: "Action",
+      renderCell: (params) => {
+        return (
+          <Tooltip title="View detail">
+            <IconButton onClick={() => navigate(`/classes/${params.value}`)}>
+              <VisibilityIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+        );
+      },
     },
   ];
 
   return (
     <div>
-      <h1>Manage Classes</h1>
-      <SearchBar
-        value={searchText}
+      <h1>Classes</h1>
+      <SearchField
+        placeholder="Search by name"
         onChange={(searchVal) => requestSearch(searchVal)}
-        onCancelSearch={() => cancelSearch()}
+        searchText={searchText}
       />
-      <DataGrid autoHeight columns={columns} rows={listClass} />
-      {listClass.map((cls) => (
-        <Grid item xs={12} sm={6} md={4} key={cls.id}>
-          <Card
-            onClick={() => {
-              navigate(`/classes/${cls.id}`);
-            }}
-          >
-            <CardActionArea sx={{ minHeight: 200 }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {cls.classname}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {cls.subject}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-      ))}
+      <Card sx={{ mt: 3 }}>
+        <DataGrid autoHeight columns={columns} rows={rows} />
+      </Card>
     </div>
   );
 }

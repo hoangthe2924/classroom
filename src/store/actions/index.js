@@ -6,6 +6,7 @@ export const login = (values) => async (dispatch) => {
   return await http
     .post("/users/login/", values)
     .then((res) => {
+      console.log("resbody", res.body);
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(changeState(true));
@@ -17,12 +18,13 @@ export const login = (values) => async (dispatch) => {
             console.log(error);
           }
         );
-        return true;
+        return 1;
       }
     })
     .catch((error) => {
-      console.log(error);
-      return false;
+      console.log("err", error.response);
+      if (error.response.status === 403) return -1;
+      return 0;
     });
 };
 

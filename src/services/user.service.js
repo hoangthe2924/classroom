@@ -14,11 +14,11 @@ export function getAllAdmins() {
 }
 
 export function getUserDetail(userId) {
-  return http.get("/users/:userId", { headers: authHeader() });
+  return http.get(`/users/${userId}`, { headers: authHeader() });
 }
 
 export function addAdmin(values) {
-  return http.post(`/users/admin`, values, {
+  return http.post(`/users/addAdmin`, values, {
     headers: authHeader(),
   });
 }

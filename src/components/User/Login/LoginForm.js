@@ -40,17 +40,23 @@ function LoginForm(props) {
     },
     onSubmit: async (values) => {
       const tryLogin = dispatch(actions.login(values));
-      tryLogin.then((loginSuccess) => {
-        if (loginSuccess) {
-          // checkLoginStatus();
-          let navigateLink = localStorage.getItem("prev-link");
-          if (!navigateLink) {
-            navigateLink = "/dashboard";
-          }
-          navigate(navigateLink);
-          window.location.reload();
-        } else {
-          alert("incorrect username or password!");
+      tryLogin.then((loginStatus) => {
+        console.log("log", loginStatus);
+        switch (loginStatus) {
+          case 1:
+            // checkLoginStatus();
+            let navigateLink = localStorage.getItem("prev-link");
+            if (!navigateLink) {
+              navigateLink = "/dashboard";
+            }
+            navigate(navigateLink);
+            window.location.reload();
+            break;
+          case -1:
+            alert("Your account has been banned!");
+            break;
+          default:
+            alert("incorrect username or password!");
         }
       });
     },
@@ -86,12 +92,7 @@ function LoginForm(props) {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box
-              component="form"
-              onSubmit={formik.handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
