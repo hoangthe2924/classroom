@@ -13,11 +13,12 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
 import ProtectedRoute from "components/Routes/ProtectedRoute";
+import { SocketContext, socket } from 'context/socket';
 import ManageAdmins from "pages/ManageAdmins";
 import ManageUsers from "pages/ManageUsers";
 import ManageClasses from "pages/ManageClasses";
 import ManageUserDetail from "pages/ManageUserDetail";
-let mdTheme = createTheme();
+const mdTheme = createTheme();
 
 function Copyright(props) {
   return (
@@ -46,6 +47,7 @@ function App() {
 
   return (
     <div>
+<SocketContext.Provider value={socket}>
       <ThemeProvider theme={mdTheme}>
         <MyAppBar title={title}>
           <Routes>
@@ -112,6 +114,7 @@ function App() {
           <Copyright sx={{ pt: 4 }} />
         </MyAppBar>
       </ThemeProvider>
+      </SocketContext.Provider>
     </div>
   );
 }

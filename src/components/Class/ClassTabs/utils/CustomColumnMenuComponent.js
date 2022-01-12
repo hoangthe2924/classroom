@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { styled } from "@mui/material/styles";
 import {
   GridColumnMenu,
@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { updateFinalize } from "services/grade.service";
 import { MenuItem } from "@mui/material";
 import ImportGradeDialog from "components/Class/ClassTabs/ImportDialog/ImportGradeDialog";
+import { SocketContext } from 'context/socket';
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
   ({ theme, ownerState }) => ({
@@ -39,6 +40,7 @@ function CustomColumnMenuComponent(props) {
   } = props;
   const [isOpenImportGrade, setIsOpenImportGrade] = useState(false);
   const params = useParams();
+  const socket = useContext(SocketContext);
 
   function handleImportGrade() {
     setIsOpenImportGrade(true);
@@ -56,6 +58,7 @@ function CustomColumnMenuComponent(props) {
       return newAssignments;
     });
     await updateFinalize(currentColumn["field"], params.id);
+    socket.emit('finalize grade', params.id);
   }
 
   function updateGrade(rows, grade) {
