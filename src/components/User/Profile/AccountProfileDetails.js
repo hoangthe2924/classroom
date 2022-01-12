@@ -12,18 +12,15 @@ import {
 import { useFormik } from "formik";
 import http from "axios-config";
 
-export const AccountProfileDetails = ({ item, onUpdate }) => {
-  const [values, setValues] = useState(item);
+export const AccountProfileDetails = ({ item, onUpdate, viewedByAdmin }) => {
   const [editing, setEditing] = useState(false);
 
-  useEffect(() => {
-    setValues(item);
-  }, [item]);
   const formik = useFormik({
     initialValues: {
-      fullname: values?.fullname || "",
-      studentId: values?.studentId || "",
-      email: values?.email || "",
+      id: item?.id || null,
+      fullname: item?.fullname || "",
+      studentId: item?.studentId || "",
+      email: item?.email || "",
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -31,14 +28,16 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
         .put("/users/info", values)
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            onUpdate();
             alert("Updated profile successfully!");
+            onUpdate();
           } else {
             alert("Please try again later");
+            formik.resetForm();
           }
         })
         .catch((error) => {
           alert(error.response.data || "Please try again later");
+          formik.resetForm();
           console.log("err: ", JSON.stringify(error));
         });
       setEditing(false);
@@ -59,7 +58,7 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
                 name="fullname"
                 label="Full name"
                 type="text"
-                disabled={!editing}
+                disabled={!editing || viewedByAdmin}
                 value={formik.values.fullname}
                 onChange={formik.handleChange}
                 fullWidth
@@ -68,13 +67,12 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
-                required
                 margin="dense"
                 id="studentId"
                 name="studentId"
                 label="Student Id"
                 type="tel"
-                disabled={!!values?.studentId || !editing}
+                disabled={(!!item?.studentId && !viewedByAdmin) || !editing}
                 value={formik.values.studentId}
                 onChange={formik.handleChange}
                 fullWidth
@@ -118,17 +116,35 @@ export const AccountProfileDetails = ({ item, onUpdate }) => {
               Edit
             </Button>
           ) : (
-            <Button
-              color="primary"
-              type="submit"
-              variant="contained"
-              disabled={!formik.isValid || formik.isSubmitting}
-            >
-              Save
-            </Button>
+            <div>
+              <Button
+                color="primary"
+                variant="outlined"
+                sx={{ marginRight: 1 }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setEditing(false);
+                  formik.resetForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="primary"
+                type="submit"
+                variant="contained"
+                disabled={!formik.isValid || formik.isSubmitting}
+              >
+                Save
+              </Button>
+            </div>
           )}
         </Box>
       </Card>
     </form>
   );
+};
+
+AccountProfileDetails.defaultProps = {
+  viewedByAdmin: false,
 };
