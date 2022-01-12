@@ -17,23 +17,17 @@ import GradeReviewDetail from "./GradeReview/GradeReviewDetail";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-const calculateTotal = (gradesDetail) => {
-  const reducer = (previousValue, currentValue) => {
-    return {
-      totalGrade:
-        previousValue.totalGrade +
-        (currentValue.grade.grade / 10.0) * currentValue.point,
-      maxGrade: previousValue.maxGrade + currentValue.point,
-    };
-  };
-
-  let total = gradesDetail.reduce(reducer, { totalGrade: 0.0, maxGrade: 0.0 });
-
-  return {
-    maxGrade: total.maxGrade.toFixed(2),
-    totalGrade: (Math.round(total.totalGrade * 100) / 100).toFixed(2),
-  };
-};
+const getTotal = (assignments) => {
+  let total = 0;
+  let totalPoint = 0;
+  let totalFactor = 0;
+  assignments.forEach((assignment) => {
+    totalPoint += assignment.grade.grade * assignment.point;
+    totalFactor += assignment.point;
+  });
+  total = totalPoint / totalFactor;
+  return Math.round(total*100)/100;
+}
 
 const percentColors = [
   { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
@@ -114,8 +108,9 @@ const StudentViewGradeDetail = ({ studentID }) => {
     }
   }, [sID]);
 
-  const total = calculateTotal(gradesDetail);
-  const color = calculateColorFromPercentage(total.totalGrade / total.maxGrade);
+  const total = getTotal(gradesDetail);
+  console.log(total);
+  const color = calculateColorFromPercentage(total / 10);
 
   return (
     <>
@@ -136,8 +131,8 @@ const StudentViewGradeDetail = ({ studentID }) => {
             <div style={{ width: 150, height: 150 }}>
               <CircularProgressbar
                 sx={{ margin: "auto" }}
-                value={(total.totalGrade / total.maxGrade) * 100}
-                text={`${total.totalGrade}/${total.maxGrade}`}
+                value={(total / 10.0) * 100}
+                text={`${total}/10`}
                 styles={buildStyles({
                   textColor: color,
                   backgroundColor: color,
