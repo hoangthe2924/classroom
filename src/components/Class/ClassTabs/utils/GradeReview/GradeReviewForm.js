@@ -9,10 +9,15 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { createGradeReviewRequest } from "services/grade.service";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { SocketContext } from 'context/socket';
+import { useParams } from "react-router-dom";
 
 export default function GradeReviewForm({ assignmentId, onUpdate, openLoading }) {
   const [err, setErr] = useState({ hasError: false, message: "" });
+  const socket = useContext(SocketContext);
+  const params = useParams();
+
   const formik = useFormik({
     initialValues: {
       expectedGrade: "",
@@ -30,6 +35,7 @@ export default function GradeReviewForm({ assignmentId, onUpdate, openLoading })
             values.message
           );
           if (res.data) {
+            socket.emit('grade review request', params.id);
             onUpdate();
           }
           setErr({ hasError: false, message: "" });
