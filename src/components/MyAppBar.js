@@ -11,11 +11,13 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Button, ListItem, ListItemIcon } from "@mui/material";
 import { MainListItems } from "components/Dashboard/ListItems";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import * as actions from "store/actions/index.js";
 import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
+import Notification from "./Notification";
+import { SocketContext } from 'context/socket';
 
 const drawerWidth = 240;
 
@@ -42,7 +44,7 @@ const Drawer = styled(MuiDrawer, {
 })(({ theme, open }) => ({
   "& .MuiDrawer-paper": {
     position: "relative",
-    whiteSpace: "normal",
+    whiteSpace: "nowrap",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -64,9 +66,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function MyAppBar(props) {
-  const loginStatus = useSelector(state => state.loginStatus);
-  const classList = useSelector(state => state.classList);
+  const loginStatus = useSelector((state) => state.loginStatus);
+  const classList = useSelector((state) => state.classList);
+  const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
 
   const checkLoginStatus = () => {
     dispatch(actions.checkIsLoggedIn());
@@ -74,6 +78,7 @@ function MyAppBar(props) {
 
   const logOut = () => {
     dispatch(actions.logout());
+    socket.emit('logout')
   };
 
   useEffect(() => {
@@ -116,6 +121,7 @@ function MyAppBar(props) {
           </Typography>
           {loginStatus === true ? (
             <div>
+              <Notification />
               <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>
                 <NavLink
                   to="/profile"
@@ -149,7 +155,11 @@ function MyAppBar(props) {
           </ListItem>
         </Toolbar>
         <Divider />
-        <MainListItems open={open} classList={classList} />
+        <MainListItems
+          open={open}
+          classList={classList}
+          isAdmin={currentUser.isAdmin}
+        />
         <Divider />
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
