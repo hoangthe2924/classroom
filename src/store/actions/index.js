@@ -6,10 +6,10 @@ export const login = (values) => async (dispatch) => {
   return await http
     .post("/users/login/", values)
     .then((res) => {
+      console.log("resbody", res.body);
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(changeState(true));
-
         fetchAllClasses().then(
           (result) => {
             dispatch({ type: "FETCH", payload: result.data });
@@ -18,12 +18,13 @@ export const login = (values) => async (dispatch) => {
             console.log(error);
           }
         );
-        return true;
+        return 1;
       }
     })
     .catch((error) => {
-      console.log(error);
-      return false;
+      console.log("err", error.response);
+      if (error.response.status === 403) return -1;
+      return 0;
     });
 };
 
@@ -31,6 +32,7 @@ export const logout = () => {
   return async (dispatch) => {
     localStorage.removeItem("user");
     dispatch(changeState(false));
+    dispatch({ type: "CLEAR_USER" });
     dispatch({ type: "DELETE" });
   };
 };
@@ -43,24 +45,27 @@ export const checkIsLoggedIn = () => {
         if (res.data.id) {
           localStorage.setItem("mssv", JSON.stringify(res.data.studentId));
           dispatch(changeState(true));
-          fetchAllClasses().then(
-            (result) => {
-              dispatch({ type: "FETCH", payload: result.data });
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
+          dispatch(setCurrentUser(res.data));
+          // fetchAllClasses().then(
+          //   (result) => {
+          //     dispatch({ type: "FETCH", payload: result.data });
+          //   },
+          //   (error) => {
+          //     console.log(error);
+          //   }
+          // );
           return;
         }
         dispatch(changeState(false));
         localStorage.removeItem("mssv");
         dispatch({ type: "DELETE" });
+        dispatch({ type: "CLEAR_USER" });
       })
       .catch((error) => {
         dispatch(changeState(false));
         localStorage.removeItem("mssv");
         dispatch({ type: "DELETE" });
+        dispatch({ type: "CLEAR_USER" });
       });
   };
 };
@@ -69,5 +74,12 @@ export const changeState = (status) => {
   return {
     type: "IS_LOGGED_IN",
     status,
+  };
+};
+
+export const setCurrentUser = (user) => {
+  return {
+    type: "SET_USER",
+    user,
   };
 };
