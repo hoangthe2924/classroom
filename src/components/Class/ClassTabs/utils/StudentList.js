@@ -107,7 +107,7 @@ export default function StudentList({ ListAssignment }) {
         params.row[assignment.id.toString()] * assignment.point || 0;
       totalFactor += assignment.point || 0;
     });
-    total = totalPoint / totalFactor;
+    total = (totalPoint / totalFactor).toPrecision(2);
     return total;
   }
 

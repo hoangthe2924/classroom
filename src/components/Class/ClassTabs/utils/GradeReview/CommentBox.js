@@ -3,8 +3,11 @@ import TextField from "@mui/material/TextField";
 import { ListItemAvatar, Avatar } from "@mui/material";
 import { useFormik } from "formik";
 import { createCommentGR } from "services/grade.service";
+import { useContext } from "react";
+import { SocketContext } from 'context/socket';
 
-export default function CommentBox({ assignmentId, onUpdate, gradeReviewId, openLoading }) {
+export default function CommentBox({ assignmentId, onUpdate, gradeReviewId, openLoading, studentId }) {
+  const socket = useContext(SocketContext);
   const formik = useFormik({
     initialValues: {
       comment: "",
@@ -19,6 +22,7 @@ export default function CommentBox({ assignmentId, onUpdate, gradeReviewId, open
             values.comment
           );
           if (res.data) {
+            socket.emit('grade review reply', studentId);
             onUpdate();
             formik.resetForm();
           }
