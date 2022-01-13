@@ -9,7 +9,7 @@ import {
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { updateFinalize } from "services/grade.service";
-import { MenuItem } from "@mui/material";
+import { MenuItem, Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Button } from "@mui/material";
 import ImportGradeDialog from "components/Class/ClassTabs/ImportDialog/ImportGradeDialog";
 import { SocketContext } from 'context/socket';
 
@@ -41,6 +41,7 @@ function CustomColumnMenuComponent(props) {
   const [isOpenImportGrade, setIsOpenImportGrade] = useState(false);
   const params = useParams();
   const socket = useContext(SocketContext);
+  const [isOpenConfirmBox, setIsOpenConfirmBox] = useState(false);
 
   function handleImportGrade() {
     setIsOpenImportGrade(true);
@@ -51,13 +52,14 @@ function CustomColumnMenuComponent(props) {
       let newAssignments = assignments.slice();
       for (const assignment of newAssignments) {
         if (assignment.id.toString() === currentColumn["field"]) {
-          assignment.finalize = !assignment.finalize;
+          assignment.finalize = 1;
           break;
         }
       }
       return newAssignments;
     });
     await updateFinalize(currentColumn["field"], params.id);
+    handleCloseConfirmBox()
     socket.emit('finalize grade', params.id);
   }
 
@@ -89,6 +91,10 @@ function CustomColumnMenuComponent(props) {
     console.log("close", value);
   };
 
+  function handleCloseConfirmBox() {
+    setIsOpenConfirmBox(false);
+  }
+
   if (currentColumn.field === "name") {
     return (
       <StyledGridColumnMenuContainer
@@ -116,7 +122,22 @@ function CustomColumnMenuComponent(props) {
         {...other}
       >
         <MenuItem onClick={handleImportGrade}>Import Grade</MenuItem>
-        <MenuItem onClick={handleFinalize}>Mark as Finalize</MenuItem>
+        <MenuItem onClick={()=> setIsOpenConfirmBox(true)}>Mark as Finalize</MenuItem>
+        <Dialog open={isOpenConfirmBox} onClose={handleCloseConfirmBox}>
+        <DialogTitle>Confirm finalize grade</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to finalize grade ?
+            <b> *You cannot undo this action!</b>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmBox}>Cancel</Button>
+          <Button onClick={handleFinalize} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
         <ImportGradeDialog open={isOpenImportGrade} onClose={handleClose} />
       </StyledGridColumnMenuContainer>
     );
