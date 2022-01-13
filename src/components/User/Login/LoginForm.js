@@ -17,6 +17,7 @@ import GoogleLoginButton from "./GoogleLogin";
 import { Navigate, useNavigate } from "react-router-dom";
 import * as actions from "store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchAllClasses } from "services/class.service";
 
 function LoginForm(props) {
   //const { loginStatus } = props;
@@ -49,8 +50,16 @@ function LoginForm(props) {
             if (!navigateLink) {
               navigateLink = "/dashboard";
             }
+            const fetchClass = fetchAllClasses()
+              .then((result) => {
+                dispatch({ type: "FETCH", payload: result.data });
+                return result.data;
+              })
+              .catch((error) => {
+                console.log("err: ", error);
+              });
             navigate(navigateLink);
-            window.location.reload();
+            // window.location.reload();
             break;
           case -1:
             alert("Your account has been banned!");
