@@ -90,7 +90,7 @@ export default function Notification() {
       >
         {notifications.length === 0 ?
           (<MenuItem onClick={handleClose}>
-            <Alert sx={{ width: 320 }} severity="success">
+            <Alert severity="success">
               <AlertTitle>Nothing here</AlertTitle>
               No one cares about <strong>you!</strong>
             </Alert>
@@ -100,11 +100,11 @@ export default function Notification() {
               case "finalize_grade":
                 return (
                   <MenuItem key={notification.id} onClick={handleClose}>
-
-                    <Alert severity="warning">
-                    <AlertTitle>Giáo viên {notification.fromUser.fullname} đã thực hiện công bố điểm.</AlertTitle>
+                    <Alert sx={{ width: '100%' }} severity="warning">
+                    <AlertTitle sx={{ width: '100%' }}>Giáo viên {notification.fromUser.fullname} đã thực hiện công bố điểm.</AlertTitle>
 
                       <Stack
+                      sx={{ width: '100%' }}
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
@@ -119,11 +119,12 @@ export default function Notification() {
                 )
               case "grade_review_reply":
                 return (
-                  <MenuItem key={notification.id} onClick={handleClose}>
-                    <Alert severity="info">
-                    <AlertTitle>Giáo viên {notification.fromUser.fullname} đã trả lời yêu cầu phúc khảo của bạn.</AlertTitle>
+                  <MenuItem  key={notification.id} onClick={handleClose}>
+                    <Alert sx={{ width: '100%' }} severity="info">
+                    <AlertTitle sx={{ width: '100%' }}>Giáo viên {notification.fromUser.fullname} đã trả lời yêu cầu phúc khảo của bạn.</AlertTitle>
 
                       <Stack
+                      sx={{ width: '100%' }}
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
@@ -137,11 +138,12 @@ export default function Notification() {
                 )
               case "grade_review_final":
                 return (
-                  <MenuItem key={notification.id} onClick={handleClose}>
-                    <Alert severity="success">
-                    <AlertTitle>Giáo viên {notification.fromUser.fullname} đã hoàn thành yêu cầu phúc khảo điểm của bạn.</AlertTitle>
+                  <MenuItem  key={notification.id} onClick={handleClose}>
+                    <Alert sx={{ width: '100%' }} severity="success">
+                    <AlertTitle sx={{ width: '100%' }}>Giáo viên {notification.fromUser.fullname} đã hoàn thành yêu cầu phúc khảo điểm của bạn.</AlertTitle>
 
                       <Stack
+                      sx={{ width: '100%' }}
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
@@ -155,11 +157,12 @@ export default function Notification() {
                 )
               case "grade_review_request":
                 return (
-                  <MenuItem key={notification.id} onClick={handleClose}>
-                    <Alert severity="info">
-                    <AlertTitle>Học sinh {notification.fromUser.fullname} đã yêu cầu phúc khảo điểm.</AlertTitle>
+                  <MenuItem  key={notification.id} onClick={handleClose}>
+                    <Alert sx={{ width: '100%' }} severity="info">
+                    <AlertTitle sx={{ width: '100%' }}>Học sinh {notification.fromUser.fullname} đã yêu cầu phúc khảo điểm.</AlertTitle>
 
                       <Stack
+                      sx={{ width: '100%' }}
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
