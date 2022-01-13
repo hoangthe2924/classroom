@@ -49,20 +49,20 @@ export default function ListGradeReviewRequest({ list, onUpdate }) {
   const [dialogGRInfo, setDialogGRInfo] = useState(null);
 
   const handleOpen = async (studentId, assignmentId) => {
-      try {
-        const res = await getGradeReviewSummary(studentId, assignmentId);
-        setDialogGRInfo(res.data[0]);
-        setOpenDialogGR(true);
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      const res = await getGradeReviewSummary(studentId, assignmentId);
+      setDialogGRInfo(res.data[0]);
+      setOpenDialogGR(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  useEffect(()=>{
-    if(!openDialogGR){
+  useEffect(() => {
+    if (!openDialogGR) {
       onUpdate();
     }
-  },[openDialogGR]);
+  }, [openDialogGR]);
 
   return (
     <Fragment>
@@ -88,7 +88,11 @@ export default function ListGradeReviewRequest({ list, onUpdate }) {
                 display: "flex",
                 justifyContent: "space-between",
               }}
-              onClick={handleOpen.bind(null, gr.user.studentId, gr.assignment.id)}
+              onClick={handleOpen.bind(
+                null,
+                gr.user.studentId,
+                gr.assignment.id
+              )}
             >
               <Typography>{`${gr.user.studentId} - ${gr.user.fullName} - ${gr.assignment.title}`}</Typography>
               <Typography color={color[gr.status]}>
