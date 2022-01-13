@@ -18,7 +18,7 @@ import ManageAdmins from "pages/ManageAdmins";
 import ManageUsers from "pages/ManageUsers";
 import ManageClasses from "pages/ManageClasses";
 import ManageUserDetail from "pages/ManageUserDetail";
-let mdTheme = createTheme();
+const mdTheme = createTheme();
 
 function Copyright(props) {
   return (

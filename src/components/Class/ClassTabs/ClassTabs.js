@@ -8,6 +8,7 @@ import OverviewTab from "components/Class/ClassTabs/OverviewTab";
 import PeopleTab from "components/Class/ClassTabs/PeopleTab";
 import DragAndDropForm from "components/Class/ClassTabs/utils/DragAndDropForm";
 import GradeBoard from "components/Class/ClassTabs/GradeBoardTab";
+import GradeReviewTab from "./GradeReviewTab";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -60,6 +61,7 @@ export default function BasicTabs(props) {
           <Tab label="People" {...a11yProps(1)} />
           <Tab label="Grades" {...a11yProps(2)} />
           {isTeacher && <Tab label="Grade Structure" {...a11yProps(3)} />}
+          {isTeacher && <Tab label="Grade Review" {...a11yProps(4)} />}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -74,6 +76,11 @@ export default function BasicTabs(props) {
       {isTeacher && (
         <TabPanel value={value} index={3}>
           <DragAndDropForm items={props.item} onUpdate={props.onUpdate} />
+        </TabPanel>
+      )}
+      {isTeacher && (
+        <TabPanel value={value} index={4}>
+          <GradeReviewTab />
         </TabPanel>
       )}
     </Box>
