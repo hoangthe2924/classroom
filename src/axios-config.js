@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "services/auth.service";
 
-export const DEFAULT_DOMAIN = "https://classrum-api.netlify.app/";
+export const DEFAULT_DOMAIN = "https://classrum-api.herokuapp.com/";
 
 const token = getToken();
 export default axios.create({
