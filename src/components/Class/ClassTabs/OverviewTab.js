@@ -2,10 +2,11 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
 import GradeStructure from "components/Class/ClassTabs/GradeStructureTab";
+import ClassCodeBox from "components/Class/ClassTabs/OverviewTab/ClassCodeBox";
+import PostBox from "components/Class/ClassTabs/OverviewTab/PostBox";
 import { Grid } from "@mui/material";
 
 export default function OverviewTab({ item, onChangeTab }) {
-
   return (
     <div>
       <CardContent
@@ -14,10 +15,11 @@ export default function OverviewTab({ item, onChangeTab }) {
           marginBottom: "10px",
           height: "150px",
           backgroundPosition: "center",
+          borderRadius: "10px",
         }}
       >
-        <Typography variant="h5" color="text.primary" gutterBottom>
-          <strong> Class Name:</strong> {item.className}
+        <Typography variant="h4" color="common.white" gutterBottom>
+          {item.className}
         </Typography>
         <Typography variant="body1" color="text.primary">
           <strong>Subject:</strong> {item.subject}
@@ -26,11 +28,20 @@ export default function OverviewTab({ item, onChangeTab }) {
           <strong>Description:</strong> {item.description}
         </Typography>
       </CardContent>
-      <Grid container spacing={2} marginTop="10px">
-        <Grid item xs={3} md={3}>
-          <GradeStructure item={item} onChangeTab={onChangeTab} />
+      <Grid container spacing={2}>
+        <Grid xs={3} my={2} item>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <ClassCodeBox cjc={item.cjc} />
+            </Grid>
+            <Grid item xs={12}>
+              <GradeStructure item={item} onChangeTab={onChangeTab} />
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={9} md={9}></Grid>
+        <Grid xs={9} my={2} item>
+          <PostBox />
+        </Grid>
       </Grid>
     </div>
   );
