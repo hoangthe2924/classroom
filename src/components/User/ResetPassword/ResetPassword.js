@@ -14,7 +14,8 @@ import * as actions from "store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "services/user.service";
 import { Alert } from "@mui/material";
-import KeyIcon from "@mui/icons-material/Key";
+// import KeyIcon from '@mui/icons-material/Key';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 function ResetPassword() {
   const [success, setSuccess] = useState(false);
@@ -94,7 +95,7 @@ function ResetPassword() {
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <KeyIcon />
+              <VpnKeyIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Reset Password
