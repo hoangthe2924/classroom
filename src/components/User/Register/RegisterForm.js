@@ -6,7 +6,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -16,7 +15,7 @@ import { Alert } from "@mui/material/index";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { register } from "services/auth.service";
 import * as Yup from "yup";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 import * as actions from "../../../store/actions/index";
 import { connect } from "react-redux";
 
@@ -160,9 +159,11 @@ function RegisterForm(props) {
                 Sign Up
               </Button>
               <Grid container justifyContent="center">
-                <Link href="/login" variant="body2">
+                <NavLink
+                  to="/login"
+                >
                   Already have an account? Sign in
-                </Link>
+                </NavLink>
               </Grid>
             </Box>
           </Box>

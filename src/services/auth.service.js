@@ -20,7 +20,7 @@ export function logout() {
   localStorage.removeItem("user");
 }
 
-export function register(values) {
+export async function register(values) {
   return http
     .post("/users/register/", values)
     .then((res) => {

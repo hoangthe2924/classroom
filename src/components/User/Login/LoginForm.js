@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -6,7 +6,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -14,14 +13,17 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import GoogleLoginButton from "./GoogleLogin";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import * as actions from "store/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllClasses } from "services/class.service";
+import { Alert } from "@mui/material";
 
 function LoginForm(props) {
   //const { loginStatus } = props;
   const loginStatus = useSelector((state) => state.loginStatus);
+  const [hasError, setHasError] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const checkLoginStatus = () => {
@@ -40,6 +42,7 @@ function LoginForm(props) {
       password: "",
     },
     onSubmit: async (values) => {
+      setHasError(false);
       const tryLogin = dispatch(actions.login(values));
       tryLogin.then((loginStatus) => {
         console.log("log", loginStatus);
@@ -58,14 +61,17 @@ function LoginForm(props) {
               .catch((error) => {
                 console.log("err: ", error);
               });
+            console.log("fet", fetchClass);
             navigate(navigateLink);
             // window.location.reload();
             break;
           case -1:
-            alert("Your account has been banned!");
+            setHasError(true);
+            setErrorText("Your account has been banned!");
             break;
           default:
-            alert("incorrect username or password!");
+            setHasError(true);
+            setErrorText("incorrect username or password!");
         }
       });
     },
@@ -126,10 +132,35 @@ function LoginForm(props) {
                 value={formik.values.subject}
                 onChange={formik.handleChange}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              <Grid container spacing={2}>
+                <Grid xs={6} item>
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                  />
+                </Grid>
+                <Grid xs={6} item paddingTop={5}>
+                  <div style={{ paddingTop: "9px" }}>
+                    <NavLink
+                      to="/forgot-password"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        paddingTop: "9px",
+                      }}
+                    >
+                      Forgot your password ?
+                    </NavLink>
+                  </div>
+                </Grid>
+              </Grid>
+
+              {hasError && (
+                <Alert severity="error">
+                  {errorText || "Something wrong. Please try again later!"}
+                </Alert>
+              )}
+
               <Button
                 type="submit"
                 fullWidth
@@ -143,9 +174,7 @@ function LoginForm(props) {
                 <GoogleLoginButton />
               </Grid>
               <Grid sx={{ mt: 2, mb: 2 }} container justifyContent="center">
-                <Link href="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <NavLink to="/register">Don't have an account? Sign Up</NavLink>
               </Grid>
             </Box>
           </Box>
@@ -154,20 +183,5 @@ function LoginForm(props) {
     </React.Fragment>
   );
 }
-
-// const mapStateToProps = (state) => {
-//   return {
-//     loginStatus: state.loginStatus,
-//   };
-// };
-// const mapDispatchToProps = (dispatch, props) => {
-//   return {
-//     checkLoginStatus: () => {
-
-//     },
-//   };
-// };
-
-//export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
 
 export default LoginForm;

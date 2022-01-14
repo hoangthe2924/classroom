@@ -18,6 +18,8 @@ import ManageAdmins from "pages/ManageAdmins";
 import ManageUsers from "pages/ManageUsers";
 import ManageClasses from "pages/ManageClasses";
 import ManageUserDetail from "pages/ManageUserDetail";
+import ForgotPassword from "components/User/ResetPassword/ForgotPassword";
+import ResetPassword from "components/User/ResetPassword/ResetPassword";
 const mdTheme = createTheme();
 
 function Copyright(props) {
@@ -61,6 +63,8 @@ function App() {
               />
               <Route path={"login"} element={<Login />} />
               <Route path={"register"} element={<Register />} />
+              <Route path={"forgot-password"} element={<ForgotPassword />} />
+              <Route path={"password-reset/:userId/:token"} element={<ResetPassword />} />
               <Route
                 path={"profile"}
                 element={
