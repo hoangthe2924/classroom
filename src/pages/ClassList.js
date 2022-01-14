@@ -6,14 +6,17 @@ import {
   Grid,
   Typography,
   Button,
+  CardMedia,
+  Box, IconButton
 } from "@mui/material";
 import * as PropTypes from "prop-types";
 import AddClassForm from "components/Class/AddClassForm";
 import JoinClassForm from "components/Class/JoinClassForm";
 import { useNavigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import Loading from "components/Loading";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 function LoadingButton(props) {
   return null;
@@ -32,21 +35,21 @@ function ClassList(props) {
   const [open, setOpen] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
   const [openJoinClassForm, setOpenJoinClassForm] = useState(false);
-  const listClass = useSelector(state => state.classList);
+  const listClass = useSelector((state) => state.classList);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchClass();
-    localStorage.removeItem('prev-link');
+    localStorage.removeItem("prev-link");
   }, []);
 
   async function fetchClass() {
     setOpenLoading(true);
     await fetchAllClasses().then(
       (result) => {
-        dispatch({type: "FETCH", payload: result.data});
+        dispatch({ type: "FETCH", payload: result.data });
       },
       (error) => {
         console.log(error);
@@ -84,7 +87,7 @@ function ClassList(props) {
         spacing={3}
         direction="row"
         justify="flex-start"
-        padding={10}
+        padding={5}
         alignItems="flex-start"
       >
         <Grid item xs={12} sm={12} md={12} textAlign="center">
@@ -114,20 +117,38 @@ function ClassList(props) {
           />
         </Grid>
         {listClass.map((cls) => (
-          <Grid item xs={12} sm={6} md={4} key={cls.id}>
+          <Grid item xs={12} sm={12} md={6} lg={4} key={cls.id}>
             <Card
+              sx={{ mx: "auto", minHeight: "220px", maxWidth: "345px" }}
               onClick={() => {
                 navigate(`/classes/${cls.id}`);
               }}
             >
-              <CardActionArea sx={{ minHeight: 200 }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {cls.classname}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {cls.subject}
-                  </Typography>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  image={`/class-background-${Math.floor(
+                    Math.random() * 9 + 1
+                  )}.jpg`}
+                  alt={cls.subject}
+                  sx={{ minHeight: "100px" }}
+                />
+                <CardContent sx={{display: 'flex', justifyContent: 'space-between'}}>
+                  <Box>
+                    <Typography gutterBottom variant="h6" component="div">
+                      {cls.classname}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {cls.subject}
+                    </Typography>
+                  </Box>
+                  <IconButton
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                  >
+                    <FolderOpenIcon />
+                  </IconButton>
                 </CardContent>
               </CardActionArea>
             </Card>
