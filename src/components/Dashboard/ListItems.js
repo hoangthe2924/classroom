@@ -15,6 +15,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
+import { grey } from '@mui/material/colors';
 
 export const MainListItems = ({ open, classList, isAdmin }) => {
   const teachingClasses = classList.filter(
@@ -32,7 +33,7 @@ export const MainListItems = ({ open, classList, isAdmin }) => {
         button
       >
         <ListItemIcon style={{ minWidth: "40px" }}>
-          <SchoolIcon />
+          <SchoolIcon sx={{ color: grey[900] }}/>
         </ListItemIcon>
         <ListItemText
           primaryTypographyProps={{ fontSize: "14px" }}
@@ -51,7 +52,7 @@ export const MainListItems = ({ open, classList, isAdmin }) => {
         button
       >
         <ListItemIcon style={{ minWidth: "40px" }}>
-          <SchoolIcon />
+          <SchoolIcon sx={{ color: grey[900] }}/>
         </ListItemIcon>
         <ListItemText
           primaryTypographyProps={{ fontSize: "14px" }}
@@ -81,14 +82,14 @@ export const MainListItems = ({ open, classList, isAdmin }) => {
       <List>
         <ListItem component={NavLink} to="/dashboard" button>
           <ListItemIcon>
-            <DashboardIcon />
+            <DashboardIcon sx={{ color: grey[900] }} />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
         {!open && (
           <ListItem component={NavLink} to="/classes" button>
             <ListItemIcon>
-              <SchoolIcon />
+              <SchoolIcon sx={{ color: grey[900] }}/>
             </ListItemIcon>
             <ListItemText primary="Classes" />
           </ListItem>
