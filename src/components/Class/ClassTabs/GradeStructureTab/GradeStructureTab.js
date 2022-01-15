@@ -32,7 +32,7 @@ import {
 } from "services/class.service";
 import { useEffect } from "react";
 
-export default function DragAndDropForm({ onUpdate }) {
+export default function GradeStructureTab({ onUpdate }) {
   const params = useParams();
   const navigate = useNavigate();
 

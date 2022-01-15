@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import { Typography, Grid } from "@mui/material";
 import SearchGradeDetail from "./SearchGradeDetail";
 import RateReviewIcon from "@mui/icons-material/RateReview";
-import GradeReviewDetail from "./GradeReview/GradeReviewDetail";
+import GradeReviewDetail from "../GradeReviewTab/GradeReview/GradeReviewDetail";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -196,7 +196,7 @@ const StudentViewGradeDetail = ({ studentID }) => {
               gutterBottom
               sx={{ fontStyle: "italic", fontWeight: "bolder" }}
             >
-              {`Total: ${total.totalGrade}/${total.maxGrade}`}
+              {`Total: ${total}/10`}
             </Typography>
           </TableContainer>
         </>

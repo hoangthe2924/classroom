@@ -1,7 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
-import GradeStructure from "components/Class/ClassTabs/GradeStructureTab";
+import GradeStructure from "./GradeStructure";
 import ClassCodeBox from "components/Class/ClassTabs/OverviewTab/ClassCodeBox";
 import PostBox from "components/Class/ClassTabs/OverviewTab/PostBox";
 import { Grid } from "@mui/material";

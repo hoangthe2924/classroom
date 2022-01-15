@@ -3,7 +3,7 @@ import { useState, Fragment, useEffect } from "react";
 import Loading from "components/Loading";
 import { useParams } from "react-router-dom";
 import { Typography, Divider } from "@mui/material";
-import ListGradeReviewRequest from "components/Class/ClassTabs/utils/GradeReview/ListGradeReviewRequest";
+import ListGradeReviewRequest from "components/Class/ClassTabs/GradeReviewTab/GradeReview/ListGradeReviewRequest";
 
 export default function GradeReviewTab({ props }) {
   const [openLoading, setOpenLoading] = useState(false);

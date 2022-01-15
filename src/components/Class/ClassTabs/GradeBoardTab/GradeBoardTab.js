@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import StudentViewGradeDetail from "./utils/StudentViewGradeDetail";
-import TeacherViewGradeDetail from "./utils/TeacherViewGradeDetail";
+import StudentViewGradeDetail from "./StudentViewGradeDetail";
+import TeacherViewGradeDetail from "./TeacherViewGradeDetail";
 
 export default function GradeBoard({ items }) {
   const role = items.requesterRole;

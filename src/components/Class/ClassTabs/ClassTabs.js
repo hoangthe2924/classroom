@@ -4,11 +4,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import OverviewTab from "components/Class/ClassTabs/OverviewTab";
-import PeopleTab from "components/Class/ClassTabs/PeopleTab";
-import DragAndDropForm from "components/Class/ClassTabs/utils/DragAndDropForm";
-import GradeBoard from "components/Class/ClassTabs/GradeBoardTab";
-import GradeReviewTab from "./GradeReviewTab";
+import OverviewTab from "components/Class/ClassTabs/OverviewTab/OverviewTab";
+import PeopleTab from "components/Class/ClassTabs/PeopleTab/PeopleTab";
+import GradeStructureTab from "components/Class/ClassTabs/GradeStructureTab/GradeStructureTab";
+import GradeBoard from "components/Class/ClassTabs/GradeBoardTab/GradeBoardTab";
+import GradeReviewTab from "./GradeReviewTab/GradeReviewTab";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -75,7 +75,7 @@ export default function BasicTabs(props) {
       </TabPanel>
       {isTeacher && (
         <TabPanel value={value} index={3}>
-          <DragAndDropForm items={props.item} onUpdate={props.onUpdate} />
+          <GradeStructureTab items={props.item} onUpdate={props.onUpdate} />
         </TabPanel>
       )}
       {isTeacher && (
