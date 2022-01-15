@@ -11,6 +11,8 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Divider,
+  CardActions,
 } from "@mui/material";
 import * as PropTypes from "prop-types";
 import AddClassForm from "components/Class/AddClassForm";
@@ -111,8 +113,17 @@ function ClassList(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleClickOpen}>Add class</MenuItem>
-      <MenuItem onClick={handleClickOpenJoinClassForm}>Join class</MenuItem>
+      <MenuItem onClick={handleClickOpen}>
+        <Typography sx={{ minWidth: 100, textAlign: "center" }}>
+          Add Class
+        </Typography>
+      </MenuItem>
+      <Divider />
+      <MenuItem onClick={handleClickOpenJoinClassForm}>
+        <Typography sx={{ minWidth: 100, textAlign: "center" }}>
+          Join Class
+        </Typography>
+      </MenuItem>
     </Menu>
   );
 
@@ -127,17 +138,16 @@ function ClassList(props) {
         alignItems="flex-start"
       >
         <Grid item xs={12} sm={12} md={12} textAlign="right">
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
+          <Button
+            variant="contained"
             aria-controls="class-list-menu"
             aria-haspopup="true"
+            edge="end"
             onClick={handleClasslistMenuOpen}
-            color="inherit"
+            startIcon={<AddIcon />}
           >
-            <AddIcon fontSize="inherit" />
-          </IconButton>
+            <b>More Class</b>
+          </Button>
           <AddClassForm
             open={open}
             handleClose={handleClose}
@@ -149,7 +159,7 @@ function ClassList(props) {
             onSuccess={handleSuccess}
           />
         </Grid>
-        {listClass.map((cls, idx) => (
+        {listClass.map((cls) => (
           <Grid item xs={12} sm={12} md={6} lg={4} key={cls.id}>
             <Card
               sx={{ mx: "auto", minHeight: "220px", maxWidth: "345px" }}
@@ -160,7 +170,7 @@ function ClassList(props) {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={`/class-background-${idx%9+1}.jpg`}
+                  image={`/class-background-${(cls.id % 9) + 1}.jpg`}
                   alt={cls.subject}
                   sx={{ minHeight: "100px" }}
                 />
@@ -175,10 +185,13 @@ function ClassList(props) {
                       {cls.subject}
                     </Typography>
                   </Box>
-                  <IconButton size="small" variant="contained" color="primary">
+                </CardContent>
+                <Divider />
+                <CardActions sx={{display: 'flex', justifyContent: 'end'}}>
+                  <IconButton size="small" variant="contained" edge="end" color="primary" sx={{mx: 1}}>
                     <FolderOpenIcon />
                   </IconButton>
-                </CardContent>
+                </CardActions>
               </CardActionArea>
             </Card>
           </Grid>
