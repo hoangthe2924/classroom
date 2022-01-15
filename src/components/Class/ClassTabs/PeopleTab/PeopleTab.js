@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
-import InvitationDialog from "components/Class/InvitationUser/InvitationDialog";
+import InvitationDialog from "components/Class/ClassTabs/PeopleTab/InvitationUser/InvitationDialog";
 
 export default function PeopleTab({ items }) {
   let teachers = items.users

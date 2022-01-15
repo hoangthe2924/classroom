@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { Grid, Box } from "@mui/material";
-import ImportStudentDialog from "components/Class/ClassTabs/ImportDialog/ImportStudentDialog";
+import ImportStudentDialog from "components/Class/ClassTabs/GradeBoardTab/ImportDialog/ImportStudentDialog";
 import { useParams } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import { getStudentList, updateStudentList } from "services/class.service";

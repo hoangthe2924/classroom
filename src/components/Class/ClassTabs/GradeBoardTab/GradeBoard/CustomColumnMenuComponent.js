@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { updateFinalize } from "services/grade.service";
 import { MenuItem, Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Button } from "@mui/material";
-import ImportGradeDialog from "components/Class/ClassTabs/ImportDialog/ImportGradeDialog";
+import ImportGradeDialog from "components/Class/ClassTabs/GradeBoardTab/ImportDialog/ImportGradeDialog";
 import { SocketContext } from 'context/socket';
 
 const StyledGridColumnMenuContainer = styled(GridColumnMenuContainer)(
