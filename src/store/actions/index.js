@@ -24,6 +24,7 @@ export const login = (values) => async (dispatch) => {
     .catch((error) => {
       console.log("err", error.response);
       if (error.response.status === 403) return -1;
+      if (error.response.status === 412) return 2;
       return 0;
     });
 };

@@ -18,6 +18,7 @@ import ManageAdmins from "pages/ManageAdmins";
 import ManageUsers from "pages/ManageUsers";
 import ManageClasses from "pages/ManageClasses";
 import ManageUserDetail from "pages/ManageUserDetail";
+import Confirmation from "pages/Confirmation"
 const mdTheme = createTheme();
 
 function Copyright(props) {
@@ -75,6 +76,12 @@ function App() {
                 <ProtectedRoute>
                   <ClassDetail changeTitle={changeTitle} />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/confirm/:token"
+              element={
+                  <Confirmation />
               }
             />
             <Route

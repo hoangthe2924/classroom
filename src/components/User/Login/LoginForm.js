@@ -55,6 +55,9 @@ function LoginForm(props) {
           case -1:
             alert("Your account has been banned!");
             break;
+          case 2:
+            alert("Your account has not been activated!");
+            break;
           default:
             alert("incorrect username or password!");
         }
