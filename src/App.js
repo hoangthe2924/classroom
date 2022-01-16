@@ -13,12 +13,14 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyAppBar from "components/MyAppBar";
 import ProtectedRoute from "components/Routes/ProtectedRoute";
-import { SocketContext, socket } from 'context/socket';
+import { SocketContext, socket } from "context/socket";
 import ManageAdmins from "pages/ManageAdmins";
 import ManageUsers from "pages/ManageUsers";
 import ManageClasses from "pages/ManageClasses";
 import ManageUserDetail from "pages/ManageUserDetail";
 import Confirmation from "pages/Confirmation"
+import ForgotPassword from "components/User/ResetPassword/ForgotPassword";
+import ResetPassword from "components/User/ResetPassword/ResetPassword";
 const mdTheme = createTheme();
 
 function Copyright(props) {
@@ -48,79 +50,81 @@ function App() {
 
   return (
     <div>
-<SocketContext.Provider value={socket}>
-      <ThemeProvider theme={mdTheme}>
-        <MyAppBar title={title}>
-          <Routes>
-            <Route
-              path={"classes"}
-              element={
-                <ProtectedRoute>
-                  <ClassList />
-                </ProtectedRoute>
-              }
-            />
-            <Route path={"login"} element={<Login />} />
-            <Route path={"register"} element={<Register />} />
-            <Route
-              path={"profile"}
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/classes/:id"
-              element={
-                <ProtectedRoute>
-                  <ClassDetail changeTitle={changeTitle} />
-                </ProtectedRoute>
-              }
-            />
-            <Route
+      <SocketContext.Provider value={socket}>
+        <ThemeProvider theme={mdTheme}>
+          <MyAppBar title={title}>
+            <Routes>
+              <Route
+                path={"classes"}
+                element={
+                  <ProtectedRoute>
+                    <ClassList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path={"login"} element={<Login />} />
+              <Route path={"register"} element={<Register />} />
+              <Route path={"forgot-password"} element={<ForgotPassword />} />
+              <Route path={"password-reset/:userId/:token"} element={<ResetPassword />} />
+              <Route
+                path={"profile"}
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
               path="/confirm/:token"
               element={
                   <Confirmation />
               }
             />
-            <Route
-              path="/manage/admins"
-              element={
-                <ProtectedRoute adminRoute={true}>
-                  <ManageAdmins />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/manage/users"
-              element={
-                <ProtectedRoute adminRoute={true}>
-                  <ManageUsers />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/manage/users/:id"
-              element={
-                <ProtectedRoute adminRoute={true}>
-                  <ManageUserDetail />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/manage/classes"
-              element={
-                <ProtectedRoute adminRoute={true}>
-                  <ManageClasses />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-          <Copyright sx={{ pt: 4 }} />
-        </MyAppBar>
-      </ThemeProvider>
+              <Route
+                path="/classes/:id"
+                element={
+                  <ProtectedRoute>
+                    <ClassDetail changeTitle={changeTitle} />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage/admins"
+                element={
+                  <ProtectedRoute adminRoute={true}>
+                    <ManageAdmins />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage/users"
+                element={
+                  <ProtectedRoute adminRoute={true}>
+                    <ManageUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage/users/:id"
+                element={
+                  <ProtectedRoute adminRoute={true}>
+                    <ManageUserDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage/classes"
+                element={
+                  <ProtectedRoute adminRoute={true}>
+                    <ManageClasses />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+            <Copyright sx={{ pt: 4 }} />
+          </MyAppBar>
+        </ThemeProvider>
       </SocketContext.Provider>
     </div>
   );

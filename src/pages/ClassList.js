@@ -6,14 +6,23 @@ import {
   Grid,
   Typography,
   Button,
+  CardMedia,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+  CardActions,
 } from "@mui/material";
 import * as PropTypes from "prop-types";
 import AddClassForm from "components/Class/AddClassForm";
 import JoinClassForm from "components/Class/JoinClassForm";
 import { useNavigate } from "react-router-dom";
 import { fetchAllClasses } from "services/class.service";
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import Loading from "components/Loading";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import AddIcon from "@mui/icons-material/Add";
 
 function LoadingButton(props) {
   return null;
@@ -32,21 +41,24 @@ function ClassList(props) {
   const [open, setOpen] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
   const [openJoinClassForm, setOpenJoinClassForm] = useState(false);
-  const listClass = useSelector(state => state.classList);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const listClass = useSelector((state) => state.classList);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
+  const isMenuOpen = Boolean(anchorEl);
+
   useEffect(() => {
     fetchClass();
-    localStorage.removeItem('prev-link');
+    localStorage.removeItem("prev-link");
   }, []);
 
   async function fetchClass() {
     setOpenLoading(true);
     await fetchAllClasses().then(
       (result) => {
-        dispatch({type: "FETCH", payload: result.data});
+        dispatch({ type: "FETCH", payload: result.data });
       },
       (error) => {
         console.log(error);
@@ -77,6 +89,44 @@ function ClassList(props) {
     setOpenJoinClassForm(false);
   };
 
+  const handleClasslistMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id="class-list-menu"
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleClickOpen}>
+        <Typography sx={{ minWidth: 100, textAlign: "center" }}>
+          Add Class
+        </Typography>
+      </MenuItem>
+      <Divider />
+      <MenuItem onClick={handleClickOpenJoinClassForm}>
+        <Typography sx={{ minWidth: 100, textAlign: "center" }}>
+          Join Class
+        </Typography>
+      </MenuItem>
+    </Menu>
+  );
+
   return (
     <div>
       <Grid
@@ -84,23 +134,19 @@ function ClassList(props) {
         spacing={3}
         direction="row"
         justify="flex-start"
-        padding={10}
+        padding={5}
         alignItems="flex-start"
       >
-        <Grid item xs={12} sm={12} md={12} textAlign="center">
+        <Grid item xs={12} sm={12} md={12} textAlign="right">
           <Button
-            variant="outlined"
-            sx={{ float: "center" }}
-            onClick={handleClickOpen}
+            variant="contained"
+            aria-controls="class-list-menu"
+            aria-haspopup="true"
+            edge="end"
+            onClick={handleClasslistMenuOpen}
+            startIcon={<AddIcon />}
           >
-            Add Class
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ float: "center" }}
-            onClick={handleClickOpenJoinClassForm}
-          >
-            Join Class
+            <b>More Class</b>
           </Button>
           <AddClassForm
             open={open}
@@ -114,26 +160,44 @@ function ClassList(props) {
           />
         </Grid>
         {listClass.map((cls) => (
-          <Grid item xs={12} sm={6} md={4} key={cls.id}>
+          <Grid item xs={12} sm={12} md={6} lg={4} key={cls.id}>
             <Card
+              sx={{ mx: "auto", minHeight: "220px", maxWidth: "345px" }}
               onClick={() => {
                 navigate(`/classes/${cls.id}`);
               }}
             >
-              <CardActionArea sx={{ minHeight: 200 }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {cls.classname}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {cls.subject}
-                  </Typography>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  image={`/class-background-${(cls.id % 9) + 1}.jpg`}
+                  alt={cls.subject}
+                  sx={{ minHeight: "100px" }}
+                />
+                <CardContent
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Box>
+                    <Typography gutterBottom variant="h6" component="div">
+                      {cls.classname}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {cls.subject}
+                    </Typography>
+                  </Box>
                 </CardContent>
+                <Divider />
+                <CardActions sx={{display: 'flex', justifyContent: 'end'}}>
+                  <IconButton size="small" variant="contained" edge="end" color="primary" sx={{mx: 1}}>
+                    <FolderOpenIcon />
+                  </IconButton>
+                </CardActions>
               </CardActionArea>
             </Card>
           </Grid>
         ))}
       </Grid>
+      {renderMenu}
       <Loading open={openLoading} />
     </div>
   );

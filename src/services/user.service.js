@@ -28,3 +28,15 @@ export function banUser(values) {
     headers: authHeader(),
   });
 }
+
+export function requestResetPassword(values) {
+  return http.post(`/users/forgot-password`, values, {
+    headers: authHeader(),
+  });
+}
+
+export function resetPassword(userId, token, values) {
+  return http.post(`/users/reset-password/${userId}/${token}`, values, {
+    headers: authHeader(),
+  });
+}

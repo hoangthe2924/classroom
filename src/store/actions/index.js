@@ -1,6 +1,5 @@
 import http from "../../axios-config";
 import authHeader from "services/auth-header";
-import { fetchAllClasses } from "services/class.service";
 
 export const login = (values) => async (dispatch) => {
   return await http
@@ -10,14 +9,6 @@ export const login = (values) => async (dispatch) => {
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(changeState(true));
-        fetchAllClasses().then(
-          (result) => {
-            dispatch({ type: "FETCH", payload: result.data });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
         return 1;
       }
     })

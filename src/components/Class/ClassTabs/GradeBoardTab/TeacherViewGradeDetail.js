@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import StudentList from "./StudentList";
+import StudentList from "./GradeBoard/StudentList";
 
 const TeacherViewGradeDetail = ({ListAssignment}) => {
   return (
