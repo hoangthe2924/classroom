@@ -64,7 +64,7 @@ function ManageClasses() {
       headerName: "Created by",
       flex: 1.0,
       renderCell: (params) => {
-        return <Typography>{params.value.username}</Typography>;
+        return <Typography>{params.value?.username || ""}</Typography>;
       },
     },
     {

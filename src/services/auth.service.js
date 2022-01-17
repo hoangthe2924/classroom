@@ -25,12 +25,15 @@ export async function register(values) {
     .post("/users/register/", values)
     .then((res) => {
       if (res.status === 200 || res.status === 201) {
-        alert("Register Success!");
+        alert(
+          "Register successfully. Please check your email to activate your account!"
+        );
       } else {
-        alert("Please try again with different username/email!");
+        alert("Please try again later!");
       }
     })
     .catch((error) => {
+      alert(error.response.data || "Something wrong, please try again later!");
       console.log("err: ", error);
     });
 }
