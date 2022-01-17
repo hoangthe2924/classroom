@@ -70,7 +70,10 @@ function LoginForm(props) {
             setErrorText("Your account has been banned!");
             break;
           case 2:
-            alert("Your account has not been activated!");
+            setHasError(true);
+            setErrorText(
+              "Your account has not been activated! Please check you email to activate it."
+            );
             break;
           default:
             setHasError(true);

@@ -86,7 +86,7 @@ function RegisterForm(props) {
                     required
                     fullWidth
                     id="fullname"
-                    value={formik.values.subject}
+                    value={formik.values.fullname}
                     onChange={formik.handleChange}
                     label="Full Name"
                     autoFocus
@@ -102,7 +102,7 @@ function RegisterForm(props) {
                     id="username"
                     label="Username"
                     name="username"
-                    value={formik.values.subject}
+                    value={formik.values.username}
                     onChange={formik.handleChange}
                     autoComplete="user-name"
                   />
@@ -117,7 +117,7 @@ function RegisterForm(props) {
                     id="email"
                     label="Email Address"
                     name="email"
-                    value={formik.values.subject}
+                    value={formik.values.email}
                     onChange={formik.handleChange}
                     autoComplete="email"
                   />
@@ -132,7 +132,7 @@ function RegisterForm(props) {
                     name="password"
                     label="Password"
                     type="password"
-                    value={formik.values.subject}
+                    value={formik.values.password}
                     onChange={formik.handleChange}
                     id="password"
                     autoComplete="new-password"
@@ -159,11 +159,7 @@ function RegisterForm(props) {
                 Sign Up
               </Button>
               <Grid container justifyContent="center">
-                <NavLink
-                  to="/login"
-                >
-                  Already have an account? Sign in
-                </NavLink>
+                <NavLink to="/login">Already have an account? Sign in</NavLink>
               </Grid>
             </Box>
           </Box>
