@@ -16,7 +16,7 @@ import {
   FilledInput,
   TextField,
   Box,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -75,17 +75,21 @@ export default function GradeStructureTab({ onUpdate }) {
   const handleOnDragEnd = async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
- 
-    const itemList = Array.from(items);
-    [itemList[result.source.index], itemList[result.destination.index]] = [itemList[result.destination.index], itemList[result.source.index]];
 
-    const reorderList = itemList.map((item, idx)=>{return {...item, order: idx}});
+    const itemList = Array.from(items);
+    [itemList[result.source.index], itemList[result.destination.index]] = [
+      itemList[result.destination.index],
+      itemList[result.source.index],
+    ];
+
+    const reorderList = itemList.map((item, idx) => {
+      return { ...item, order: idx };
+    });
 
     setItems(reorderList);
     const newOrderList = { listAssignment: reorderList };
     await updateAssignmentOrder(params.id, newOrderList);
     onUpdate();
-
   };
 
   const handleEditGradeTitle = (index, title) => {
@@ -126,7 +130,6 @@ export default function GradeStructureTab({ onUpdate }) {
     setTempData(null);
     await updateAssignmentInfo(params.id, tempData);
     onUpdate();
-
   };
 
   const handleDeleteGradeForm = async (index) => {
@@ -134,19 +137,19 @@ export default function GradeStructureTab({ onUpdate }) {
     let p1 = items.slice(0, index);
     let p2 = items.slice(index + 1);
     const newItems = p1.concat(p2);
-    const reorderList = newItems.map((item, idx)=>{return {...item, order: idx}});
+    const reorderList = newItems.map((item, idx) => {
+      return { ...item, order: idx };
+    });
     setItems(reorderList);
     await deleteAssignment(params.id, deleteItem.id);
     const newOrderList = { listAssignment: reorderList };
     await updateAssignmentOrder(params.id, newOrderList);
 
     onUpdate();
-
   };
 
   return (
     <React.Fragment>
-      
       <Card sx={{ minWidth: 400 }}>
         <CardContent>
           <Typography variant={"h4"} align="center" gutterBottom>
@@ -167,107 +170,116 @@ export default function GradeStructureTab({ onUpdate }) {
                   >
                     {items.map(({ title, point, order }, index) => {
                       return (
-                        <Draggable
-                          key={title + order}
-                          draggableId={title + order}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <Card
-                              variant="outlined"
-                              sx={{ m: 2 }}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <CardContent>
-                                <FormControl
-                                  variant="filled"
-                                  sx={{ marginBottom: 3, width: "80%" }}
-                                >
-                                  <InputLabel htmlFor="form-title">
-                                    Grade Title
-                                  </InputLabel>
-                                  <FilledInput
-                                    id="form-title"
-                                    value={
-                                      onEditModeIndex === index
-                                        ? tempData["title"]
-                                        : title
-                                    }
-                                    disabled={!(onEditModeIndex === index)}
-                                    onChange={(e) => {
-                                      handleEditGradeTitle(
-                                        index,
-                                        e.target.value
-                                      );
-                                    }}
-                                  />
-                                </FormControl>
+                        <Box sx={{ width: "60%", mx:"auto" }}>
+                          <Draggable
+                            key={title + order}
+                            draggableId={title + order}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <Card
+                                variant="outlined"
+                                sx={{
+                                  my: 2,
+                                  mx: "auto",
+                                  maxWidth: "700px",
+                                  width: "100%",
+                                }}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <CardContent>
+                                  <FormControl
+                                    variant="filled"
+                                    sx={{ marginBottom: 3, width: "100%" }}
+                                  >
+                                    <InputLabel htmlFor="form-title">
+                                      Grade Title
+                                    </InputLabel>
+                                    <FilledInput
+                                      id="form-title"
+                                      size="small"
+                                      value={
+                                        onEditModeIndex === index
+                                          ? tempData["title"]
+                                          : title
+                                      }
+                                      disabled={!(onEditModeIndex === index)}
+                                      onChange={(e) => {
+                                        handleEditGradeTitle(
+                                          index,
+                                          e.target.value
+                                        );
+                                      }}
+                                    />
+                                  </FormControl>
 
-                                <FormControl
-                                  variant="filled"
-                                  sx={{ marginBottom: 0, width: "80%" }}
-                                >
-                                  <InputLabel htmlFor="form-detail">
-                                    Grade Point
-                                  </InputLabel>
-                                  <FilledInput
-                                    id="form-detail"
-                                    value={
-                                      onEditModeIndex === index
-                                        ? tempData["point"]
-                                        : point
-                                    }
-                                    disabled={!(onEditModeIndex === index)}
-                                    onChange={(e) => {
-                                      handleEditGradePoint(
-                                        index,
-                                        e.target.value
-                                      );
-                                    }}
-                                  />
-                                </FormControl>
-                              </CardContent>
-                              <CardActions disableSpacing>
-                                {onEditModeIndex === index ? (
+                                  <FormControl
+                                    variant="filled"
+                                    sx={{ marginBottom: 0, width: "100%" }}
+                                  >
+                                    <InputLabel htmlFor="form-detail">
+                                      Grade Point
+                                    </InputLabel>
+                                    <FilledInput
+                                      id="form-detail"
+                                      size="small"
+                                      value={
+                                        onEditModeIndex === index
+                                          ? tempData["point"]
+                                          : point
+                                      }
+                                      disabled={!(onEditModeIndex === index)}
+                                      onChange={(e) => {
+                                        handleEditGradePoint(
+                                          index,
+                                          e.target.value
+                                        );
+                                      }}
+                                    />
+                                  </FormControl>
+                                </CardContent>
+                                <CardActions disableSpacing>
+                                  {onEditModeIndex === index ? (
+                                    <Button
+                                      size="small"
+                                      color="primary"
+                                      onClick={() => {
+                                        handleSaveGradeForm(index);
+                                      }}
+                                      endIcon={<SaveIcon />}
+                                    >
+                                      Save
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      size="small"
+                                      color="primary"
+                                      endIcon={<EditIcon />}
+                                      onClick={() => {
+                                        handleEditGradeForm(index);
+                                      }}
+                                    >
+                                      Edit
+                                    </Button>
+                                  )}
+
                                   <Button
                                     size="small"
-                                    color="primary"
+                                    color="secondary"
+                                    endIcon={<DeleteIcon />}
                                     onClick={() => {
-                                      handleSaveGradeForm(index);
-                                    }}
-                                    endIcon={<SaveIcon />}
-                                  >
-                                    Save
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    size="small"
-                                    color="primary"
-                                    endIcon={<EditIcon />}
-                                    onClick={() => {
-                                      handleEditGradeForm(index);
+                                      handleDeleteGradeForm(index);
                                     }}
                                   >
-                                    Edit
+                                    Remove
                                   </Button>
-                                )}
-
-                                <Button
-                                  size="small"
-                                  color="secondary"
-                                  endIcon={<DeleteIcon />}
-                                  onClick={() => {
-                                    handleDeleteGradeForm(index);
-                                  }}
-                                >
-                                  Remove
-                                </Button>
-                              </CardActions>
-                            </Card>
-                          )}
-                        </Draggable>
+                                </CardActions>
+                              </Card>
+                            )}
+                          </Draggable>
+                        </Box>
                       );
                     })}
                     {provided.placeholder}
@@ -309,21 +321,23 @@ export default function GradeStructureTab({ onUpdate }) {
                   />
                 </form>
               </CardContent>
-              {formik.isSubmitting && (<Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>)}
-              {!formik.isSubmitting && 
-              (<CardActions disableSpacing>
-                <Button
-                  size="small"
-                  color="secondary"
-                  endIcon={<CheckIcon />}
-                  onClick={formik.handleSubmit}
-                >
-                  Confirm
-                </Button>
-              </CardActions>)}
-              
+              {formik.isSubmitting && (
+                <Box sx={{ display: "flex" }}>
+                  <CircularProgress />
+                </Box>
+              )}
+              {!formik.isSubmitting && (
+                <CardActions disableSpacing>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    endIcon={<CheckIcon />}
+                    onClick={formik.handleSubmit}
+                  >
+                    Confirm
+                  </Button>
+                </CardActions>
+              )}
             </Card>
           </Container>
         </CardContent>

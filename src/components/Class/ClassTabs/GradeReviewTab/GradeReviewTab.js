@@ -7,6 +7,7 @@ import ListGradeReviewRequest from "components/Class/ClassTabs/GradeReviewTab/Gr
 
 export default function GradeReviewTab({ props }) {
   const [openLoading, setOpenLoading] = useState(false);
+  const [isAscending, setIsAscending] = useState(true);
   const [listGR, setListGR] = useState([]);
   const params = useParams();
 
@@ -14,7 +15,15 @@ export default function GradeReviewTab({ props }) {
     try {
       setOpenLoading(true);
       const res = await getAllGradeReviewOfClass(params.id);
-      setListGR(res.data);
+      setListGR(res.data.sort(function ( a, b ) {
+        if ( a.status < b.status ){
+          return -1;
+        }
+        if ( a.status > b.status ){
+          return 1;
+        }
+        return 0;
+      }));
       setOpenLoading(false);
     } catch (error) {
       setOpenLoading(false);
@@ -27,8 +36,17 @@ export default function GradeReviewTab({ props }) {
 
   const handleUpdate = () => {
     fetchListGradeReview();
-  }
+  };
   
+  const handleDescending = () => {
+    setIsAscending(false);
+    setListGR([...listGR.reverse()]);
+  };
+
+  const handleAscending = () => {
+    setIsAscending(true);
+    setListGR([...listGR.reverse()]);
+  }
 
   return (
     <Fragment>
@@ -36,7 +54,7 @@ export default function GradeReviewTab({ props }) {
         Grade Review Requests
       </Typography>
       <Divider sx={{my: 2}} width="100%" />
-      <ListGradeReviewRequest list={listGR} onUpdate={handleUpdate}/>
+      <ListGradeReviewRequest list={listGR} onUpdate={handleUpdate} isAscending={isAscending} handleAscending={handleAscending} handleDescending={handleDescending}/>
       <Loading open={openLoading} />
     </Fragment>
   );

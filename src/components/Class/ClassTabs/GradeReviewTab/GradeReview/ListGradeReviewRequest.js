@@ -1,4 +1,4 @@
-import { Typography, Divider, Box } from "@mui/material";
+import { Typography, Divider, Box, IconButton } from "@mui/material";
 import ButtonUnstyled, {
   buttonUnstyledClasses,
 } from "@mui/base/ButtonUnstyled";
@@ -7,6 +7,8 @@ import { Fragment } from "react";
 import GradeReviewDetail from "./GradeReviewDetail";
 import { useState, useEffect } from "react";
 import { getGradeReviewSummary } from "services/grade.service";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 const grey = {
   200: "inherit",
@@ -38,7 +40,13 @@ function CustomButton(props) {
   return <ButtonUnstyled {...props} component={CustomButtonRoot} />;
 }
 
-export default function ListGradeReviewRequest({ list, onUpdate }) {
+export default function ListGradeReviewRequest({
+  list,
+  onUpdate,
+  isAscending,
+  handleAscending,
+  handleDescending,
+}) {
   const color = {
     pending: "warning.main",
     approved: "success.main",
@@ -74,6 +82,18 @@ export default function ListGradeReviewRequest({ list, onUpdate }) {
           mx: "auto",
         }}
       >
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          {isAscending && (
+            <IconButton onClick={handleDescending}>
+              <ArrowUpwardIcon />
+            </IconButton>
+          )}
+          {!isAscending && (
+            <IconButton onClick={handleAscending}>
+              <ArrowDownwardIcon />
+            </IconButton>
+          )}
+        </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography sx={{ fontWeight: "bolder" }}>Title</Typography>
           <Typography sx={{ fontWeight: "bolder" }}>Status</Typography>
