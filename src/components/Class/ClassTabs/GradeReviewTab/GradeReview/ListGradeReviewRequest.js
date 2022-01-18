@@ -129,7 +129,7 @@ export default function ListGradeReviewRequest({
           setOpen={setOpenDialogGR}
           studentId={dialogGRInfo.studentId}
           studentName={dialogGRInfo.fullName}
-          actualGrade={dialogGRInfo.assignments[0].grade.grade}
+          actualGrade={dialogGRInfo.assignments[0].grade}
           assignmentId={dialogGRInfo.assignments[0].id}
           title={dialogGRInfo.assignments[0].title}
         />

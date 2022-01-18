@@ -56,8 +56,8 @@ export function createCommentGR(gradeReviewId, assignmentId, comment){
     });
 }
 
-export function changeStatusGradeReview(gradeReviewId, newStatus, assignmentId){
-    return http.put(`/grades/${assignmentId}/review`, {status: newStatus, gradeReviewId},{ 
+export function changeStatusGradeReview(gradeReviewId, newStatus, assignmentId, newGrade){
+    return http.put(`/grades/${assignmentId}/review`, {status: newStatus, gradeReviewId, newGrade},{ 
         headers: authHeader(),
     });
 }

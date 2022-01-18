@@ -43,13 +43,13 @@ export default function GradeReviewContent({
   };
 
   const handleApprove = async () => {
-    await changeStatusGradeReview(id, "approved", assignmentId);
+    await changeStatusGradeReview(id, "approved", assignmentId, {gradeId: actualGrade.id, expectedGrade});
     socket.emit('grade review final', studentId);
     onUpdate();
   };
 
   const handleDeny = async () => {
-    await changeStatusGradeReview(id, "denied", assignmentId);
+    await changeStatusGradeReview(id, "denied", assignmentId, {gradeId: actualGrade.id, expectedGrade});
     socket.emit('grade review final', studentId);
     onUpdate();
   };
@@ -102,7 +102,7 @@ export default function GradeReviewContent({
           <Grid item xs={6}>
             <Item sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography>Actual Grade:</Typography>
-              <Typography color="error.main">{actualGrade}</Typography>
+              <Typography color="error.main">{actualGrade.grade}</Typography>
             </Item>
           </Grid>
         </Grid>
