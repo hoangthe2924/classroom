@@ -47,6 +47,11 @@ export default function BasicTabs(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  React.useEffect(()=>{
+    setValue(0);
+  },[props.other]);
+
   let isTeacher = props.item?.requesterRole === "teacher";
   return (
     <Box sx={{ width: "100%" }}>

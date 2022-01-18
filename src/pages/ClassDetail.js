@@ -16,6 +16,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 export default function ClassDetail({ changeTitle }) {
   const [item, setItem] = useState([]);
   const [open, setOpen] = useState(false);
+  const [other, setOther] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ export default function ClassDetail({ changeTitle }) {
   useEffect(() => {
     fetchClass();
     localStorage.removeItem("prev-link");
+    setOther((prev) => !prev);
   }, [id]);
 
   useEffect(() => {
@@ -94,7 +96,7 @@ export default function ClassDetail({ changeTitle }) {
   return (
     <Fragment>
       <Card variant="outlined">
-        <ClassTabs item={item} onUpdate={handleUpdate} />
+        <ClassTabs other={other} item={item} onUpdate={handleUpdate} />
       </Card>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
