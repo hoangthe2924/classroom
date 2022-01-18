@@ -159,18 +159,18 @@ export default function GradeStructureTab({ onUpdate }) {
             Drag and Drop to change Grade Structure
           </Typography>
           <Divider />
-          <Container sx={{ width: "60%", mx:"auto" }} maxWidth="lg">
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Droppable droppableId="characters">
-                {(provided) => (
-                  <ul
-                    className="characters"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {items.map(({ title, point, order }, index) => {
-                      return (
-                        
+          <Container maxWidth="lg">
+            <Box sx={{ width: "60%", mx: "auto" }}>
+              <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="characters">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {items.map(({ title, point, order }, index) => {
+                        return (
                           <Draggable
                             key={title + order}
                             draggableId={title + order}
@@ -279,14 +279,14 @@ export default function GradeStructureTab({ onUpdate }) {
                               </Card>
                             )}
                           </Draggable>
-                        
-                      );
-                    })}
-                    {provided.placeholder}
-                  </ul>
-                )}
-              </Droppable>
-            </DragDropContext>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </Box>
             <Card variant="outlined" sx={{ m: 2 }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
