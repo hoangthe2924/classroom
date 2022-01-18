@@ -100,7 +100,7 @@ export default function ListGradeReviewRequest({
         </Box>
         <Divider color="error.main" sx={{ my: 1 }} />
         {list.map((gr) => (
-          <Box fullWidth>
+          <Box key={gr.id} fullWidth>
             <CustomButton
               size="small"
               sx={{
