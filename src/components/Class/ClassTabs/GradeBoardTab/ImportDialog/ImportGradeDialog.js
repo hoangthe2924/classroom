@@ -16,7 +16,7 @@ export default function ImportGradeDialog(props) {
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
     setFileExcel(event.target.files[0]);
-    console.log("f", fileUploaded);
+    // console.log("f", fileUploaded);
   };
 
   const readFile = () => {

@@ -4,11 +4,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Snackbar, TextField
+  Snackbar,
+  TextField,
 } from "@mui/material";
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormControl from "@mui/material/FormControl";
 import MuiAlert from "@mui/material/Alert";
 import { useFormik } from "formik";
 import React, { useState } from "react";
@@ -25,7 +26,7 @@ export default function JoinClassForm({ open, handleClose, onSuccess }) {
     type: "error",
     content: "",
   });
-  
+
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -33,7 +34,7 @@ export default function JoinClassForm({ open, handleClose, onSuccess }) {
       CJC: "",
     },
     onSubmit: async (values) => {
-      console.log(values);
+      // console.log(values);
       await checkClassAvailable(values)
         .then((res) => {
           if (res.status === 200) {
@@ -49,16 +50,19 @@ export default function JoinClassForm({ open, handleClose, onSuccess }) {
           }
         })
         .catch((error) => {
-            let err_msg = "Something went wrong!";
-            if(error.response.data.message && error.response.data.message.length!==0){
-              err_msg = error.response.data.message;
-            }
+          let err_msg = "Something went wrong!";
+          if (
+            error.response.data.message &&
+            error.response.data.message.length !== 0
+          ) {
+            err_msg = error.response.data.message;
+          }
 
-            setShowSnackbar(true);
-            setSnackbarContent({
-              type: "error",
-              content: err_msg,
-            });
+          setShowSnackbar(true);
+          setSnackbarContent({
+            type: "error",
+            content: err_msg,
+          });
         });
       handleClose(formik)();
     },

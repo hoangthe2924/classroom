@@ -26,8 +26,8 @@ const getTotal = (assignments) => {
     totalFactor += assignment.point;
   });
   total = totalPoint / totalFactor;
-  return Math.round(total*100)/100;
-}
+  return Math.round(total * 100) / 100;
+};
 
 const percentColors = [
   { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
@@ -109,7 +109,7 @@ const StudentViewGradeDetail = ({ studentID }) => {
   }, [sID]);
 
   const total = getTotal(gradesDetail);
-  console.log(total);
+  // console.log(total);
   const color = calculateColorFromPercentage(total / 10);
 
   return (
@@ -117,16 +117,12 @@ const StudentViewGradeDetail = ({ studentID }) => {
       {!studentID && <SearchGradeDetail handleSearch={setStudentID} />}
       {sID && !error.hasError && (
         <>
-          <Grid
-            container
-            justifyContent="space-evenly"
-            my={2}
-          >
+          <Grid container justifyContent="space-evenly" my={2}>
             <Typography
               variant="h5"
               gutterBottom
               component="div"
-              sx={{my: "auto"}}
+              sx={{ my: "auto" }}
             >{`${studentInfo?.studentId} - ${studentInfo?.fullName}`}</Typography>
             <div style={{ width: 150, height: 150 }}>
               <CircularProgressbar

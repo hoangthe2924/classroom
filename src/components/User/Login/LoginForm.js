@@ -45,7 +45,7 @@ function LoginForm(props) {
       setHasError(false);
       const tryLogin = dispatch(actions.login(values));
       tryLogin.then((loginStatus) => {
-        console.log("log", loginStatus);
+        // console.log("log", loginStatus);
         switch (loginStatus) {
           case 1:
             // checkLoginStatus();
@@ -61,7 +61,7 @@ function LoginForm(props) {
               .catch((error) => {
                 console.log("err: ", error);
               });
-            console.log("fet", fetchClass);
+            // console.log("fet", fetchClass);
             navigate(navigateLink);
             // window.location.reload();
             break;

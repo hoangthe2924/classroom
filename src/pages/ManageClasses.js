@@ -41,7 +41,7 @@ function ManageClasses() {
   }
 
   const requestSearch = (searchedVal) => {
-    console.log("text", searchText);
+    // console.log("text", searchText);
     const filteredRows = listClass.filter((row) => {
       return row.classname.toLowerCase().includes(searchedVal.toLowerCase());
     });

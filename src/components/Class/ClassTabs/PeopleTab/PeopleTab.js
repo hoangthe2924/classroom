@@ -20,7 +20,7 @@ export default function PeopleTab({ items }) {
   const [listUser, setListUser] = React.useState(null);
   let { id } = useParams();
 
-  console.log(listUser);
+  // console.log(listUser);
 
   let teachers = listUser
     ? listUser.filter((user) => user.user_class.role === "teacher")

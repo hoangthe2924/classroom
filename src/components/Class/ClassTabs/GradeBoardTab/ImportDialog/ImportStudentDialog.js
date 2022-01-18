@@ -16,7 +16,7 @@ export default function ImportStudentDialog(props) {
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
     setFileExcel(event.target.files[0]);
-    console.log("f", fileUploaded);
+    // console.log("f", fileUploaded);
   };
 
   const readFile = () => {
@@ -34,7 +34,7 @@ export default function ImportStudentDialog(props) {
             fullName: sheet.getRow(i).values[2],
           });
         }
-        console.log("list", studentList);
+        // console.log("list", studentList);
         onClose(studentList);
         setFileExcel(null);
       });

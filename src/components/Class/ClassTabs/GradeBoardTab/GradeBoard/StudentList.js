@@ -78,7 +78,7 @@ export default function StudentList({ ListAssignment }) {
     async function updateGradeAsync(assignmentId, body, classId) {
       await updateStudentGrades(assignmentId, body, classId);
       count += 1;
-      console.log(assignments.length);
+      // console.log(assignments.length);
       if (count === assignments.length) {
         setIsSavingData(false);
       }
@@ -95,7 +95,7 @@ export default function StudentList({ ListAssignment }) {
         setRows((prevrows) => [...prevrows, vl]);
       });
     }
-    console.log("close", value);
+    // console.log("close", value);
   };
 
   function getTotal(params) {
