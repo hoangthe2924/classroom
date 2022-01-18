@@ -102,7 +102,8 @@ export default function GradeReviewContent({
           <Grid item xs={6}>
             <Item sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography>Actual Grade:</Typography>
-              <Typography color="error.main">{actualGrade.grade}</Typography>
+              {isTeacher && <Typography color="error.main">{actualGrade.grade}</Typography>}
+              {!isTeacher && <Typography color="error.main">{actualGrade}</Typography>}
             </Item>
           </Grid>
         </Grid>
