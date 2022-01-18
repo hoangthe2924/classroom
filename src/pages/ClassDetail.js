@@ -29,7 +29,7 @@ export default function ClassDetail({ changeTitle }) {
     setOpenLoading(true);
     await fetchAllClasses().then(
       (result) => {
-        console.log(result.data);
+        // console.log(result.data);
         dispatch({ type: "FETCH", payload: result.data });
       },
       (error) => {

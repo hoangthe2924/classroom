@@ -7,8 +7,6 @@ function ProtectedRoute({ children, adminRoute }) {
   const loginStatus = useSelector((state) => state.loginStatus);
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
-  console.log("cur", currentUser);
-  console.log("isadmin", adminRoute);
   const checkLoginStatus = () => {
     dispatch(actions.checkIsLoggedIn());
   };
