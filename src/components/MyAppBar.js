@@ -8,7 +8,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Button, ListItem, ListItemIcon } from "@mui/material";
+import { Avatar, Button, ListItem, ListItemIcon } from "@mui/material";
 import { MainListItems } from "components/Dashboard/ListItems";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useContext } from "react";
@@ -17,7 +17,10 @@ import { styled } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
 import Notification from "./Notification";
-import { SocketContext } from 'context/socket';
+import { SocketContext } from "context/socket";
+import { stringAvatar } from "services/stringAvatar";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 
 const drawerWidth = 240;
 
@@ -78,7 +81,8 @@ function MyAppBar(props) {
 
   const logOut = () => {
     dispatch(actions.logout());
-    socket.emit('logout')
+    socket.emit("logout");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -122,27 +126,27 @@ function MyAppBar(props) {
           {loginStatus === true ? (
             <div>
               <Notification />
-              <Button variant="outlined" color="inherit" sx={{ mr: 2 }}>
+              <IconButton sx={{ mr: 2 }}>
                 <NavLink
                   to="/profile"
                   style={{ textDecoration: "none", color: "white" }}
                 >
-                  Profile
+                  <Avatar {...stringAvatar(currentUser.username)} />
                 </NavLink>
-              </Button>
-              <Button
-                variant="outlined"
+              </IconButton>
+              <IconButton
                 color="inherit"
-                href="/dashboard"
+                component={NavLink}
+                to="/dashboard"
                 onClick={() => logOut()}
               >
-                Logout
-              </Button>
+                <LogoutIcon />
+              </IconButton>
             </div>
           ) : (
-            <Button variant="outlined" color="inherit" href="/login">
-              Login
-            </Button>
+            <IconButton color="inherit" component={NavLink} to="/login">
+              <LoginIcon />
+            </IconButton>
           )}
         </Toolbar>
       </AppBar>

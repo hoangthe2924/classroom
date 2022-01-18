@@ -7,11 +7,13 @@ import {
   ListItemText,
   Avatar,
   Typography,
-  Box, Grid
+  Box,
+  Grid,
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InvitationDialog from "components/Class/ClassTabs/PeopleTab/InvitationUser/InvitationDialog";
+import { stringAvatar } from "services/stringAvatar";
 
 export default function PeopleTab({ items }) {
   let teachers = items.users
@@ -21,7 +23,13 @@ export default function PeopleTab({ items }) {
     ? items.users.filter((user) => user.user_class.role === "student")
     : [];
   return (
-    <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Box
         sx={{
           mt: 4,
@@ -35,9 +43,11 @@ export default function PeopleTab({ items }) {
         <Typography variant="h6" component="div">
           Teachers
         </Typography>
-        {items.requesterRole==="teacher" && <InvitationDialog role="teacher" cjc=""/>} 
+        {items.requesterRole === "teacher" && (
+          <InvitationDialog role="teacher" cjc="" />
+        )}
       </Box>
-      <List dense sx={{width: "60%",}}>
+      <List dense sx={{ width: "60%" }}>
         {teachers &&
           teachers.map((user) => (
             <ListItem
@@ -49,9 +59,7 @@ export default function PeopleTab({ items }) {
               }
             >
               <ListItemAvatar>
-                <Avatar>
-                  <FolderIcon />
-                </Avatar>
+                <Avatar {...stringAvatar(user.username)} />
               </ListItemAvatar>
               <ListItemText
                 primary={user.username}
@@ -71,11 +79,13 @@ export default function PeopleTab({ items }) {
         }}
       >
         <Typography variant="h6" component="div">
-        Students
+          Students
         </Typography>
-        {items.requesterRole==="teacher" && <InvitationDialog role="student" cjc={items.cjc} />}
+        {items.requesterRole === "teacher" && (
+          <InvitationDialog role="student" cjc={items.cjc} />
+        )}
       </Box>
-      <List dense sx={{width: "60%",}}>
+      <List dense sx={{ width: "60%" }}>
         {students &&
           students.map((user) => (
             <ListItem
@@ -87,9 +97,7 @@ export default function PeopleTab({ items }) {
               }
             >
               <ListItemAvatar>
-                <Avatar>
-                  <FolderIcon />
-                </Avatar>
+                <Avatar {...stringAvatar(user.username)} />
               </ListItemAvatar>
               <ListItemText
                 primary={user.username}
