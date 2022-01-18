@@ -159,7 +159,7 @@ export default function GradeStructureTab({ onUpdate }) {
             Drag and Drop to change Grade Structure
           </Typography>
           <Divider />
-          <Container maxWidth="lg">
+          <Container sx={{ width: "60%", mx:"auto" }} maxWidth="lg">
             <DragDropContext onDragEnd={handleOnDragEnd}>
               <Droppable droppableId="characters">
                 {(provided) => (
@@ -170,7 +170,7 @@ export default function GradeStructureTab({ onUpdate }) {
                   >
                     {items.map(({ title, point, order }, index) => {
                       return (
-                        <Box sx={{ width: "60%", mx:"auto" }}>
+                        
                           <Draggable
                             key={title + order}
                             draggableId={title + order}
@@ -279,7 +279,7 @@ export default function GradeStructureTab({ onUpdate }) {
                               </Card>
                             )}
                           </Draggable>
-                        </Box>
+                        
                       );
                     })}
                     {provided.placeholder}
@@ -287,7 +287,6 @@ export default function GradeStructureTab({ onUpdate }) {
                 )}
               </Droppable>
             </DragDropContext>
-
             <Card variant="outlined" sx={{ m: 2 }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
