@@ -6,6 +6,7 @@ import {
   Typography,
   Chip,
 } from "@mui/material";
+import { stringAvatar } from "services/stringAvatar";
 
 export const AccountProfile = ({ item }) => (
   <Card>
@@ -18,15 +19,11 @@ export const AccountProfile = ({ item }) => (
         }}
       >
         <Avatar
-          src={item?.avatar || ""}
-          sx={{
-            height: 64,
-            mb: 2,
-            width: 64,
-          }}
+          {...stringAvatar(item?.username)}
+          style={{ height: "64px", width: "64px", marginBottom: "16px" }}
         />
         {item?.isAdmin && (
-          <Chip label="Admin" color="error" size="small" sx={{ mb: 3 }} />
+          <Chip label="Admin" color="error" size="small" sx={{ mb: 2 }} />
         )}
         <Typography color="textPrimary" gutterBottom variant="h5">
           {item?.fullname}
