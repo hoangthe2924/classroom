@@ -15,12 +15,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CustomToolbar from "./CustomToolbar";
 import CustomColumnMenuComponent from "./CustomColumnMenuComponent";
 import Loading from "components/Loading";
+import { useSelector } from "react-redux";
 
 export default function StudentList({ ListAssignment }) {
   const params = useParams();
   const navigate = useNavigate();
   const [assignments, setAssignments] = React.useState(ListAssignment);
   const [color] = React.useState("primary");
+  const currentUser = useSelector((state) => state.currentUser);
 
   const [openLoading, setOpenLoading] = useState(false);
   const [rows, setRows] = useState([]);
@@ -206,14 +208,24 @@ export default function StudentList({ ListAssignment }) {
             autoHeight
             columns={columns2}
             rows={rows}
-            components={{
-              ColumnMenu: CustomColumnMenuComponent,
-              Toolbar: CustomToolbar,
-            }}
-            componentsProps={{
-              columnMenu: { color, rows, setRows, assignments, setAssignments },
-              toolbar: { handleClickOpen, handleSave },
-            }}
+            components={
+              !currentUser.isAdmin && {
+                ColumnMenu: CustomColumnMenuComponent,
+                Toolbar: CustomToolbar,
+              }
+            }
+            componentsProps={
+              !currentUser.isAdmin && {
+                columnMenu: {
+                  color,
+                  rows,
+                  setRows,
+                  assignments,
+                  setAssignments,
+                },
+                toolbar: { handleClickOpen, handleSave },
+              }
+            }
           />
         </Box>
       </div>
@@ -222,13 +234,15 @@ export default function StudentList({ ListAssignment }) {
           <CircularProgress />
         ) : (
           <>
-            <Button
-              startIcon={<SaveIcon fontSize="small" />}
-              sx={{ mr: 1 }}
-              onClick={handleSave}
-            >
-              Save
-            </Button>
+            {!currentUser.isAdmin && (
+              <Button
+                startIcon={<SaveIcon fontSize="small" />}
+                sx={{ mr: 1 }}
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            )}
           </>
         )}
       </Grid>
