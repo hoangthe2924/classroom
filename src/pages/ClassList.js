@@ -187,12 +187,18 @@ function ClassList(props) {
                   </Box>
                 </CardContent>
                 <Divider />
-                <CardActions sx={{display: 'flex', justifyContent: 'end'}}>
-                  <IconButton size="small" variant="contained" edge="end" color="primary" sx={{mx: 1}}>
-                    <FolderOpenIcon />
-                  </IconButton>
-                </CardActions>
               </CardActionArea>
+              <CardActions sx={{ display: "flex", justifyContent: "end" }}>
+                <IconButton
+                  size="small"
+                  variant="contained"
+                  edge="end"
+                  color="primary"
+                  sx={{ mx: 1 }}
+                >
+                  <FolderOpenIcon />
+                </IconButton>
+              </CardActions>
             </Card>
           </Grid>
         ))}

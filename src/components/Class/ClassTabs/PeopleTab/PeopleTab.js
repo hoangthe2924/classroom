@@ -10,18 +10,38 @@ import {
   Box,
   Grid,
 } from "@mui/material";
-import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InvitationDialog from "components/Class/ClassTabs/PeopleTab/InvitationUser/InvitationDialog";
 import { stringAvatar } from "services/stringAvatar";
+import { useParams } from "react-router-dom";
+import { getPeopleInClass } from "services/class.service";
 
 export default function PeopleTab({ items }) {
-  let teachers = items.users
-    ? items.users.filter((user) => user.user_class.role === "teacher")
+  const [listUser, setListUser] = React.useState(null);
+  let { id } = useParams();
+
+  console.log(listUser);
+
+  let teachers = listUser
+    ? listUser.filter((user) => user.user_class.role === "teacher")
     : [];
-  let students = items.users
-    ? items.users.filter((user) => user.user_class.role === "student")
+  let students = listUser
+    ? listUser.filter((user) => user.user_class.role === "student")
     : [];
+
+  const fetchListUser = async () => {
+    try {
+      const res = await getPeopleInClass(id);
+      if (res.data) {
+        setListUser(res.data.users);
+      }
+    } catch (error) {}
+  };
+
+  React.useEffect(() => {
+    fetchListUser();
+  }, [id]);
+
   return (
     <Grid
       container

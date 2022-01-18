@@ -9,6 +9,10 @@ export function fetchClassDetail(classId, strQuery) {
   return http.get(`/classes/${classId}` + strQuery, { headers: authHeader() });
 }
 
+export function getPeopleInClass(classId){
+  return http.get(`/classes/${classId}/users`, { headers: authHeader() });
+}
+
 export function addClass(values) {
   return http.post("/classes/", values, { headers: authHeader() });
 }
